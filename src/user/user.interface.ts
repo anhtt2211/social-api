@@ -17,3 +17,21 @@ export interface CurrentUser {
   exp: number;
   iat: number;
 }
+
+export interface IUserEntity {
+  id: number;
+
+  username: string;
+
+  email: string;
+
+  bio: string;
+
+  image: string;
+
+  password: string;
+
+  // favorites: ArticleEntity[];
+
+  // articles: ArticleEntity[];
+}
