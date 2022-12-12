@@ -31,7 +31,7 @@ export class UserController {
   async update(
     @User("id") userId: number,
     @Body("user") userData: UpdateUserDto
-  ) {
+  ): Promise<UserRO> {
     return await this.userService.update(userId, userData);
   }
 
