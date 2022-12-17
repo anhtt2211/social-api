@@ -1,3 +1,4 @@
+import { BlockEntity } from "./../block/block.entity";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, getRepository, DeleteResult } from "typeorm";
@@ -8,6 +9,7 @@ import { FollowsEntity } from "../profile/follows.entity";
 import { CreateArticleDto } from "./dto";
 
 import { ArticleRO, ArticlesRO, CommentsRO } from "./article.interface";
+import { BlockInterface } from "../block/block.interface";
 const slug = require("slug");
 
 @Injectable()
@@ -20,13 +22,14 @@ export class ArticleService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(FollowsEntity)
-    private readonly followsRepository: Repository<FollowsEntity>
+    private readonly followsRepository: Repository<FollowsEntity> // @InjectRepository(BlockEntity) // private readonly blockRepository: Repository<BlockEntity>
   ) {}
 
   async findAll(query): Promise<ArticlesRO> {
     const qb = await getRepository(ArticleEntity)
       .createQueryBuilder("article")
-      .leftJoinAndSelect("article.author", "author");
+      .leftJoinAndSelect("article.author", "author")
+      .leftJoinAndSelect("article.blocks", "blocks");
 
     qb.where("1 = 1");
 
@@ -97,7 +100,9 @@ export class ArticleService {
   }
 
   async findOne(where): Promise<ArticleRO> {
-    const article = await this.articleRepository.findOne(where);
+    const article = await this.articleRepository.findOne(where, {
+      relations: ["blocks"],
+    });
     return { article };
   }
 
@@ -183,6 +188,7 @@ export class ArticleService {
     article.slug = this.slugify(articleData.title);
     article.tagList = articleData.tagList || [];
     article.comments = [];
+    article.blocks = articleData.blocks;
 
     const newArticle = await this.articleRepository.save(article);
 
