@@ -7,6 +7,7 @@ import { ConfigModule } from "@nestjs/config";
 import { Connection } from "typeorm";
 import { ProfileModule } from "./profile/profile.module";
 import { TagModule } from "./tag/tag.module";
+import { MediaModule } from "./media/media.module";
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { TagModule } from "./tag/tag.module";
     UserModule,
     ProfileModule,
     TagModule,
+    MediaModule,
   ],
   controllers: [AppController],
   providers: [],

@@ -10,6 +10,7 @@ import { CreateArticleDto } from "./dto";
 
 import { ArticleRO, ArticlesRO, CommentsRO } from "./article.interface";
 import { BlockInterface } from "../block/block.interface";
+import { BlockType } from "../block/block.enum";
 const slug = require("slug");
 
 @Injectable()
@@ -22,7 +23,7 @@ export class ArticleService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(FollowsEntity)
-    private readonly followsRepository: Repository<FollowsEntity> // @InjectRepository(BlockEntity) // private readonly blockRepository: Repository<BlockEntity>
+    private readonly followsRepository: Repository<FollowsEntity>
   ) {}
 
   async findAll(query): Promise<ArticlesRO> {
@@ -182,6 +183,15 @@ export class ArticleService {
     userId: number,
     articleData: CreateArticleDto
   ): Promise<ArticleEntity> {
+    // // if block.type === image => upload image into s3/dropbox service => get url
+    // articleData.blocks.forEach(async (block) => {
+    //   if (block.type === BlockType.IMAGE) {
+    //     const url = this.dropboxService.uploadFile("xxx", )
+    //     // upload image into s3/dropbox service
+    //     // block.data.file.url =
+    //   }
+    // });
+
     let article = new ArticleEntity();
     article.title = articleData.title;
     article.description = articleData.description;

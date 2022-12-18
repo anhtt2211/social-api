@@ -5,12 +5,19 @@ import { Request, Response, NextFunction } from "express";
 import * as jwt from "jsonwebtoken";
 import { SECRET } from "../config";
 import { UserService } from "./user.service";
+import { UserData } from "./user.interface";
+import { IncomingHttpHeaders } from "http";
+
+interface IRequestCustom extends Request {
+  user: UserData;
+  headers: IncomingHttpHeaders;
+}
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
   constructor(private readonly userService: UserService) {}
 
-  async use(req: Request, res: Response, next: NextFunction) {
+  async use(req: IRequestCustom, res: Response, next: NextFunction) {
     const authHeaders = req.headers.authorization;
     if (authHeaders && (authHeaders as string).split(" ")[1]) {
       const token = (authHeaders as string).split(" ")[1];
