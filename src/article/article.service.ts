@@ -183,15 +183,6 @@ export class ArticleService {
     userId: number,
     articleData: CreateArticleDto
   ): Promise<ArticleEntity> {
-    // // if block.type === image => upload image into s3/dropbox service => get url
-    // articleData.blocks.forEach(async (block) => {
-    //   if (block.type === BlockType.IMAGE) {
-    //     const url = this.dropboxService.uploadFile("xxx", )
-    //     // upload image into s3/dropbox service
-    //     // block.data.file.url =
-    //   }
-    // });
-
     let article = new ArticleEntity();
     article.title = articleData.title;
     article.description = articleData.description;
