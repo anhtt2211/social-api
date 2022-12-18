@@ -21,3 +21,6 @@ coverage
 dist/*
 
 .env
+.env.development
+
+app.yaml

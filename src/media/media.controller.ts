@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Post,
   UploadedFile,
