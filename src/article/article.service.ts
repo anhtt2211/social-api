@@ -29,8 +29,7 @@ export class ArticleService {
   async findAll(query): Promise<ArticlesRO> {
     const qb = await getRepository(ArticleEntity)
       .createQueryBuilder("article")
-      .leftJoinAndSelect("article.author", "author")
-      .leftJoinAndSelect("article.blocks", "blocks");
+      .leftJoinAndSelect("article.author", "author");
 
     qb.where("1 = 1");
 
@@ -102,7 +101,7 @@ export class ArticleService {
 
   async findOne(where): Promise<ArticleRO> {
     const article = await this.articleRepository.findOne(where, {
-      relations: ["blocks"],
+      relations: ["blocks", "author"],
     });
     return { article };
   }
@@ -139,8 +138,15 @@ export class ArticleService {
   }
 
   async favorite(id: number, slug: string): Promise<ArticleRO> {
-    let article = await this.articleRepository.findOne({ slug });
-    const user = await this.userRepository.findOne(id);
+    let article = await this.articleRepository.findOne(
+      { slug },
+      {
+        relations: ["author"],
+      }
+    );
+    const user = await this.userRepository.findOne(id, {
+      relations: ["favorites"],
+    });
 
     const isNewFavorite =
       user.favorites.findIndex((_article) => _article.id === article.id) < 0;
