@@ -8,4 +8,6 @@ export enum BlockType {
   DELIMITER = "delimiter",
   PULL_QUOTE = "pullquote",
   LINK_TOOL = "linkTool",
+  UNSPLASH = "unsplash",
+  EMBED = "embed",
 }
