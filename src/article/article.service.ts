@@ -1,16 +1,14 @@
-import { BlockEntity } from "./../block/block.entity";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, getRepository, DeleteResult } from "typeorm";
+import { DeleteResult, getRepository, Repository } from "typeorm";
+import { FollowsEntity } from "../profile/follows.entity";
+import { UserEntity } from "../user/user.entity";
 import { ArticleEntity } from "./article.entity";
 import { Comment } from "./comment.entity";
-import { UserEntity } from "../user/user.entity";
-import { FollowsEntity } from "../profile/follows.entity";
 import { CreateArticleDto } from "./dto";
 
 import { ArticleRO, ArticlesRO, CommentsRO } from "./article.interface";
-import { BlockInterface } from "../block/block.interface";
-import { BlockType } from "../block/block.enum";
+import { ArticleFilters } from "./dto/article-query";
 const slug = require("slug");
 
 @Injectable()
@@ -26,7 +24,7 @@ export class ArticleService {
     private readonly followsRepository: Repository<FollowsEntity>
   ) {}
 
-  async findAll(query): Promise<ArticlesRO> {
+  async findAll(query: ArticleFilters): Promise<ArticlesRO> {
     const qb = await getRepository(ArticleEntity)
       .createQueryBuilder("article")
       .leftJoinAndSelect("article.author", "author");
@@ -69,7 +67,7 @@ export class ArticleService {
     return { articles, articlesCount };
   }
 
-  async findFeed(userId: number, query): Promise<ArticlesRO> {
+  async findFeed(userId: number, query: ArticleFilters): Promise<ArticlesRO> {
     const _follows = await this.followsRepository.find({ followerId: userId });
 
     if (!(Array.isArray(_follows) && _follows.length > 0)) {
@@ -227,5 +225,31 @@ export class ArticleService {
       "-" +
       ((Math.random() * Math.pow(36, 6)) | 0).toString(36)
     );
+  }
+
+  async seed(userId: number, articleList: CreateArticleDto[]) {
+    const articles: ArticleEntity[] = articleList.map((article) => {
+      let articleEntity = new ArticleEntity();
+      articleEntity.title = article.title;
+      articleEntity.description = article.description;
+      articleEntity.slug = this.slugify(article.title);
+      articleEntity.tagList = article.tagList || [];
+      articleEntity.comments = [];
+      articleEntity.blocks = article.blocks;
+
+      return articleEntity;
+    });
+
+    await this.articleRepository.save(articles);
+
+    const author = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ["articles"],
+    });
+    author.articles = [...author.articles, ...articles];
+
+    await this.userRepository.save(author);
+
+    return true;
   }
 }

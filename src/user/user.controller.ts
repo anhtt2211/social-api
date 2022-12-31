@@ -1,20 +1,11 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  UsePipes,
-} from "@nestjs/common";
+import { Body, Controller, Get, Post, Put, UsePipes } from "@nestjs/common";
 import { HttpException } from "@nestjs/common/exceptions/http.exception";
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { ValidationPipe } from "../shared/pipes/validation.pipe";
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from "./dto";
 import { User } from "./user.decorator";
 import { UserRO } from "./user.interface";
 import { UserService } from "./user.service";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
 @ApiBearerAuth()
 @ApiTags("user")
@@ -22,11 +13,14 @@ import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @ApiOperation({ summary: "get current user" })
   @Get("user")
   async findMe(@User("email") email: string): Promise<UserRO> {
     return await this.userService.findByEmail(email);
   }
 
+  @ApiOperation({ summary: "update user" })
+  @ApiBody({ type: UpdateUserDto, required: true })
   @Put("user")
   async update(
     @User("id") userId: number,
@@ -35,17 +29,16 @@ export class UserController {
     return await this.userService.update(userId, userData);
   }
 
+  @ApiOperation({ summary: "create user" })
+  @ApiBody({ type: CreateUserDto, required: true })
   @UsePipes(new ValidationPipe())
   @Post("users")
   async create(@Body("user") userData: CreateUserDto) {
     return this.userService.create(userData);
   }
 
-  @Delete("users/:slug")
-  async delete(@Param() params) {
-    return await this.userService.delete(params.slug);
-  }
-
+  @ApiOperation({ summary: "login" })
+  @ApiBody({ type: LoginUserDto, required: true })
   @UsePipes(new ValidationPipe())
   @Post("users/login")
   async login(@Body("user") loginUserDto: LoginUserDto): Promise<UserRO> {

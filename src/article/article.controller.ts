@@ -1,26 +1,28 @@
 import {
-  Get,
-  Post,
   Body,
-  Put,
-  Delete,
-  Query,
-  Param,
   Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
 } from "@nestjs/common";
-import { Request } from "express";
+import { User } from "../user/user.decorator";
+import { ArticleRO, ArticlesRO, CommentsRO } from "./article.interface";
 import { ArticleService } from "./article.service";
 import { CreateArticleDto, CreateCommentDto } from "./dto";
-import { ArticlesRO, ArticleRO } from "./article.interface";
-import { CommentsRO } from "./article.interface";
-import { User } from "../user/user.decorator";
 
 import {
   ApiBearerAuth,
-  ApiResponse,
+  ApiBody,
   ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
+import { ArticleFilters } from "./dto/article-query";
 
 @ApiBearerAuth()
 @ApiTags("articles")
@@ -31,7 +33,7 @@ export class ArticleController {
   @ApiOperation({ summary: "Get all articles" })
   @ApiResponse({ status: 200, description: "Return all articles." })
   @Get()
-  async findAll(@Query() query): Promise<ArticlesRO> {
+  async findAll(@Query() query: ArticleFilters): Promise<ArticlesRO> {
     return await this.articleService.findAll(query);
   }
 
@@ -41,16 +43,28 @@ export class ArticleController {
   @Get("feed")
   async getFeed(
     @User("id") userId: number,
-    @Query() query
+    @Query() query: ArticleFilters
   ): Promise<ArticlesRO> {
     return await this.articleService.findFeed(userId, query);
   }
 
+  @ApiOperation({ summary: "Get article by slug" })
+  @ApiParam({
+    name: "slug",
+    required: true,
+    schema: { oneOf: [{ type: "string" }] },
+  })
   @Get(":slug")
   async findOne(@Param("slug") slug): Promise<ArticleRO> {
     return await this.articleService.findOne({ slug });
   }
 
+  @ApiOperation({ summary: "Get comments of article" })
+  @ApiParam({
+    name: "slug",
+    required: true,
+    schema: { oneOf: [{ type: "string" }] },
+  })
   @Get(":slug/comments")
   async findComments(@Param("slug") slug): Promise<CommentsRO> {
     return await this.articleService.findComments(slug);
@@ -61,6 +75,7 @@ export class ArticleController {
     status: 201,
     description: "The article has been successfully created.",
   })
+  @ApiBody({ type: CreateArticleDto })
   @ApiResponse({ status: 403, description: "Forbidden." })
   @Post()
   async create(
@@ -75,13 +90,13 @@ export class ArticleController {
     status: 201,
     description: "The article has been successfully updated.",
   })
+  @ApiBody({ type: CreateArticleDto })
   @ApiResponse({ status: 403, description: "Forbidden." })
   @Put(":slug")
   async update(
     @Param() params,
     @Body("article") articleData: CreateArticleDto
   ) {
-    // Todo: update slug also when title gets changed
     return this.articleService.update(params.slug, articleData);
   }
 
@@ -89,6 +104,11 @@ export class ArticleController {
   @ApiResponse({
     status: 201,
     description: "The article has been successfully deleted.",
+  })
+  @ApiParam({
+    name: "slug",
+    required: true,
+    schema: { oneOf: [{ type: "string" }] },
   })
   @ApiResponse({ status: 403, description: "Forbidden." })
   @Delete(":slug")
@@ -101,6 +121,7 @@ export class ArticleController {
     status: 201,
     description: "The comment has been successfully created.",
   })
+  @ApiBody({ type: CreateCommentDto })
   @ApiResponse({ status: 403, description: "Forbidden." })
   @Post(":slug/comments")
   async createComment(
@@ -142,5 +163,13 @@ export class ArticleController {
   @Delete(":slug/favorite")
   async unFavorite(@User("id") userId: number, @Param("slug") slug) {
     return await this.articleService.unFavorite(userId, slug);
+  }
+
+  @Post("/seed")
+  async seedData(
+    @User("id") userId: number,
+    @Body("articles") articleList: CreateArticleDto[]
+  ) {
+    return this.articleService.seed(userId, articleList);
   }
 }

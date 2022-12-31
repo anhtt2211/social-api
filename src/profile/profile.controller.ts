@@ -1,33 +1,40 @@
-import { Get, Post, Delete, Param, Controller } from '@nestjs/common';
-import { Request } from 'express';
-import { ProfileService } from './profile.service';
-import { ProfileRO } from './profile.interface';
-import { User } from '../user/user.decorator';
+import { Controller, Delete, Get, Param, Post } from "@nestjs/common";
+import { User } from "../user/user.decorator";
+import { ProfileRO } from "./profile.interface";
+import { ProfileService } from "./profile.service";
 
-import {
-  ApiBearerAuth, ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 
 @ApiBearerAuth()
-@ApiTags('profiles')
-@Controller('profiles')
+@ApiTags("profiles")
+@Controller("profiles")
 export class ProfileController {
-
   constructor(private readonly profileService: ProfileService) {}
 
-  @Get(':username')
-  async getProfile(@User('id') userId: number, @Param('username') username: string): Promise<ProfileRO> {
+  @ApiOperation({ summary: "get profile" })
+  @Get(":username")
+  async getProfile(
+    @User("id") userId: number,
+    @Param("username") username: string
+  ): Promise<ProfileRO> {
     return await this.profileService.findProfile(userId, username);
   }
 
-  @Post(':username/follow')
-  async follow(@User('email') email: string, @Param('username') username: string): Promise<ProfileRO> {
+  @ApiOperation({ summary: "follow user" })
+  @Post(":username/follow")
+  async follow(
+    @User("email") email: string,
+    @Param("username") username: string
+  ): Promise<ProfileRO> {
     return await this.profileService.follow(email, username);
   }
 
-  @Delete(':username/follow')
-  async unFollow(@User('id') userId: number,  @Param('username') username: string): Promise<ProfileRO> {
+  @ApiOperation({ summary: "unfollow user" })
+  @Delete(":username/follow")
+  async unFollow(
+    @User("id") userId: number,
+    @Param("username") username: string
+  ): Promise<ProfileRO> {
     return await this.profileService.unFollow(userId, username);
   }
-
 }

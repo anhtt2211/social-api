@@ -1,5 +1,6 @@
-import { UserData } from '../user/user.interface';
-import { ArticleEntity } from './article.entity';
+import { ApiProperty } from "@nestjs/swagger";
+import { UserData } from "../user/user.interface";
+import { ArticleEntity } from "./article.entity";
 interface Comment {
   body: string;
 }
@@ -10,8 +11,8 @@ interface ArticleData {
   description: string;
   body?: string;
   tagList?: string[];
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: Date;
+  updatedAt?: Date;
   favorited?: boolean;
   favoritesCount?: number;
   author?: UserData;
@@ -29,4 +30,3 @@ export interface ArticlesRO {
   articles: ArticleEntity[];
   articlesCount: number;
 }
-
