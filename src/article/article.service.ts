@@ -132,7 +132,9 @@ export class ArticleService {
     const article = await this.articleRepository.findOne(where, {
       relations: ["blocks", "author"],
     });
-    return { article };
+
+    const articleData = this.buildArticleRO(article);
+    return { article: articleData };
   }
 
   async addComment(slug: string, commentData): Promise<ArticleRO> {
