@@ -31,7 +31,7 @@ export class ArticleService {
   ) {}
 
   async findAll(userId: number, query: ArticleFilters): Promise<ArticlesRO> {
-    const qb = await getRepository(ArticleEntity)
+    const qb = getRepository(ArticleEntity)
       .createQueryBuilder("article")
       .leftJoinAndSelect("article.author", "author");
 
@@ -92,15 +92,20 @@ export class ArticleService {
   async findFeed(userId: number, query: ArticleFilters): Promise<ArticlesRO> {
     const _follows = await this.followsRepository.find({ followerId: userId });
 
+    const user = await this.userRepository.findOne(userId, {
+      relations: ["favorites"],
+    });
+
     if (!(Array.isArray(_follows) && _follows.length > 0)) {
       return { articles: [], articlesCount: 0 };
     }
 
     const ids = _follows.map((el) => el.followingId);
 
-    const qb = await getRepository(ArticleEntity)
+    const qb = getRepository(ArticleEntity)
       .createQueryBuilder("article")
-      .where("article.authorId IN (:ids)", { ids });
+      .where("article.authorId IN (:...ids)", { ids })
+      .leftJoinAndSelect("article.author", "author");
 
     qb.orderBy("article.created", "DESC");
 
@@ -116,7 +121,11 @@ export class ArticleService {
 
     const articles = await qb.getMany();
 
-    return { articles, articlesCount };
+    const articlesRO = articles?.map((article) =>
+      this.buildArticleRO(article, user)
+    );
+
+    return { articles: articlesRO, articlesCount };
   }
 
   async findOne(where): Promise<ArticleRO> {
@@ -278,7 +287,7 @@ export class ArticleService {
       favoritesCount: article.favoriteCount,
       author: {
         username: article.author.username,
-        email: article.author.email,
+        following: false,
         bio: article.author.bio,
         image: article.author.image,
       },

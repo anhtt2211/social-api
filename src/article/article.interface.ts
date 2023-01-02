@@ -1,6 +1,5 @@
 import { BlockDto } from "../block/block.dto";
-import { UserData } from "../user/user.interface";
-import { ArticleEntity } from "./article.entity";
+import { ProfileData } from "../profile/profile.interface";
 interface Comment {
   body: string;
 }
@@ -15,7 +14,7 @@ export interface ArticleData {
   updatedAt?: Date;
   favorited?: boolean;
   favoritesCount?: number;
-  author?: UserData;
+  author?: ProfileData;
 }
 
 export interface CommentsRO {
