@@ -58,7 +58,7 @@ export class ArticleService {
         }
       );
       const ids = author.favorites.map((el) => el.id);
-      qb.andWhere("article.authorId IN (:...ids)", { ids });
+      qb.andWhere("article.id IN (:...ids)", { ids });
     }
 
     qb.orderBy("article.created", "DESC");
