@@ -100,7 +100,7 @@ export class UserService {
 
   async findByEmail(email: string): Promise<UserRO> {
     const user = await this.userRepository.findOne({ email });
-    return this.buildUserRO(user);
+    return { user };
   }
 
   public generateJWT(user) {
