@@ -1,15 +1,15 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { BlockDto } from "../block/block.dto";
 import { UserData } from "../user/user.interface";
 import { ArticleEntity } from "./article.entity";
 interface Comment {
   body: string;
 }
 
-interface ArticleData {
+export interface ArticleData {
   slug: string;
   title: string;
   description: string;
-  body?: string;
+  blocks?: BlockDto[];
   tagList?: string[];
   createdAt?: Date;
   updatedAt?: Date;
@@ -23,10 +23,10 @@ export interface CommentsRO {
 }
 
 export interface ArticleRO {
-  article: ArticleEntity;
+  article: ArticleData;
 }
 
 export interface ArticlesRO {
-  articles: ArticleEntity[];
+  articles: ArticleData[];
   articlesCount: number;
 }

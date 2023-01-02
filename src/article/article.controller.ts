@@ -33,8 +33,11 @@ export class ArticleController {
   @ApiOperation({ summary: "Get all articles" })
   @ApiResponse({ status: 200, description: "Return all articles." })
   @Get()
-  async findAll(@Query() query: ArticleFilters): Promise<ArticlesRO> {
-    return await this.articleService.findAll(query);
+  async findAll(
+    @User("id") userId: number,
+    @Query() query: ArticleFilters
+  ): Promise<ArticlesRO> {
+    return await this.articleService.findAll(userId, query);
   }
 
   @ApiOperation({ summary: "Get article feed" })

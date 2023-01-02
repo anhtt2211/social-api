@@ -7,8 +7,14 @@ import { ArticleEntity } from "./article.entity";
 import { Comment } from "./comment.entity";
 import { CreateArticleDto } from "./dto";
 
-import { ArticleRO, ArticlesRO, CommentsRO } from "./article.interface";
+import {
+  ArticleData,
+  ArticleRO,
+  ArticlesRO,
+  CommentsRO,
+} from "./article.interface";
 import { ArticleFilters } from "./dto/article-query";
+import { BlockDto } from "../block/block.dto";
 const slug = require("slug");
 
 @Injectable()
@@ -24,7 +30,7 @@ export class ArticleService {
     private readonly followsRepository: Repository<FollowsEntity>
   ) {}
 
-  async findAll(query: ArticleFilters): Promise<ArticlesRO> {
+  async findAll(userId: number, query: ArticleFilters): Promise<ArticlesRO> {
     const qb = await getRepository(ArticleEntity)
       .createQueryBuilder("article")
       .leftJoinAndSelect("article.author", "author");
@@ -43,11 +49,16 @@ export class ArticleService {
     }
 
     if ("favorited" in query) {
-      const author = await this.userRepository.findOne({
-        username: query.favorited,
-      });
+      const author = await this.userRepository.findOne(
+        {
+          username: query.favorited,
+        },
+        {
+          relations: ["favorites"],
+        }
+      );
       const ids = author.favorites.map((el) => el.id);
-      qb.andWhere("article.authorId IN (:ids)", { ids });
+      qb.andWhere("article.authorId IN (:...ids)", { ids });
     }
 
     qb.orderBy("article.created", "DESC");
@@ -64,7 +75,18 @@ export class ArticleService {
 
     const articles = await qb.getMany();
 
-    return { articles, articlesCount };
+    let user = null;
+    if (userId) {
+      user = await this.userRepository.findOne(userId, {
+        relations: ["favorites"],
+      });
+    }
+
+    const articlesRO = articles?.map((article) =>
+      this.buildArticleRO(article, user)
+    );
+
+    return { articles: articlesRO, articlesCount };
   }
 
   async findFeed(userId: number, query: ArticleFilters): Promise<ArticlesRO> {
@@ -156,12 +178,19 @@ export class ArticleService {
       article = await this.articleRepository.save(article);
     }
 
-    return { article };
+    return { article: this.buildArticleRO(article, user) };
   }
 
   async unFavorite(id: number, slug: string): Promise<ArticleRO> {
-    let article = await this.articleRepository.findOne({ slug });
-    const user = await this.userRepository.findOne(id);
+    let article = await this.articleRepository.findOne(
+      { slug },
+      {
+        relations: ["author"],
+      }
+    );
+    const user = await this.userRepository.findOne(id, {
+      relations: ["favorites"],
+    });
 
     const deleteIndex = user.favorites.findIndex(
       (_article) => _article.id === article.id
@@ -175,7 +204,7 @@ export class ArticleService {
       article = await this.articleRepository.save(article);
     }
 
-    return { article };
+    return { article: this.buildArticleRO(article, user) };
   }
 
   async findComments(slug: string): Promise<CommentsRO> {
@@ -225,6 +254,37 @@ export class ArticleService {
       "-" +
       ((Math.random() * Math.pow(36, 6)) | 0).toString(36)
     );
+  }
+
+  private buildArticleRO(
+    article: ArticleEntity,
+    user?: UserEntity
+  ): ArticleData {
+    let favorite =
+      user?.favorites?.filter((art) => art.slug === article.slug).length > 0;
+
+    const articleData: ArticleData = {
+      slug: article.slug,
+      title: article.title,
+      description: article.description,
+      blocks: article?.blocks?.map((block: BlockDto) => ({
+        type: block.type,
+        data: block.data,
+      })),
+      tagList: article.tagList,
+      createdAt: article.created,
+      updatedAt: article.updated,
+      favorited: favorite,
+      favoritesCount: article.favoriteCount,
+      author: {
+        username: article.author.username,
+        email: article.author.email,
+        bio: article.author.bio,
+        image: article.author.image,
+      },
+    };
+
+    return articleData;
   }
 
   async seed(userId: number, articleList: CreateArticleDto[]) {
