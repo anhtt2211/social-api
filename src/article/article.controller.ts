@@ -58,8 +58,11 @@ export class ArticleController {
     schema: { oneOf: [{ type: "string" }] },
   })
   @Get(":slug")
-  async findOne(@Param("slug") slug): Promise<ArticleRO> {
-    return await this.articleService.findOne({ slug });
+  async findOne(
+    @User("id") userId: number,
+    @Param("slug") slug
+  ): Promise<ArticleRO> {
+    return await this.articleService.findOne(userId, slug);
   }
 
   @ApiOperation({ summary: "Get comments of article" })

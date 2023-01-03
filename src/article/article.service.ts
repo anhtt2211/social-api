@@ -76,15 +76,31 @@ export class ArticleService {
     const articles = await qb.getMany();
 
     let user = null;
+    let follows = [];
     if (userId) {
+      const authorIds = articles
+        .map((art) => art.author.id)
+        .filter((id, index, ids) => ids.indexOf(id) === index);
+
       user = await this.userRepository.findOne(userId, {
         relations: ["favorites"],
       });
+
+      follows = await getRepository(FollowsEntity)
+        .createQueryBuilder("follows")
+        .where("follows.followerId = :followerId", { followerId: userId })
+        .andWhere("follows.followingId IN (:...followingIds)", {
+          followingIds: authorIds,
+        })
+        .getMany();
     }
 
-    const articlesRO = articles?.map((article) =>
-      this.buildArticleRO(article, user)
-    );
+    const articlesRO = articles?.map((article) => {
+      const following =
+        follows?.filter((follow) => follow.followingId === article.author.id)
+          .length > 0;
+      return this.buildArticleRO(article, user, following);
+    });
 
     return { articles: articlesRO, articlesCount };
   }
@@ -122,18 +138,30 @@ export class ArticleService {
     const articles = await qb.getMany();
 
     const articlesRO = articles?.map((article) =>
-      this.buildArticleRO(article, user)
+      this.buildArticleRO(article, user, !!_follows)
     );
 
     return { articles: articlesRO, articlesCount };
   }
 
-  async findOne(where): Promise<ArticleRO> {
-    const article = await this.articleRepository.findOne(where, {
-      relations: ["blocks", "author"],
+  async findOne(userId: number, slug: string): Promise<ArticleRO> {
+    const article = await this.articleRepository.findOne(
+      { slug },
+      {
+        relations: ["blocks", "author"],
+      }
+    );
+    const user = await this.userRepository.findOne(
+      { id: userId },
+      { relations: ["favorites"] }
+    );
+
+    const follows = await this.followsRepository.findOne({
+      followerId: userId,
+      followingId: article.author.id,
     });
 
-    const articleData = this.buildArticleRO(article);
+    const articleData = this.buildArticleRO(article, user, !!follows);
     return { article: articleData };
   }
 
@@ -269,7 +297,8 @@ export class ArticleService {
 
   private buildArticleRO(
     article: ArticleEntity,
-    user?: UserEntity
+    user?: UserEntity,
+    following?: boolean
   ): ArticleData {
     let favorite =
       user?.favorites?.filter((art) => art.slug === article.slug).length > 0;
@@ -289,7 +318,7 @@ export class ArticleService {
       favoritesCount: article.favoriteCount,
       author: {
         username: article.author.username,
-        following: false,
+        following: following || false,
         bio: article.author.bio,
         image: article.author.image,
       },
