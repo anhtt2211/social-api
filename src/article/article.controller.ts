@@ -131,10 +131,11 @@ export class ArticleController {
   @ApiResponse({ status: 403, description: "Forbidden." })
   @Post(":slug/comments")
   async createComment(
+    @User("id") userId,
     @Param("slug") slug,
     @Body("comment") commentData: CreateCommentDto
   ) {
-    return await this.articleService.addComment(slug, commentData);
+    return await this.articleService.addComment(userId, slug, commentData);
   }
 
   @ApiOperation({ summary: "Delete comment" })

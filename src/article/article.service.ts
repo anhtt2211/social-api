@@ -5,16 +5,19 @@ import { FollowsEntity } from "../profile/follows.entity";
 import { UserEntity } from "../user/user.entity";
 import { ArticleEntity } from "./article.entity";
 import { Comment } from "./comment.entity";
-import { CreateArticleDto } from "./dto";
+import { CreateArticleDto, CreateCommentDto } from "./dto";
 
 import {
   ArticleData,
   ArticleRO,
   ArticlesRO,
+  CommentRO,
   CommentsRO,
+  Comment as IComment,
 } from "./article.interface";
 import { ArticleFilters } from "./dto/article-query";
 import { BlockDto } from "../block/block.dto";
+import { BlockEntity } from "../block/block.entity";
 const slug = require("slug");
 
 @Injectable()
@@ -165,17 +168,26 @@ export class ArticleService {
     return { article: articleData };
   }
 
-  async addComment(slug: string, commentData): Promise<ArticleRO> {
+  async addComment(
+    userId: number,
+    slug: string,
+    commentData: CreateCommentDto
+  ): Promise<CommentRO> {
     let article = await this.articleRepository.findOne({ slug });
+    const author = await this.userRepository.findOne(userId);
 
     const comment = new Comment();
     comment.body = commentData.body;
+    comment.author = author;
+    await this.commentRepository.save(comment);
 
     article.comments.push(comment);
+    await this.articleRepository.save(article);
 
-    await this.commentRepository.save(comment);
-    article = await this.articleRepository.save(article);
-    return { article };
+    const commentRO = this.buildCommentRO(comment);
+    return {
+      comment: commentRO,
+    };
   }
 
   async deleteComment(slug: string, id: string): Promise<ArticleRO> {
@@ -190,9 +202,9 @@ export class ArticleService {
       const deleteComments = article.comments.splice(deleteIndex, 1);
       await this.commentRepository.delete(deleteComments[0].id);
       article = await this.articleRepository.save(article);
-      return { article };
+      return { article: this.buildArticleRO(article) };
     } else {
-      return { article };
+      return { article: this.buildArticleRO(article) };
     }
   }
 
@@ -247,8 +259,18 @@ export class ArticleService {
   }
 
   async findComments(slug: string): Promise<CommentsRO> {
-    const article = await this.articleRepository.findOne({ slug });
-    return { comments: article.comments };
+    const article = await this.articleRepository.findOne(
+      { slug },
+      {
+        relations: ["comments", "comments.author"],
+      }
+    );
+
+    const commentsRO = article.comments.map((comment) =>
+      this.buildCommentRO(comment)
+    );
+
+    return { comments: commentsRO };
   }
 
   async create(
@@ -307,7 +329,8 @@ export class ArticleService {
       slug: article.slug,
       title: article.title,
       description: article.description,
-      blocks: article?.blocks?.map((block: BlockDto) => ({
+      blocks: article?.blocks?.map((block: BlockEntity) => ({
+        id: block.id,
         type: block.type,
         data: block.data,
       })),
@@ -325,6 +348,19 @@ export class ArticleService {
     };
 
     return articleData;
+  }
+
+  private buildCommentRO({ author, ...commentEntity }: Comment): IComment {
+    const comment: IComment = {
+      ...commentEntity,
+      author: {
+        username: author.username,
+        bio: author.bio,
+        image: author.image,
+      },
+    };
+
+    return comment;
   }
 
   async seed(userId: number, articleList: CreateArticleDto[]) {

@@ -1,14 +1,19 @@
 import { BlockDto } from "../block/block.dto";
+import { IBlock } from "../block/block.interface";
 import { ProfileData } from "../profile/profile.interface";
-interface Comment {
+export interface Comment {
+  id: number;
   body: string;
+  created: Date;
+  updated?: Date;
+  author: ProfileData;
 }
 
 export interface ArticleData {
   slug: string;
   title: string;
   description: string;
-  blocks?: BlockDto[];
+  blocks?: IBlock[];
   tagList?: string[];
   createdAt?: Date;
   updatedAt?: Date;
@@ -19,6 +24,10 @@ export interface ArticleData {
 
 export interface CommentsRO {
   comments: Comment[];
+}
+
+export interface CommentRO {
+  comment: Comment;
 }
 
 export interface ArticleRO {
