@@ -6,6 +6,7 @@ import {
   JoinTable,
   ManyToMany,
   OneToMany,
+  Index,
 } from "typeorm";
 import { IsEmail } from "class-validator";
 import * as argon2 from "argon2";
@@ -17,9 +18,11 @@ export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index("user_username")
   @Column()
   username: string;
 
+  @Index("user_email")
   @Column()
   @IsEmail()
   email: string;

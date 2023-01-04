@@ -1,13 +1,12 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
+  BeforeUpdate,
   Column,
-  OneToOne,
+  Entity,
+  Index,
+  JoinColumn,
   ManyToOne,
   OneToMany,
-  JoinColumn,
-  AfterUpdate,
-  BeforeUpdate,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 import { BlockEntity } from "../block/block.entity";
 import { UserEntity } from "../user/user.entity";
@@ -18,6 +17,7 @@ export class ArticleEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index("article_slug")
   @Column()
   slug: string;
 
