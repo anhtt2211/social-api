@@ -16,7 +16,6 @@ import {
   Comment as IComment,
 } from "./article.interface";
 import { ArticleFilters } from "./dto/article-query";
-import { BlockDto } from "../block/block.dto";
 import { BlockEntity } from "../block/block.entity";
 const slug = require("slug");
 
@@ -89,13 +88,15 @@ export class ArticleService {
         relations: ["favorites"],
       });
 
-      follows = await getRepository(FollowsEntity)
+      const followsBuilder = getRepository(FollowsEntity)
         .createQueryBuilder("follows")
-        .where("follows.followerId = :followerId", { followerId: userId })
-        .andWhere("follows.followingId IN (:...followingIds)", {
+        .where("follows.followerId = :followerId", { followerId: userId });
+      if (authorIds.length > 0) {
+        followsBuilder.andWhere("follows.followingId IN (:...followingIds)", {
           followingIds: authorIds,
-        })
-        .getMany();
+        });
+      }
+      follows = await followsBuilder.getMany();
     }
 
     const articlesRO = articles?.map((article) => {
