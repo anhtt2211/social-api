@@ -4,15 +4,23 @@
 
 Clone the repository
 
-    git clone https://github.com/anhtt2211/nestjs-boilerplate.git
+    git clone https://github.com/anhtt2211/social-api.git
 
 Switch to the repo folder
 
-    cd nestjs-boilerplate
+    cd social-api
 
 Install dependencies
 
     npm install
+
+Create file .env from .env.example and fill it
+
+    cp .env.example .env
+
+Run migration
+
+    npm run migration:run
 
 ---
 
