@@ -17,5 +17,5 @@ export class ArticleFilters {
   offset?: number;
 
   @ApiProperty({ required: false })
-  search?: number;
+  search?: string;
 }
