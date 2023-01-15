@@ -11,7 +11,7 @@ async function bootstrap() {
   app.setGlobalPrefix("api");
 
   const options = new DocumentBuilder()
-    .setTitle("NestJS Boilerplate")
+    .setTitle("Social API")
     .setDescription("The Boilerplate API description")
     .setVersion("1.0")
     .setBasePath("api")
