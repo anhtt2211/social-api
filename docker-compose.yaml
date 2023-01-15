@@ -1,0 +1,33 @@
+version: '2.6'
+
+services:
+  social-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: social-api
+    container_name: social-api-app
+    restart: always
+    ports:
+      - "8000:8000"
+    # working directory
+    working_dir: /social-api
+    environment: 
+      - NODE_ENV=${NODE_ENV}
+      - DATABASE_HOST=host.docker.internal
+      - DATABASE_PORT=5432
+      - DATABASE_ENGINE=postgres
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_NAME=${DATABASE_NAME}
+
+      - TYPEORM_ENTITIES=src/**/**.entity{.ts,.js}
+      - TYPEORM_MIGRATIONS=src/database/migrations/*{.ts,.js}
+      - TYPEORM_MIGRATIONS_DIR=src/database/migrations
+      - TYPEORM_LOGGING=true
+      - TYPEORM_SYNCHRONIZE=false
+      - TYPEORM_MIGRATION_RUN=false
+
+      - DROPBOX_TOKEN=${DROPBOX_TOKEN}
+      - DROPBOX_KEY=${DROPBOX_KEY}
+      - DROPBOX_SECRET=${DROPBOX_SECRET}
