@@ -53,4 +53,7 @@ export class ArticleEntity {
 
   @OneToMany(() => BlockEntity, (block) => block.article, { cascade: true })
   blocks: BlockEntity[];
+
+  @Column("tsvector", { select: false, nullable: true })
+  document_with_weights: any;
 }

@@ -63,6 +63,15 @@ export class ArticleService {
       qb.andWhere("article.id IN (:...ids)", { ids });
     }
 
+    if ("search" in query) {
+      qb.andWhere("document_with_weights @@ plainto_tsquery(:search)", {
+        search: query.search,
+      }).orderBy(
+        "ts_rank(document_with_weights, plainto_tsquery(:query))",
+        "DESC"
+      );
+    }
+
     qb.orderBy("article.created", "DESC");
 
     const articlesCount = await qb.getCount();
@@ -126,6 +135,15 @@ export class ArticleService {
       .createQueryBuilder("article")
       .where("article.authorId IN (:...ids)", { ids })
       .leftJoinAndSelect("article.author", "author");
+
+    if ("search" in query) {
+      qb.andWhere("document_with_weights @@ plainto_tsquery(:search)", {
+        search: query.search,
+      }).orderBy(
+        "ts_rank(document_with_weights, plainto_tsquery(:query))",
+        "DESC"
+      );
+    }
 
     qb.orderBy("article.created", "DESC");
 
