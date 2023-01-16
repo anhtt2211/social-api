@@ -1,18 +1,17 @@
-FROM node:14
+FROM node:16
 
 # Create app directory
 WORKDIR /social-api/
 
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-COPY package*.json ./
+COPY --chown=node:node package*.json ./
+COPY ormconfig.js ./ormconfig.js
+COPY --chown=node:node . .
+COPY .env ./
 
-# Install app dependencies
-RUN npm install
-
+RUN npm i
 RUN npm run migration:run
 
-# Bundle app source
-COPY . .
+USER node
 
 # Start the server using the production build
 CMD [ "npm", "run", "start" ]
