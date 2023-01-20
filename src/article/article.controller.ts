@@ -12,23 +12,41 @@ import { User } from "../user/user.decorator";
 import { ArticleRO, ArticlesRO, CommentsRO } from "./article.interface";
 import { ArticleService } from "./article.service";
 import { CreateArticleDto, CreateCommentDto } from "./dto";
-
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiParam,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
 import { ArticleFilters } from "./dto/article-query";
+import {
+  FindAllArticleQuery,
+  FindCommentQuery,
+  FindFeedArticleQuery,
+  FindOneArticleQuery,
+} from "./handlers/queries";
+import {
+  CreateArticleCommand,
+  CreateCommentCommand,
+  DeleteArticleCommand,
+  DeleteCommentCommand,
+  FavoriteArticleCommand,
+  UnFavoriteArticleCommand,
+  UpdateArticleCommand,
+} from "./handlers/commands";
 
 @ApiBearerAuth()
 @ApiTags("articles")
 @Controller("articles")
 export class ArticleController {
-  constructor(private readonly articleService: ArticleService) {}
+  constructor(
+    private readonly articleService: ArticleService,
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus
+  ) {}
 
   @ApiOperation({ summary: "Get all articles" })
   @ApiResponse({ status: 200, description: "Return all articles." })
@@ -37,7 +55,7 @@ export class ArticleController {
     @User("id") userId: number,
     @Query() query: ArticleFilters
   ): Promise<ArticlesRO> {
-    return await this.articleService.findAll(userId, query);
+    return this.queryBus.execute(new FindAllArticleQuery(userId, query));
   }
 
   @ApiOperation({ summary: "Get article feed" })
@@ -48,7 +66,7 @@ export class ArticleController {
     @User("id") userId: number,
     @Query() query: ArticleFilters
   ): Promise<ArticlesRO> {
-    return await this.articleService.findFeed(userId, query);
+    return this.queryBus.execute(new FindFeedArticleQuery(userId, query));
   }
 
   @ApiOperation({ summary: "Get article by slug" })
@@ -62,7 +80,7 @@ export class ArticleController {
     @User("id") userId: number,
     @Param("slug") slug
   ): Promise<ArticleRO> {
-    return await this.articleService.findOne(userId, slug);
+    return this.queryBus.execute(new FindOneArticleQuery(userId, slug));
   }
 
   @ApiOperation({ summary: "Get comments of article" })
@@ -73,7 +91,7 @@ export class ArticleController {
   })
   @Get(":slug/comments")
   async findComments(@Param("slug") slug): Promise<CommentsRO> {
-    return await this.articleService.findComments(slug);
+    return this.queryBus.execute(new FindCommentQuery(slug));
   }
 
   @ApiOperation({ summary: "Create article" })
@@ -87,8 +105,10 @@ export class ArticleController {
   async create(
     @User("id") userId: number,
     @Body("article") articleData: CreateArticleDto
-  ) {
-    return this.articleService.create(userId, articleData);
+  ): Promise<ArticleRO> {
+    return this.commandBus.execute(
+      new CreateArticleCommand(userId, articleData)
+    );
   }
 
   @ApiOperation({ summary: "Update article" })
@@ -102,8 +122,10 @@ export class ArticleController {
   async update(
     @Param() params,
     @Body("article") articleData: CreateArticleDto
-  ) {
-    return this.articleService.update(params.slug, articleData);
+  ): Promise<ArticleRO> {
+    return this.commandBus.execute(
+      new UpdateArticleCommand(params.slug, articleData)
+    );
   }
 
   @ApiOperation({ summary: "Delete article" })
@@ -118,8 +140,10 @@ export class ArticleController {
   })
   @ApiResponse({ status: 403, description: "Forbidden." })
   @Delete(":slug")
-  async delete(@Param() params) {
-    return this.articleService.delete(params.slug);
+  async delete(@User("id") userId: number, @Param() params) {
+    return this.commandBus.execute(
+      new DeleteArticleCommand(userId, params.slug)
+    );
   }
 
   @ApiOperation({ summary: "Create comment" })
@@ -135,7 +159,9 @@ export class ArticleController {
     @Param("slug") slug,
     @Body("comment") commentData: CreateCommentDto
   ) {
-    return await this.articleService.addComment(userId, slug, commentData);
+    return this.commandBus.execute(
+      new CreateCommentCommand(userId, slug, commentData)
+    );
   }
 
   @ApiOperation({ summary: "Delete comment" })
@@ -145,9 +171,12 @@ export class ArticleController {
   })
   @ApiResponse({ status: 403, description: "Forbidden." })
   @Delete(":slug/comments/:id")
-  async deleteComment(@Param() params) {
-    const { slug, id } = params;
-    return await this.articleService.deleteComment(slug, id);
+  async deleteComment(@User("id") userId, @Param() params): Promise<ArticleRO> {
+    const { slug, id: commentId } = params;
+
+    return this.commandBus.execute(
+      new DeleteCommentCommand(userId, slug, commentId)
+    );
   }
 
   @ApiOperation({ summary: "Favorite article" })
@@ -158,7 +187,7 @@ export class ArticleController {
   @ApiResponse({ status: 403, description: "Forbidden." })
   @Post(":slug/favorite")
   async favorite(@User("id") userId: number, @Param("slug") slug) {
-    return await this.articleService.favorite(userId, slug);
+    return this.commandBus.execute(new FavoriteArticleCommand(userId, slug));
   }
 
   @ApiOperation({ summary: "Unfavorite article" })
@@ -169,7 +198,7 @@ export class ArticleController {
   @ApiResponse({ status: 403, description: "Forbidden." })
   @Delete(":slug/favorite")
   async unFavorite(@User("id") userId: number, @Param("slug") slug) {
-    return await this.articleService.unFavorite(userId, slug);
+    return this.commandBus.execute(new UnFavoriteArticleCommand(userId, slug));
   }
 
   @Post("/seed")

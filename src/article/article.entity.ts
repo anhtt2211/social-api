@@ -44,7 +44,9 @@ export class ArticleEntity {
   @ManyToOne((type) => UserEntity, (user) => user.articles)
   author: UserEntity;
 
-  @OneToMany((type) => Comment, (comment) => comment.article, { eager: true })
+  @OneToMany((type) => Comment, (comment) => comment.article, {
+    eager: true,
+  })
   @JoinColumn()
   comments: Comment[];
 

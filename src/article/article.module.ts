@@ -13,6 +13,9 @@ import { FollowsEntity } from "../profile/follows.entity";
 import { ArticleService } from "./article.service";
 import { AuthMiddleware } from "../user/auth.middleware";
 import { UserModule } from "../user/user.module";
+import { CommandHandlers, QueryHandlers } from "./handlers";
+import { CqrsModule } from "@nestjs/cqrs";
+import { BlockEntity } from "../block/block.entity";
 
 @Module({
   imports: [
@@ -21,10 +24,12 @@ import { UserModule } from "../user/user.module";
       Comment,
       UserEntity,
       FollowsEntity,
+      BlockEntity,
     ]),
     UserModule,
+    CqrsModule,
   ],
-  providers: [ArticleService],
+  providers: [ArticleService, ...QueryHandlers, ...CommandHandlers],
   controllers: [ArticleController],
 })
 export class ArticleModule implements NestModule {
