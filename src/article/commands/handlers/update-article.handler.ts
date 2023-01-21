@@ -4,14 +4,7 @@ import { Repository } from "typeorm";
 import { ArticleEntity } from "../../article.entity";
 import { ArticleRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
-import { CreateArticleDto } from "../../dto";
-
-export class UpdateArticleCommand {
-  constructor(
-    public readonly slug: string,
-    public readonly articleData: CreateArticleDto
-  ) {}
-}
+import { UpdateArticleCommand } from "../impl";
 
 @CommandHandler(UpdateArticleCommand)
 export class UpdateArticleCommandHandler

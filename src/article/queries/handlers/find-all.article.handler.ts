@@ -6,14 +6,7 @@ import { UserEntity } from "../../../user/user.entity";
 import { ArticleEntity } from "../../article.entity";
 import { ArticlesRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
-import { ArticleFilters } from "../../dto/article-query";
-
-export class FindAllArticleQuery {
-  constructor(
-    public readonly userId: number,
-    public readonly query: ArticleFilters
-  ) {}
-}
+import { FindAllArticleQuery } from "../impl";
 
 @QueryHandler(FindAllArticleQuery)
 export class FindAllArticleQueryHandler

@@ -6,14 +6,7 @@ import { ArticleEntity } from "../../article.entity";
 import { ArticleRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
 import { Comment } from "../../comment.entity";
-
-export class DeleteCommentCommand {
-  constructor(
-    public readonly userId: number,
-    public readonly slug: string,
-    public readonly commentId: number
-  ) {}
-}
+import { DeleteCommentCommand } from "../impl";
 
 @CommandHandler(DeleteCommentCommand)
 export class DeleteCommentCommandHandler

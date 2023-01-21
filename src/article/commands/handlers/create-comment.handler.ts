@@ -6,15 +6,7 @@ import { ArticleEntity } from "../../article.entity";
 import { CommentRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
 import { Comment } from "../../comment.entity";
-import { CreateCommentDto } from "../../dto";
-
-export class CreateCommentCommand {
-  constructor(
-    public readonly userId: number,
-    public readonly slug: string,
-    public readonly commentData: CreateCommentDto
-  ) {}
-}
+import { CreateCommentCommand } from "../impl";
 
 @CommandHandler(CreateCommentCommand)
 export class CreateCommentCommandHandler

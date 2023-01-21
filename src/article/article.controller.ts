@@ -27,7 +27,7 @@ import {
   FindCommentQuery,
   FindFeedArticleQuery,
   FindOneArticleQuery,
-} from "./handlers/queries";
+} from "./queries";
 import {
   CreateArticleCommand,
   CreateCommentCommand,
@@ -36,7 +36,7 @@ import {
   FavoriteArticleCommand,
   UnFavoriteArticleCommand,
   UpdateArticleCommand,
-} from "./handlers/commands";
+} from "./commands";
 
 @ApiBearerAuth()
 @ApiTags("articles")

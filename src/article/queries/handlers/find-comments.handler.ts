@@ -4,10 +4,7 @@ import { Repository } from "typeorm";
 import { ArticleEntity } from "../../article.entity";
 import { CommentsRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
-
-export class FindCommentQuery {
-  constructor(public readonly slug: string) {}
-}
+import { FindCommentQuery } from "../impl";
 
 @QueryHandler(FindCommentQuery)
 export class FindCommentQueryHandler

@@ -5,14 +5,11 @@ import { UserEntity } from "../../../user/user.entity";
 import { ArticleEntity } from "../../article.entity";
 import { ArticleRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
+import { UnFavoriteArticleCommand } from "../impl";
 
-export class FavoriteArticleCommand {
-  constructor(public readonly userId: number, public readonly slug: string) {}
-}
-
-@CommandHandler(FavoriteArticleCommand)
-export class FavoriteArticleCommandHandler
-  implements ICommandHandler<FavoriteArticleCommand>
+@CommandHandler(UnFavoriteArticleCommand)
+export class UnFavoriteArticleCommandHandler
+  implements ICommandHandler<UnFavoriteArticleCommand>
 {
   constructor(
     @InjectRepository(ArticleEntity)
@@ -23,7 +20,10 @@ export class FavoriteArticleCommandHandler
     private readonly articleService: ArticleService
   ) {}
 
-  async execute({ userId, slug }: FavoriteArticleCommand): Promise<ArticleRO> {
+  async execute({
+    userId,
+    slug,
+  }: UnFavoriteArticleCommand): Promise<ArticleRO> {
     let article = await this.articleRepository.findOne(
       { slug },
       {
@@ -34,11 +34,13 @@ export class FavoriteArticleCommandHandler
       relations: ["favorites"],
     });
 
-    const isNewFavorite =
-      user.favorites.findIndex((_article) => _article.id === article.id) < 0;
-    if (isNewFavorite) {
-      user.favorites.push(article);
-      article.favoriteCount++;
+    const deleteIndex = user.favorites.findIndex(
+      (_article) => _article.id === article.id
+    );
+
+    if (deleteIndex >= 0) {
+      user.favorites.splice(deleteIndex, 1);
+      article.favoriteCount--;
 
       await this.userRepository.save(user);
       article = await this.articleRepository.save(article);

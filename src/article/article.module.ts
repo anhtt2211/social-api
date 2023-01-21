@@ -13,9 +13,12 @@ import { FollowsEntity } from "../profile/follows.entity";
 import { ArticleService } from "./article.service";
 import { AuthMiddleware } from "../user/auth.middleware";
 import { UserModule } from "../user/user.module";
-import { CommandHandlers, QueryHandlers } from "./handlers";
+// import { CommandHandlers, EventHandlers, QueryHandlers } from "./handlers";
 import { CqrsModule } from "@nestjs/cqrs";
 import { BlockEntity } from "../block/block.entity";
+import { QueryHandlers } from "./queries";
+import { CommandHandlers } from "./commands";
+import { EventHandlers } from "./events";
 
 @Module({
   imports: [
@@ -29,7 +32,12 @@ import { BlockEntity } from "../block/block.entity";
     UserModule,
     CqrsModule,
   ],
-  providers: [ArticleService, ...QueryHandlers, ...CommandHandlers],
+  providers: [
+    ArticleService,
+    ...QueryHandlers,
+    ...CommandHandlers,
+    ...EventHandlers,
+  ],
   controllers: [ArticleController],
 })
 export class ArticleModule implements NestModule {

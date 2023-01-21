@@ -6,10 +6,7 @@ import { UserEntity } from "../../../user/user.entity";
 import { ArticleEntity } from "../../article.entity";
 import { ArticleRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
-
-export class FindOneArticleQuery {
-  constructor(public readonly userId: number, public readonly slug: string) {}
-}
+import { FindOneArticleQuery } from "../impl";
 
 @QueryHandler(FindOneArticleQuery)
 export class FindOneArticleQueryHandler

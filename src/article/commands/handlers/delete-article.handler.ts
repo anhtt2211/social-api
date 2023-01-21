@@ -4,10 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { DeleteResult, In, Repository } from "typeorm";
 import { BlockEntity } from "../../../block/block.entity";
 import { ArticleEntity } from "../../article.entity";
-
-export class DeleteArticleCommand {
-  constructor(public readonly userId: number, public readonly slug: string) {}
-}
+import { DeleteArticleCommand } from "../impl";
 
 @CommandHandler(DeleteArticleCommand)
 export class DeleteArticleCommandHandler

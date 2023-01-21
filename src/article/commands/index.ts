@@ -6,26 +6,17 @@ import {
   FavoriteArticleCommandHandler,
   UnFavoriteArticleCommandHandler,
   UpdateArticleCommandHandler,
-} from "./commands";
-import {
-  FindAllArticleQueryHandler,
-  FindCommentQueryHandler,
-  FindFeedArticleQueryHandler,
-  FindOneArticleQueryHandler,
-} from "./queries";
+} from "./handlers";
 
-export const QueryHandlers = [
-  FindAllArticleQueryHandler,
-  FindFeedArticleQueryHandler,
-  FindOneArticleQueryHandler,
-  FindCommentQueryHandler,
-];
+export * from "./handlers";
+export * from "./impl";
+
 export const CommandHandlers = [
   CreateArticleCommandHandler,
-  UpdateArticleCommandHandler,
-  DeleteArticleCommandHandler,
   CreateCommentCommandHandler,
+  DeleteArticleCommandHandler,
   DeleteCommentCommandHandler,
   FavoriteArticleCommandHandler,
   UnFavoriteArticleCommandHandler,
+  UpdateArticleCommandHandler,
 ];
