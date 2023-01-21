@@ -1,14 +1,22 @@
-import { HttpStatus, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus } from "@nestjs/common";
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { UserEntity } from "../user/user.entity";
-import { DeepPartial } from "typeorm/common/DeepPartial";
-import { ProfileRO, ProfileData } from "./profile.interface";
-import { FollowsEntity } from "./follows.entity";
-import { HttpException } from "@nestjs/common/exceptions/http.exception";
+import { UserEntity } from "../../../user/user.entity";
+import { FollowsEntity } from "../../follows.entity";
+import { ProfileData, ProfileRO } from "../../profile.interface";
 
-@Injectable()
-export class ProfileService {
+export class UnFollowProfileCommand {
+  constructor(
+    public readonly followerId: number,
+    public readonly username: string
+  ) {}
+}
+
+@CommandHandler(UnFollowProfileCommand)
+export class UnFollowProfileCommandHandler
+  implements ICommandHandler<UnFollowProfileCommand>
+{
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
@@ -16,18 +24,10 @@ export class ProfileService {
     private readonly followsRepository: Repository<FollowsEntity>
   ) {}
 
-  async findAll(): Promise<UserEntity[]> {
-    return await this.userRepository.find();
-  }
-
-  async findOne(options?: DeepPartial<UserEntity>): Promise<ProfileRO> {
-    const user = await this.userRepository.findOne(options);
-    delete user.id;
-    if (user) delete user.password;
-    return { profile: user };
-  }
-
-  async unFollow(followerId: number, username: string): Promise<ProfileRO> {
+  async execute({
+    followerId,
+    username,
+  }: UnFollowProfileCommand): Promise<ProfileRO> {
     if (!followerId || !username) {
       throw new HttpException(
         "FollowerId and username not provided.",
