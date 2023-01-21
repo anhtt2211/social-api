@@ -1,21 +1,19 @@
 import { Controller, Delete, Get, Param, Post } from "@nestjs/common";
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { User } from "../user/user.decorator";
-import { ProfileRO } from "./profile.interface";
-import { ProfileService } from "./profile.service";
-import { FindProfileQuery } from "./handlers/queries";
 import {
   FollowProfileCommand,
   UnFollowProfileCommand,
 } from "./handlers/commands";
+import { FindProfileQuery } from "./handlers/queries";
+import { ProfileRO } from "./profile.interface";
 
 @ApiBearerAuth()
 @ApiTags("profiles")
 @Controller("profiles")
 export class ProfileController {
   constructor(
-    private readonly profileService: ProfileService,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus
   ) {}
