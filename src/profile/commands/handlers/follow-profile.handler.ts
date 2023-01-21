@@ -5,13 +5,7 @@ import { Repository } from "typeorm";
 import { UserEntity } from "../../../user/user.entity";
 import { FollowsEntity } from "../../follows.entity";
 import { ProfileData, ProfileRO } from "../../profile.interface";
-
-export class FollowProfileCommand {
-  constructor(
-    public readonly followerEmail: string,
-    public readonly username: string
-  ) {}
-}
+import { FollowProfileCommand } from "../impl";
 
 @CommandHandler(FollowProfileCommand)
 export class FollowProfileCommandHandler

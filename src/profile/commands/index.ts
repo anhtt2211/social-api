@@ -1,10 +1,11 @@
 import {
   FollowProfileCommandHandler,
   UnFollowProfileCommandHandler,
-} from "./commands";
-import { FindProfileQueryHandler } from "./queries";
+} from "./handlers";
 
-export const QueryHandlers = [FindProfileQueryHandler];
+export * from "./handlers";
+export * from "./impl";
+
 export const CommandHandlers = [
   FollowProfileCommandHandler,
   UnFollowProfileCommandHandler,

@@ -1,12 +1,8 @@
 import { HttpException } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { LoginUserDto } from "../../dto";
 import { UserRO } from "../../user.interface";
 import { UserService } from "../../user.service";
-
-export class LoginCommand {
-  constructor(public readonly loginUserDto: LoginUserDto) {}
-}
+import { LoginCommand } from "../impl";
 
 @CommandHandler(LoginCommand)
 export class LoginCommandHandler implements ICommandHandler<LoginCommand> {

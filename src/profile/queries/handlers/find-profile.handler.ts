@@ -4,13 +4,7 @@ import { Repository } from "typeorm";
 import { UserEntity } from "../../../user/user.entity";
 import { FollowsEntity } from "../../follows.entity";
 import { ProfileData, ProfileRO } from "../../profile.interface";
-
-export class FindProfileQuery {
-  constructor(
-    public readonly userId: number,
-    public readonly followingUsername: string
-  ) {}
-}
+import { FindProfileQuery } from "../impl";
 
 @QueryHandler(FindProfileQuery)
 export class FindProfileQueryHandler

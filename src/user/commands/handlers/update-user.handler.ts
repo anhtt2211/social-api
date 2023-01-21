@@ -1,14 +1,10 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { UpdateUserDto } from "../../dto";
 import { UserEntity } from "../../user.entity";
 import { UserRO } from "../../user.interface";
 import { UserService } from "../../user.service";
-
-export class UpdateUserCommand {
-  constructor(public readonly id: number, public readonly dto: UpdateUserDto) {}
-}
+import { UpdateUserCommand } from "../impl";
 
 @CommandHandler(UpdateUserCommand)
 export class UpdateUserCommandHandler

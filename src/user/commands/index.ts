@@ -2,12 +2,13 @@ import {
   CreateUserCommandHandler,
   LoginCommandHandler,
   UpdateUserCommandHandler,
-} from "./commands";
-import { FindUserByEmailQueryHandler } from "./queries";
+} from "./handlers";
 
-export const QueryHandlers = [FindUserByEmailQueryHandler];
+export * from "./handlers";
+export * from "./impl";
+
 export const CommandHandlers = [
-  LoginCommandHandler,
   CreateUserCommandHandler,
   UpdateUserCommandHandler,
+  LoginCommandHandler,
 ];

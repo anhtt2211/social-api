@@ -12,7 +12,8 @@ import { UserEntity } from "../user/user.entity";
 import { FollowsEntity } from "./follows.entity";
 import { AuthMiddleware } from "../user/auth.middleware";
 import { CqrsModule } from "@nestjs/cqrs";
-import { CommandHandlers, QueryHandlers } from "./handlers";
+import { CommandHandlers } from "./commands";
+import { QueryHandlers } from "./queries";
 
 @Module({
   imports: [
@@ -26,11 +27,9 @@ import { CommandHandlers, QueryHandlers } from "./handlers";
 })
 export class ProfileModule implements NestModule {
   public configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleware)
-      .forRoutes({
-        path: "profiles/:username/follow",
-        method: RequestMethod.ALL,
-      });
+    consumer.apply(AuthMiddleware).forRoutes({
+      path: "profiles/:username/follow",
+      method: RequestMethod.ALL,
+    });
   }
 }

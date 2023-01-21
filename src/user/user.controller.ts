@@ -3,12 +3,8 @@ import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { ValidationPipe } from "../shared/pipes/validation.pipe";
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from "./dto";
-import {
-  CreateUserCommand,
-  LoginCommand,
-  UpdateUserCommand,
-} from "./handlers/commands";
-import { FindUserByEmailQuery } from "./handlers/queries";
+import { CreateUserCommand, LoginCommand, UpdateUserCommand } from "./commands";
+import { FindUserByEmailQuery } from "./queries";
 import { User } from "./user.decorator";
 import { UserRO } from "./user.interface";
 
