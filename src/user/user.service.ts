@@ -35,54 +35,6 @@ export class UserService {
     return null;
   }
 
-  async create(dto: CreateUserDto): Promise<UserRO> {
-    // check uniqueness of username/email
-    const { username, email, password } = dto;
-    const qb = await getRepository(UserEntity)
-      .createQueryBuilder("user")
-      .where("user.username = :username", { username })
-      .orWhere("user.email = :email", { email });
-
-    const user = await qb.getOne();
-
-    if (user) {
-      const errors = { username: "Username and email must be unique." };
-      throw new HttpException(
-        { message: "Input data validation failed", errors },
-        HttpStatus.BAD_REQUEST
-      );
-    }
-
-    // create new user
-    let newUser = new UserEntity();
-    newUser.username = username;
-    newUser.email = email;
-    newUser.password = password;
-    newUser.articles = [];
-
-    const errors = await validate(newUser);
-    if (errors.length > 0) {
-      const _errors = { username: "Userinput is not valid." };
-      throw new HttpException(
-        { message: "Input data validation failed", _errors },
-        HttpStatus.BAD_REQUEST
-      );
-    } else {
-      const savedUser = await this.userRepository.save(newUser);
-      return this.buildUserRO(savedUser);
-    }
-  }
-
-  async update(id: number, dto: UpdateUserDto): Promise<UserRO> {
-    let toUpdate = await this.userRepository.findOne(id);
-    delete toUpdate.password;
-    delete toUpdate.favorites;
-
-    let updated = Object.assign(toUpdate, dto);
-    const userUpdated = await this.userRepository.save(updated);
-    return this.buildUserRO(userUpdated);
-  }
-
   async delete(email: string): Promise<DeleteResult> {
     return await this.userRepository.delete({ email: email });
   }
@@ -119,7 +71,7 @@ export class UserService {
     );
   }
 
-  private buildUserRO(user: UserEntity) {
+  buildUserRO(user: UserEntity) {
     const userRO = {
       id: user.id,
       username: user.username,
