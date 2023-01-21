@@ -9,10 +9,12 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserEntity } from "./user.entity";
 import { UserService } from "./user.service";
 import { AuthMiddleware } from "./auth.middleware";
+import { CqrsModule } from "@nestjs/cqrs";
+import { CommandHandlers, QueryHandlers } from "./handlers";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity])],
-  providers: [UserService],
+  imports: [TypeOrmModule.forFeature([UserEntity]), CqrsModule],
+  providers: [UserService, ...CommandHandlers, ...QueryHandlers],
   controllers: [UserController],
   exports: [UserService],
 })

@@ -1,22 +1,30 @@
 import { Body, Controller, Get, Post, Put, UsePipes } from "@nestjs/common";
-import { HttpException } from "@nestjs/common/exceptions/http.exception";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { ValidationPipe } from "../shared/pipes/validation.pipe";
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from "./dto";
+import {
+  CreateUserCommand,
+  LoginCommand,
+  UpdateUserCommand,
+} from "./handlers/commands";
+import { FindUserByEmailQuery } from "./handlers/queries";
 import { User } from "./user.decorator";
 import { UserRO } from "./user.interface";
-import { UserService } from "./user.service";
 
 @ApiBearerAuth()
 @ApiTags("user")
 @Controller()
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly queryBus: QueryBus,
+    private readonly commandBus: CommandBus
+  ) {}
 
   @ApiOperation({ summary: "get current user" })
   @Get("user")
   async findMe(@User("email") email: string): Promise<UserRO> {
-    return await this.userService.findByEmail(email);
+    return this.queryBus.execute(new FindUserByEmailQuery(email));
   }
 
   @ApiOperation({ summary: "update user" })
@@ -26,7 +34,7 @@ export class UserController {
     @User("id") userId: number,
     @Body("user") userData: UpdateUserDto
   ): Promise<UserRO> {
-    return await this.userService.update(userId, userData);
+    return this.commandBus.execute(new UpdateUserCommand(userId, userData));
   }
 
   @ApiOperation({ summary: "create user" })
@@ -34,7 +42,7 @@ export class UserController {
   @UsePipes(new ValidationPipe())
   @Post("users")
   async create(@Body("user") userData: CreateUserDto) {
-    return this.userService.create(userData);
+    return this.commandBus.execute(new CreateUserCommand(userData));
   }
 
   @ApiOperation({ summary: "login" })
@@ -42,14 +50,6 @@ export class UserController {
   @UsePipes(new ValidationPipe())
   @Post("users/login")
   async login(@Body("user") loginUserDto: LoginUserDto): Promise<UserRO> {
-    const _user = await this.userService.findOne(loginUserDto);
-
-    const errors = { User: " not found" };
-    if (!_user) throw new HttpException({ errors }, 401);
-
-    const token = await this.userService.generateJWT(_user);
-    const { email, username, bio, image } = _user;
-    const user = { email, token, username, bio, image };
-    return { user };
+    return this.commandBus.execute(new LoginCommand(loginUserDto));
   }
 }
