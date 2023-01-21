@@ -1,19 +1,15 @@
-import { HttpStatus, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { UserEntity } from "../user/user.entity";
 import { DeepPartial } from "typeorm/common/DeepPartial";
-import { ProfileRO, ProfileData } from "./profile.interface";
-import { FollowsEntity } from "./follows.entity";
-import { HttpException } from "@nestjs/common/exceptions/http.exception";
+import { UserEntity } from "../user/user.entity";
+import { ProfileRO } from "./profile.interface";
 
 @Injectable()
 export class ProfileService {
   constructor(
     @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(FollowsEntity)
-    private readonly followsRepository: Repository<FollowsEntity>
+    private readonly userRepository: Repository<UserEntity>
   ) {}
 
   async findAll(): Promise<UserEntity[]> {
@@ -25,34 +21,5 @@ export class ProfileService {
     delete user.id;
     if (user) delete user.password;
     return { profile: user };
-  }
-
-  async unFollow(followerId: number, username: string): Promise<ProfileRO> {
-    if (!followerId || !username) {
-      throw new HttpException(
-        "FollowerId and username not provided.",
-        HttpStatus.BAD_REQUEST
-      );
-    }
-
-    const followingUser = await this.userRepository.findOne({ username });
-
-    if (followingUser.id === followerId) {
-      throw new HttpException(
-        "FollowerId and FollowingId cannot be equal.",
-        HttpStatus.BAD_REQUEST
-      );
-    }
-    const followingId = followingUser.id;
-    await this.followsRepository.delete({ followerId, followingId });
-
-    let profile: ProfileData = {
-      username: followingUser.username,
-      bio: followingUser.bio,
-      image: followingUser.image,
-      following: false,
-    };
-
-    return { profile };
   }
 }
