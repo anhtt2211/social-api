@@ -1,15 +1,13 @@
 import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, getRepository, DeleteResult } from "typeorm";
-import { UserEntity } from "./user.entity";
-import { CreateUserDto, LoginUserDto, UpdateUserDto } from "./dto";
-const jwt = require("jsonwebtoken");
-import { SECRET } from "../config";
-import { UserRO } from "./user.interface";
-import { validate } from "class-validator";
 import { HttpException } from "@nestjs/common/exceptions/http.exception";
-import { HttpStatus } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
 import * as argon2 from "argon2";
+import { DeleteResult, Repository } from "typeorm";
+import { SECRET } from "../config";
+import { LoginUserDto } from "./dto";
+import { UserEntity } from "./user.entity";
+import { UserRO } from "./user.interface";
+const jwt = require("jsonwebtoken");
 
 @Injectable()
 export class UserService {
