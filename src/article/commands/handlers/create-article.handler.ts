@@ -6,7 +6,7 @@ import { UserEntity } from "../../../user/user.entity";
 import { ArticleEntity } from "../../article.entity";
 import { ArticleRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
-import { CreatedArticleEvent } from "../events";
+import { CreatedArticleEvent } from "../../events";
 import { CreateArticleCommand } from "../impl";
 
 @CommandHandler(CreateArticleCommand)
