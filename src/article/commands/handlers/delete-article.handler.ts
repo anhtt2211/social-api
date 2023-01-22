@@ -4,7 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { DeleteResult, In, Repository } from "typeorm";
 import { BlockEntity } from "../../../block/block.entity";
 import { WriteConnection } from "../../../config";
-import { ArticleEntity } from "../../article.entity";
+import { ArticleWrite_DBEntity } from "../../article.writedb.entity";
 import { DeleteArticleCommand } from "../impl";
 
 @CommandHandler(DeleteArticleCommand)
@@ -12,8 +12,8 @@ export class DeleteArticleCommandHandler
   implements ICommandHandler<DeleteArticleCommand>
 {
   constructor(
-    @InjectRepository(ArticleEntity, WriteConnection)
-    private readonly articleRepository: Repository<ArticleEntity>,
+    @InjectRepository(ArticleWrite_DBEntity, WriteConnection)
+    private readonly articleRepository: Repository<ArticleWrite_DBEntity>,
     @InjectRepository(BlockEntity, WriteConnection)
     private readonly blockRepository: Repository<BlockEntity>
   ) {}

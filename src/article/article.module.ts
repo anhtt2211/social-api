@@ -4,25 +4,18 @@ import {
   NestModule,
   RequestMethod,
 } from "@nestjs/common";
+import { CqrsModule } from "@nestjs/cqrs";
 import { AuthMiddleware } from "../user/auth.middleware";
 import { UserModule } from "../user/user.module";
 import { ArticleController } from "./article.controller";
 import { ArticleService } from "./article.service";
-import { CqrsModule } from "@nestjs/cqrs";
-import { CommandHandlers } from "./commands";
 import { CommandModule } from "./commands/command.module";
-import { EventHandlers } from "./events";
-import { QueryHandlers } from "./queries";
+import { EventModule } from "./events/event.module";
 import { QueryModule } from "./queries/query.module";
 
 @Module({
-  imports: [CqrsModule, UserModule, CommandModule, QueryModule],
-  providers: [
-    ArticleService,
-    // ...QueryHandlers,
-    // ...CommandHandlers,
-    // ...EventHandlers,
-  ],
+  imports: [CqrsModule, UserModule, CommandModule, QueryModule, EventModule],
+  providers: [ArticleService],
   controllers: [ArticleController],
 })
 export class ArticleModule implements NestModule {

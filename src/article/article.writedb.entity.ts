@@ -2,7 +2,6 @@ import {
   BeforeUpdate,
   Column,
   Entity,
-  Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
@@ -10,18 +9,13 @@ import {
 } from "typeorm";
 import { BlockEntity } from "../block/block.entity";
 import { UserEntity } from "../user/user.entity";
-import { ArticleWrite_DBEntity } from "./article.writedb.entity";
 import { Comment } from "./comment.entity";
 
-@Entity("article")
-export class ArticleEntity {
-  constructor(_article: ArticleWrite_DBEntity) {
-    Object.assign(this, _article);
-  }
+@Entity("article", { database: "social" })
+export class ArticleWrite_DBEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Index("article_slug")
   @Column()
   slug: string;
 
@@ -59,7 +53,4 @@ export class ArticleEntity {
 
   @OneToMany(() => BlockEntity, (block) => block.article, { cascade: true })
   blocks: BlockEntity[];
-
-  @Column("tsvector", { select: false, nullable: true })
-  document_with_weights?: any;
 }

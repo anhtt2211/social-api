@@ -1,5 +1,8 @@
-import { ArticleEntity } from "../../article.entity";
+import { ArticleWrite_DBEntity } from "../../article.writedb.entity";
 
 export class CreatedArticleEvent {
-  constructor(public readonly article: ArticleEntity) {}
+  constructor(
+    public readonly userId: number,
+    public readonly article: ArticleWrite_DBEntity
+  ) {}
 }

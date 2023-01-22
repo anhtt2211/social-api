@@ -8,12 +8,12 @@ import { CreateArticleDto } from "./dto";
 import { BlockEntity } from "../block/block.entity";
 import { ArticleData, Comment as IComment } from "./article.interface";
 import { WriteConnection } from "../config";
+import { ArticleWrite_DBEntity } from "./article.writedb.entity";
 const slug = require("slug");
 
 @Injectable()
 export class ArticleService {
-  constructor() // @InjectRepository(ArticleEntity, WriteConnection)
-  // private readonly articleRepository: Repository<ArticleEntity>,
+  constructor() // private readonly articleRepository: Repository<ArticleEntity>, // @InjectRepository(ArticleEntity, WriteConnection)
   // @InjectRepository(UserEntity, WriteConnection)
   // private readonly userRepository: Repository<UserEntity>
   {}
@@ -27,7 +27,7 @@ export class ArticleService {
   }
 
   buildArticleRO(
-    article: ArticleEntity,
+    article: ArticleEntity | ArticleWrite_DBEntity,
     user?: UserEntity,
     following?: boolean
   ): ArticleData {

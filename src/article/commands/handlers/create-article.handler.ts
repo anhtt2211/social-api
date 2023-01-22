@@ -3,8 +3,8 @@ import { CommandHandler, EventBus, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { WriteConnection } from "../../../config";
-import { UserEntity } from "../../../user/user.entity";
-import { ArticleEntity } from "../../article.entity";
+import { UserWrite_DBEntity } from "../../../user/user.writedb.entity";
+import { ArticleWrite_DBEntity } from "../../article.writedb.entity";
 import { ArticleRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
 import { CreatedArticleEvent } from "../../events";
@@ -15,10 +15,10 @@ export class CreateArticleCommandHandler
   implements ICommandHandler<CreateArticleCommand>
 {
   constructor(
-    @InjectRepository(ArticleEntity, WriteConnection)
-    private readonly articleRepository: Repository<ArticleEntity>,
-    @InjectRepository(UserEntity, WriteConnection)
-    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(ArticleWrite_DBEntity, WriteConnection)
+    private readonly articleRepository: Repository<ArticleWrite_DBEntity>,
+    @InjectRepository(UserWrite_DBEntity, WriteConnection)
+    private readonly userRepository: Repository<UserWrite_DBEntity>,
 
     private readonly eventBus: EventBus,
     private readonly articleService: ArticleService
@@ -29,7 +29,7 @@ export class CreateArticleCommandHandler
     articleData,
   }: CreateArticleCommand): Promise<ArticleRO> {
     try {
-      let article = new ArticleEntity();
+      let article = new ArticleWrite_DBEntity();
       article.title = articleData.title;
       article.description = articleData.description;
       article.slug = this.articleService.slugify(articleData.title);
@@ -47,7 +47,7 @@ export class CreateArticleCommandHandler
 
       await this.userRepository.save(author);
 
-      this.eventBus.publish(new CreatedArticleEvent(newArticle));
+      this.eventBus.publish(new CreatedArticleEvent(userId, newArticle));
 
       return {
         article: this.articleService.buildArticleRO(newArticle),

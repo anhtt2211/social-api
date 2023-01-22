@@ -2,10 +2,10 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { WriteConnection } from "../../../config";
-import { UserEntity } from "../../../user/user.entity";
-import { ArticleEntity } from "../../article.entity";
+import { UserWrite_DBEntity } from "../../../user/user.writedb.entity";
 import { ArticleRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
+import { ArticleWrite_DBEntity } from "../../article.writedb.entity";
 import { FavoriteArticleCommand } from "../impl";
 
 @CommandHandler(FavoriteArticleCommand)
@@ -13,10 +13,10 @@ export class FavoriteArticleCommandHandler
   implements ICommandHandler<FavoriteArticleCommand>
 {
   constructor(
-    @InjectRepository(ArticleEntity, WriteConnection)
-    private readonly articleRepository: Repository<ArticleEntity>,
-    @InjectRepository(UserEntity, WriteConnection)
-    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(ArticleWrite_DBEntity, WriteConnection)
+    private readonly articleRepository: Repository<ArticleWrite_DBEntity>,
+    @InjectRepository(UserWrite_DBEntity, WriteConnection)
+    private readonly userRepository: Repository<UserWrite_DBEntity>,
 
     private readonly articleService: ArticleService
   ) {}
