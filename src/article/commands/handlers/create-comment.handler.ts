@@ -1,6 +1,7 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { WriteConnection } from "../../../config";
 import { UserEntity } from "../../../user/user.entity";
 import { ArticleEntity } from "../../article.entity";
 import { CommentRO } from "../../article.interface";
@@ -13,11 +14,11 @@ export class CreateCommentCommandHandler
   implements ICommandHandler<CreateCommentCommand>
 {
   constructor(
-    @InjectRepository(ArticleEntity)
+    @InjectRepository(ArticleEntity, WriteConnection)
     private readonly articleRepository: Repository<ArticleEntity>,
-    @InjectRepository(UserEntity)
+    @InjectRepository(UserEntity, WriteConnection)
     private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(Comment)
+    @InjectRepository(Comment, WriteConnection)
     private readonly commentRepository: Repository<Comment>,
 
     private readonly articleService: ArticleService

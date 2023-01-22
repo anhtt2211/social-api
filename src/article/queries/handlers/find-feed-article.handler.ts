@@ -1,6 +1,7 @@
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { getRepository, Repository } from "typeorm";
+import { ReadConnection } from "../../../config";
 import { FollowsEntity } from "../../../profile/follows.entity";
 import { UserEntity } from "../../../user/user.entity";
 import { ArticleEntity } from "../../article.entity";
@@ -13,10 +14,11 @@ export class FindFeedArticleQueryHandler
   implements IQueryHandler<FindFeedArticleQuery>
 {
   constructor(
-    @InjectRepository(UserEntity)
+    @InjectRepository(UserEntity, ReadConnection)
     private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(FollowsEntity)
+    @InjectRepository(FollowsEntity, ReadConnection)
     private readonly followsRepository: Repository<FollowsEntity>,
+
     private readonly articleService: ArticleService
   ) {}
 
@@ -33,7 +35,7 @@ export class FindFeedArticleQueryHandler
 
     const ids = _follows.map((el) => el.followingId);
 
-    const qb = getRepository(ArticleEntity)
+    const qb = getRepository(ArticleEntity, ReadConnection)
       .createQueryBuilder("article")
       .where("article.authorId IN (:...ids)", { ids })
       .leftJoinAndSelect("article.author", "author");

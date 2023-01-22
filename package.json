@@ -13,7 +13,7 @@
     "test:coverage": "jest --config=jest.json --coverage --coverageDirectory=coverage",
     "migration:create": "ts-node node_modules/typeorm/cli.js migration:create -n",
     "migration:generate": "ts-node node_modules/typeorm/cli.js migration:generate -n",
-    "migration:run": "ts-node node_modules/typeorm/cli.js migration:run",
+    "migration:run": "ts-node node_modules/typeorm/cli.js migration:run -c",
     "migration:revert": "ts-node node_modules/typeorm/cli.js migration:revert",
     "migration:run--prod": "ts-node node_modules/typeorm/cli.js migration:run"
   },

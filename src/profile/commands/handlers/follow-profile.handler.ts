@@ -2,6 +2,7 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { WriteConnection } from "../../../config";
 import { UserEntity } from "../../../user/user.entity";
 import { FollowsEntity } from "../../follows.entity";
 import { ProfileData, ProfileRO } from "../../profile.interface";
@@ -12,9 +13,9 @@ export class FollowProfileCommandHandler
   implements ICommandHandler<FollowProfileCommand>
 {
   constructor(
-    @InjectRepository(UserEntity)
+    @InjectRepository(UserEntity, WriteConnection)
     private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(FollowsEntity)
+    @InjectRepository(FollowsEntity, WriteConnection)
     private readonly followsRepository: Repository<FollowsEntity>
   ) {}
 

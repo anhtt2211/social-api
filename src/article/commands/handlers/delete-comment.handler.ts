@@ -2,6 +2,7 @@ import { HttpException } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { WriteConnection } from "../../../config";
 import { ArticleEntity } from "../../article.entity";
 import { ArticleRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
@@ -13,9 +14,9 @@ export class DeleteCommentCommandHandler
   implements ICommandHandler<DeleteCommentCommand>
 {
   constructor(
-    @InjectRepository(ArticleEntity)
+    @InjectRepository(ArticleEntity, WriteConnection)
     private readonly articleRepository: Repository<ArticleEntity>,
-    @InjectRepository(Comment)
+    @InjectRepository(Comment, WriteConnection)
     private readonly commentRepository: Repository<Comment>,
 
     private readonly articleService: ArticleService

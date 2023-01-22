@@ -1,6 +1,7 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { WriteConnection } from "../../../config";
 import { UserEntity } from "../../user.entity";
 import { UserRO } from "../../user.interface";
 import { UserService } from "../../user.service";
@@ -11,7 +12,7 @@ export class UpdateUserCommandHandler
   implements ICommandHandler<UpdateUserCommand>
 {
   constructor(
-    @InjectRepository(UserEntity)
+    @InjectRepository(UserEntity, WriteConnection)
     private readonly userRepository: Repository<UserEntity>,
 
     private readonly userService: UserService

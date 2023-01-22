@@ -2,6 +2,7 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 import { CommandHandler, EventBus, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { WriteConnection } from "../../../config";
 import { UserEntity } from "../../../user/user.entity";
 import { ArticleEntity } from "../../article.entity";
 import { ArticleRO } from "../../article.interface";
@@ -14,9 +15,9 @@ export class CreateArticleCommandHandler
   implements ICommandHandler<CreateArticleCommand>
 {
   constructor(
-    @InjectRepository(ArticleEntity)
+    @InjectRepository(ArticleEntity, WriteConnection)
     private readonly articleRepository: Repository<ArticleEntity>,
-    @InjectRepository(UserEntity)
+    @InjectRepository(UserEntity, WriteConnection)
     private readonly userRepository: Repository<UserEntity>,
 
     private readonly eventBus: EventBus,

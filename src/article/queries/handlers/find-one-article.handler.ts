@@ -1,6 +1,8 @@
+import { HttpException, HttpStatus } from "@nestjs/common";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { ReadConnection } from "../../../config";
 import { FollowsEntity } from "../../../profile/follows.entity";
 import { UserEntity } from "../../../user/user.entity";
 import { ArticleEntity } from "../../article.entity";
@@ -13,12 +15,13 @@ export class FindOneArticleQueryHandler
   implements IQueryHandler<FindOneArticleQuery>
 {
   constructor(
-    @InjectRepository(ArticleEntity)
+    @InjectRepository(ArticleEntity, ReadConnection)
     private readonly articleRepository: Repository<ArticleEntity>,
-    @InjectRepository(UserEntity)
+    @InjectRepository(UserEntity, ReadConnection)
     private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(FollowsEntity)
+    @InjectRepository(FollowsEntity, ReadConnection)
     private readonly followsRepository: Repository<FollowsEntity>,
+
     private readonly articleService: ArticleService
   ) {}
 
@@ -29,6 +32,11 @@ export class FindOneArticleQueryHandler
         relations: ["blocks", "author"],
       }
     );
+
+    if (!article) {
+      throw new HttpException("Article not found", HttpStatus.BAD_REQUEST);
+    }
+
     const user = await this.userRepository.findOne(
       { id: userId },
       { relations: ["favorites"] }

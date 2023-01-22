@@ -1,6 +1,7 @@
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { getRepository, Repository } from "typeorm";
+import { ReadConnection } from "../../../config";
 import { FollowsEntity } from "../../../profile/follows.entity";
 import { UserEntity } from "../../../user/user.entity";
 import { ArticleEntity } from "../../article.entity";
@@ -13,13 +14,16 @@ export class FindAllArticleQueryHandler
   implements IQueryHandler<FindAllArticleQuery>
 {
   constructor(
-    @InjectRepository(UserEntity)
+    @InjectRepository(UserEntity, ReadConnection)
     private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(ArticleEntity, ReadConnection)
+    private readonly articleRepository: Repository<ArticleEntity>,
+
     private readonly articleService: ArticleService
   ) {}
 
   async execute({ userId, query }: FindAllArticleQuery): Promise<ArticlesRO> {
-    const qb = getRepository(ArticleEntity)
+    const qb = this.articleRepository
       .createQueryBuilder("article")
       .leftJoinAndSelect("article.author", "author");
     if ("tag" in query) {
@@ -53,13 +57,16 @@ export class FindAllArticleQueryHandler
     }
     qb.orderBy("article.created", "DESC");
     const articlesCount = await qb.getCount();
+
     if ("limit" in query) {
       qb.limit(query.limit);
     }
     if ("offset" in query) {
       qb.offset(query.offset);
     }
+
     const articles = await qb.getMany();
+
     let user = null;
     let follows = [];
     if (userId) {
@@ -69,7 +76,7 @@ export class FindAllArticleQueryHandler
       user = await this.userRepository.findOne(userId, {
         relations: ["favorites"],
       });
-      const followsBuilder = getRepository(FollowsEntity)
+      const followsBuilder = getRepository(FollowsEntity, ReadConnection)
         .createQueryBuilder("follows")
         .where("follows.followerId = :followerId", { followerId: userId });
       if (authorIds.length > 0) {
@@ -79,12 +86,14 @@ export class FindAllArticleQueryHandler
       }
       follows = await followsBuilder.getMany();
     }
+
     const articlesRO = articles?.map((article) => {
       const following =
         follows?.filter((follow) => follow.followingId === article.author.id)
           .length > 0;
       return this.articleService.buildArticleRO(article, user, following);
     });
+
     return { articles: articlesRO, articlesCount };
   }
 }

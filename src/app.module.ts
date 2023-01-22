@@ -8,11 +8,50 @@ import { Connection } from "typeorm";
 import { ProfileModule } from "./profile/profile.module";
 import { TagModule } from "./tag/tag.module";
 import { MediaModule } from "./media/media.module";
+import { ReadConnection, WriteConnection } from "./config";
+
+const defaultOptions = {
+  migrations: ["src/database/migrations/*{.ts,.js}"],
+  logging: true,
+  synchronize: false,
+  migrationsRun: false,
+  migrationsTableName: "migrations",
+  cli: {
+    migrationsDir: "src/database/migrations",
+  },
+};
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forRoot(),
+    // write db
+    TypeOrmModule.forRootAsync({
+      name: "write_db",
+      useFactory: () => ({
+        ...defaultOptions,
+        type: "postgres",
+        host: "localhost",
+        port: 5432,
+        username: "anhtran",
+        password: "_briantran",
+        database: "social",
+        entities: ["src/**/**.entity{.ts,.js}"],
+      }),
+    }),
+    // read db
+    TypeOrmModule.forRootAsync({
+      name: "read_db",
+      useFactory: () => ({
+        ...defaultOptions,
+        type: "postgres",
+        host: "localhost",
+        port: 5432,
+        username: "anhtran",
+        password: "_briantran",
+        database: "social_read",
+        entities: ["src/**/**.entity{.ts,.js}"],
+      }),
+    }),
     ArticleModule,
     UserModule,
     ProfileModule,
@@ -22,6 +61,4 @@ import { MediaModule } from "./media/media.module";
   controllers: [AppController],
   providers: [],
 })
-export class ApplicationModule {
-  constructor(private readonly connection: Connection) {}
-}
+export class ApplicationModule {}

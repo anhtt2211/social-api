@@ -1,5 +1,5 @@
 import { LoginUserDto } from "../../dto";
 
-export class LoginCommand {
+export class LoginQuery {
   constructor(public readonly loginUserDto: LoginUserDto) {}
 }

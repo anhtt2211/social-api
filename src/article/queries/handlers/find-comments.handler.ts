@@ -1,6 +1,7 @@
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { ReadConnection } from "../../../config";
 import { ArticleEntity } from "../../article.entity";
 import { CommentsRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
@@ -11,7 +12,7 @@ export class FindCommentQueryHandler
   implements IQueryHandler<FindCommentQuery>
 {
   constructor(
-    @InjectRepository(ArticleEntity)
+    @InjectRepository(ArticleEntity, ReadConnection)
     private readonly articleRepository: Repository<ArticleEntity>,
 
     private readonly articleService: ArticleService

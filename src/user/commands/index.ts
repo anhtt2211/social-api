@@ -1,8 +1,4 @@
-import {
-  CreateUserCommandHandler,
-  LoginCommandHandler,
-  UpdateUserCommandHandler,
-} from "./handlers";
+import { CreateUserCommandHandler, UpdateUserCommandHandler } from "./handlers";
 
 export * from "./handlers";
 export * from "./impl";
@@ -10,5 +6,4 @@ export * from "./impl";
 export const CommandHandlers = [
   CreateUserCommandHandler,
   UpdateUserCommandHandler,
-  LoginCommandHandler,
 ];

@@ -7,16 +7,16 @@ import { Comment } from "./comment.entity";
 import { CreateArticleDto } from "./dto";
 import { BlockEntity } from "../block/block.entity";
 import { ArticleData, Comment as IComment } from "./article.interface";
+import { WriteConnection } from "../config";
 const slug = require("slug");
 
 @Injectable()
 export class ArticleService {
-  constructor(
-    @InjectRepository(ArticleEntity)
-    private readonly articleRepository: Repository<ArticleEntity>,
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>
-  ) {}
+  constructor() // @InjectRepository(ArticleEntity, WriteConnection)
+  // private readonly articleRepository: Repository<ArticleEntity>,
+  // @InjectRepository(UserEntity, WriteConnection)
+  // private readonly userRepository: Repository<UserEntity>
+  {}
 
   slugify(title: string) {
     return (
@@ -72,29 +72,29 @@ export class ArticleService {
     return comment;
   }
 
-  async seed(userId: number, articleList: CreateArticleDto[]) {
-    const articles: ArticleEntity[] = articleList.map((article) => {
-      let articleEntity = new ArticleEntity();
-      articleEntity.title = article.title;
-      articleEntity.description = article.description;
-      articleEntity.slug = this.slugify(article.title);
-      articleEntity.tagList = article.tagList || [];
-      articleEntity.comments = [];
-      articleEntity.blocks = article.blocks;
+  // async seed(userId: number, articleList: CreateArticleDto[]) {
+  //   const articles: ArticleEntity[] = articleList.map((article) => {
+  //     let articleEntity = new ArticleEntity();
+  //     articleEntity.title = article.title;
+  //     articleEntity.description = article.description;
+  //     articleEntity.slug = this.slugify(article.title);
+  //     articleEntity.tagList = article.tagList || [];
+  //     articleEntity.comments = [];
+  //     articleEntity.blocks = article.blocks;
 
-      return articleEntity;
-    });
+  //     return articleEntity;
+  //   });
 
-    await this.articleRepository.save(articles);
+  //   await this.articleRepository.save(articles);
 
-    const author = await this.userRepository.findOne({
-      where: { id: userId },
-      relations: ["articles"],
-    });
-    author.articles = [...author.articles, ...articles];
+  //   const author = await this.userRepository.findOne({
+  //     where: { id: userId },
+  //     relations: ["articles"],
+  //   });
+  //   author.articles = [...author.articles, ...articles];
 
-    await this.userRepository.save(author);
+  //   await this.userRepository.save(author);
 
-    return true;
-  }
+  //   return true;
+  // }
 }

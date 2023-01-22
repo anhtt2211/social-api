@@ -1,4 +1,3 @@
-import { BlockDto } from "../block/block.dto";
 import { IBlock } from "../block/block.interface";
 import { ProfileData } from "../profile/profile.interface";
 export interface Comment {
