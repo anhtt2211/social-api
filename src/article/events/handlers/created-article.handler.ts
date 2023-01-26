@@ -18,15 +18,13 @@ export class CreatedArticleEventHandler
     private readonly userRepository: Repository<UserEntity>
   ) {}
   async handle({ userId, article }: CreatedArticleEvent) {
-    const _article = new ArticleEntity(article);
-
-    await this.articleRepository.save(_article);
+    await this.articleRepository.save(article);
 
     const author = await this.userRepository.findOne({
       where: { id: userId },
       relations: ["articles"],
     });
-    author.articles.push(_article);
+    author.articles.push(article);
 
     await this.userRepository.save(author);
   }

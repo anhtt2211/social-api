@@ -6,22 +6,16 @@ import { BlockEntity } from "../../block/block.entity";
 import { WriteConnection } from "../../config";
 import { FollowsEntity } from "../../profile/follows.entity";
 import { UserModule } from "../../user/user.module";
-import { UserWrite_DBEntity } from "../../user/user.writedb.entity";
+import { UserEntity } from "../../user/user.entity";
 import { ArticleController } from "../article.controller";
 import { ArticleService } from "../article.service";
-import { ArticleWrite_DBEntity } from "../article.writedb.entity";
+import { ArticleEntity } from "../article.entity";
 import { Comment } from "../comment.entity";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature(
-      [
-        ArticleWrite_DBEntity,
-        UserWrite_DBEntity,
-        Comment,
-        FollowsEntity,
-        BlockEntity,
-      ],
+      [ArticleEntity, UserEntity, Comment, FollowsEntity, BlockEntity],
       WriteConnection
     ),
     UserModule,

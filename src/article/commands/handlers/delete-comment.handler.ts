@@ -5,7 +5,7 @@ import { Repository } from "typeorm";
 import { WriteConnection } from "../../../config";
 import { ArticleRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
-import { ArticleWrite_DBEntity } from "../../article.writedb.entity";
+import { ArticleEntity } from "../../article.entity";
 import { Comment } from "../../comment.entity";
 import { DeleteCommentCommand } from "../impl";
 
@@ -14,8 +14,8 @@ export class DeleteCommentCommandHandler
   implements ICommandHandler<DeleteCommentCommand>
 {
   constructor(
-    @InjectRepository(ArticleWrite_DBEntity, WriteConnection)
-    private readonly articleRepository: Repository<ArticleWrite_DBEntity>,
+    @InjectRepository(ArticleEntity, WriteConnection)
+    private readonly articleRepository: Repository<ArticleEntity>,
     @InjectRepository(Comment, WriteConnection)
     private readonly commentRepository: Repository<Comment>,
 

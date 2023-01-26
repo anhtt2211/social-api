@@ -1,14 +1,12 @@
 import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import { TypeOrmModule } from "@nestjs/typeorm";
 import { AppController } from "./app.controller";
 import { ArticleModule } from "./article/article.module";
-import { UserModule } from "./user/user.module";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { ConfigModule } from "@nestjs/config";
-import { Connection } from "typeorm";
+import { MediaModule } from "./media/media.module";
 import { ProfileModule } from "./profile/profile.module";
 import { TagModule } from "./tag/tag.module";
-import { MediaModule } from "./media/media.module";
-import { ReadConnection, WriteConnection } from "./config";
+import { UserModule } from "./user/user.module";
 
 const defaultOptions = {
   migrations: ["src/database/migrations/*{.ts,.js}"],
@@ -34,7 +32,7 @@ const defaultOptions = {
         port: 5432,
         username: "anhtran",
         password: "_briantran",
-        database: "social",
+        database: "social_write",
         entities: ["src/**/**.entity{.ts,.js}"],
       }),
     }),

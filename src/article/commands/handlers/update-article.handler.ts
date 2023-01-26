@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 import { WriteConnection } from "../../../config";
 import { ArticleRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
-import { ArticleWrite_DBEntity } from "../../article.writedb.entity";
+import { ArticleEntity } from "../../article.entity";
 import { UpdateArticleCommand } from "../impl";
 
 @CommandHandler(UpdateArticleCommand)
@@ -12,8 +12,8 @@ export class UpdateArticleCommandHandler
   implements ICommandHandler<UpdateArticleCommand>
 {
   constructor(
-    @InjectRepository(ArticleWrite_DBEntity, WriteConnection)
-    private readonly articleRepository: Repository<ArticleWrite_DBEntity>,
+    @InjectRepository(ArticleEntity, WriteConnection)
+    private readonly articleRepository: Repository<ArticleEntity>,
 
     private readonly articleService: ArticleService
   ) {}

@@ -10,14 +10,10 @@ import {
 } from "typeorm";
 import { BlockEntity } from "../block/block.entity";
 import { UserEntity } from "../user/user.entity";
-import { ArticleWrite_DBEntity } from "./article.writedb.entity";
 import { Comment } from "./comment.entity";
 
 @Entity("article")
 export class ArticleEntity {
-  constructor(_article: ArticleWrite_DBEntity) {
-    Object.assign(this, _article);
-  }
   @PrimaryGeneratedColumn()
   id: number;
 

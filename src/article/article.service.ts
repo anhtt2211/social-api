@@ -1,22 +1,14 @@
 import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { BlockEntity } from "../block/block.entity";
 import { UserEntity } from "../user/user.entity";
 import { ArticleEntity } from "./article.entity";
-import { Comment } from "./comment.entity";
-import { CreateArticleDto } from "./dto";
-import { BlockEntity } from "../block/block.entity";
 import { ArticleData, Comment as IComment } from "./article.interface";
-import { WriteConnection } from "../config";
-import { ArticleWrite_DBEntity } from "./article.writedb.entity";
+import { Comment } from "./comment.entity";
 const slug = require("slug");
 
 @Injectable()
 export class ArticleService {
-  constructor() // private readonly articleRepository: Repository<ArticleEntity>, // @InjectRepository(ArticleEntity, WriteConnection)
-  // @InjectRepository(UserEntity, WriteConnection)
-  // private readonly userRepository: Repository<UserEntity>
-  {}
+  constructor() {}
 
   slugify(title: string) {
     return (
@@ -27,7 +19,7 @@ export class ArticleService {
   }
 
   buildArticleRO(
-    article: ArticleEntity | ArticleWrite_DBEntity,
+    article: ArticleEntity,
     user?: UserEntity,
     following?: boolean
   ): ArticleData {
