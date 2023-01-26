@@ -3,12 +3,8 @@ import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { ValidationPipe } from "../shared/pipes/validation.pipe";
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from "./dto";
-import {
-  CreateUserCommand,
-  LoginCommand,
-  UpdateUserCommand,
-} from "./handlers/commands";
-import { FindUserByEmailQuery } from "./handlers/queries";
+import { CreateUserCommand, UpdateUserCommand } from "./commands";
+import { FindUserByEmailQuery, LoginQuery } from "./queries";
 import { User } from "./user.decorator";
 import { UserRO } from "./user.interface";
 
@@ -50,6 +46,6 @@ export class UserController {
   @UsePipes(new ValidationPipe())
   @Post("users/login")
   async login(@Body("user") loginUserDto: LoginUserDto): Promise<UserRO> {
-    return this.commandBus.execute(new LoginCommand(loginUserDto));
+    return this.queryBus.execute(new LoginQuery(loginUserDto));
   }
 }

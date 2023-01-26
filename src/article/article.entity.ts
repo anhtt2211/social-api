@@ -57,5 +57,5 @@ export class ArticleEntity {
   blocks: BlockEntity[];
 
   @Column("tsvector", { select: false, nullable: true })
-  document_with_weights: any;
+  document_with_weights?: any;
 }

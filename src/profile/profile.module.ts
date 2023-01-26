@@ -4,33 +4,27 @@ import {
   NestModule,
   RequestMethod,
 } from "@nestjs/common";
-import { ProfileController } from "./profile.controller";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { ProfileService } from "./profile.service";
-import { UserModule } from "../user/user.module";
-import { UserEntity } from "../user/user.entity";
-import { FollowsEntity } from "./follows.entity";
-import { AuthMiddleware } from "../user/auth.middleware";
 import { CqrsModule } from "@nestjs/cqrs";
-import { CommandHandlers, QueryHandlers } from "./handlers";
+import { AuthMiddleware } from "../user/auth.middleware";
+import { UserModule } from "../user/user.module";
+import { CommandHandlers } from "./commands";
+import { CommandModule } from "./commands/command.module";
+import { ProfileController } from "./profile.controller";
+import { ProfileService } from "./profile.service";
+import { QueryHandlers } from "./queries";
+import { QueryModule } from "./queries/query.module";
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([UserEntity, FollowsEntity]),
-    UserModule,
-    CqrsModule,
-  ],
-  providers: [ProfileService, ...CommandHandlers, ...QueryHandlers],
+  imports: [CqrsModule, UserModule, CommandModule, QueryModule],
+  providers: [ProfileService],
   controllers: [ProfileController],
   exports: [],
 })
 export class ProfileModule implements NestModule {
   public configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleware)
-      .forRoutes({
-        path: "profiles/:username/follow",
-        method: RequestMethod.ALL,
-      });
+    consumer.apply(AuthMiddleware).forRoutes({
+      path: "profiles/:username/follow",
+      method: RequestMethod.ALL,
+    });
   }
 }

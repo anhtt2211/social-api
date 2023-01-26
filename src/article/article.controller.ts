@@ -27,7 +27,7 @@ import {
   FindCommentQuery,
   FindFeedArticleQuery,
   FindOneArticleQuery,
-} from "./handlers/queries";
+} from "./queries";
 import {
   CreateArticleCommand,
   CreateCommentCommand,
@@ -36,7 +36,7 @@ import {
   FavoriteArticleCommand,
   UnFavoriteArticleCommand,
   UpdateArticleCommand,
-} from "./handlers/commands";
+} from "./commands";
 
 @ApiBearerAuth()
 @ApiTags("articles")
@@ -201,11 +201,11 @@ export class ArticleController {
     return this.commandBus.execute(new UnFavoriteArticleCommand(userId, slug));
   }
 
-  @Post("/seed")
-  async seedData(
-    @User("id") userId: number,
-    @Body("articles") articleList: CreateArticleDto[]
-  ) {
-    return this.articleService.seed(userId, articleList);
-  }
+  // @Post("/seed")
+  // async seedData(
+  //   @User("id") userId: number,
+  //   @Body("articles") articleList: CreateArticleDto[]
+  // ) {
+  //   return this.articleService.seed(userId, articleList);
+  // }
 }

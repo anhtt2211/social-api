@@ -4,32 +4,18 @@ import {
   NestModule,
   RequestMethod,
 } from "@nestjs/common";
-import { ArticleController } from "./article.controller";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { ArticleEntity } from "./article.entity";
-import { Comment } from "./comment.entity";
-import { UserEntity } from "../user/user.entity";
-import { FollowsEntity } from "../profile/follows.entity";
-import { ArticleService } from "./article.service";
+import { CqrsModule } from "@nestjs/cqrs";
 import { AuthMiddleware } from "../user/auth.middleware";
 import { UserModule } from "../user/user.module";
-import { CommandHandlers, QueryHandlers } from "./handlers";
-import { CqrsModule } from "@nestjs/cqrs";
-import { BlockEntity } from "../block/block.entity";
+import { ArticleController } from "./article.controller";
+import { ArticleService } from "./article.service";
+import { CommandModule } from "./commands/command.module";
+import { EventModule } from "./events/event.module";
+import { QueryModule } from "./queries/query.module";
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      ArticleEntity,
-      Comment,
-      UserEntity,
-      FollowsEntity,
-      BlockEntity,
-    ]),
-    UserModule,
-    CqrsModule,
-  ],
-  providers: [ArticleService, ...QueryHandlers, ...CommandHandlers],
+  imports: [CqrsModule, UserModule, CommandModule, QueryModule, EventModule],
+  providers: [ArticleService],
   controllers: [ArticleController],
 })
 export class ArticleModule implements NestModule {
