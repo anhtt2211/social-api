@@ -1,1 +1,1 @@
-export * from "./created-article.event";
+export * from "./article-created.event";

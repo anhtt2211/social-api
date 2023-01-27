@@ -7,7 +7,7 @@ import { UserEntity } from "../../../user/user.entity";
 import { ArticleEntity } from "../../article.entity";
 import { ArticleRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
-import { CreatedArticleEvent } from "../../events";
+import { ArticleCreatedEvent } from "../../events";
 import { CreateArticleCommand } from "../impl";
 
 @CommandHandler(CreateArticleCommand)
@@ -29,14 +29,10 @@ export class CreateArticleCommandHandler
     articleData,
   }: CreateArticleCommand): Promise<ArticleRO> {
     try {
-      let article = new ArticleEntity();
-      article.title = articleData.title;
-      article.description = articleData.description;
-      article.slug = this.articleService.slugify(articleData.title);
-      article.tagList = articleData.tagList || [];
-      article.comments = [];
-      article.blocks = articleData.blocks;
-
+      let article = new ArticleEntity({
+        ...articleData,
+        slug: this.articleService.slugify(articleData.title),
+      });
       const newArticle = await this.articleRepository.save(article);
 
       const author = await this.userRepository.findOne({
@@ -47,7 +43,7 @@ export class CreateArticleCommandHandler
 
       await this.userRepository.save(author);
 
-      this.eventBus.publish(new CreatedArticleEvent(userId, newArticle));
+      this.eventBus.publish(new ArticleCreatedEvent(userId, newArticle));
 
       return {
         article: this.articleService.buildArticleRO(newArticle),

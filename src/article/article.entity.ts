@@ -12,8 +12,26 @@ import { BlockEntity } from "../block/block.entity";
 import { UserEntity } from "../user/user.entity";
 import { Comment } from "./comment.entity";
 
+interface IArticle {
+  id?: number;
+  slug?: string;
+  title?: string;
+  description?: string;
+  created?: Date;
+  updated?: Date;
+  tagList?: string[];
+  author?: UserEntity;
+  comments?: Comment[];
+  favoriteCount?: number;
+  blocks?: BlockEntity[];
+}
+
 @Entity("article")
 export class ArticleEntity {
+  constructor(props: IArticle) {
+    Object.assign(this, props);
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -1,1 +1,1 @@
-export * from "./created-article.handler";
+export * from "./article-created.handler";

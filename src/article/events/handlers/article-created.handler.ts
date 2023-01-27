@@ -5,11 +5,11 @@ import { Repository } from "typeorm";
 import { ReadConnection } from "../../../config";
 import { UserEntity } from "../../../user/user.entity";
 import { ArticleEntity } from "../../article.entity";
-import { CreatedArticleEvent } from "../impl";
+import { ArticleCreatedEvent } from "../impl";
 
-@EventsHandler(CreatedArticleEvent)
-export class CreatedArticleEventHandler
-  implements IEventHandler<CreatedArticleEvent>
+@EventsHandler(ArticleCreatedEvent)
+export class ArticleCreatedEventHandler
+  implements IEventHandler<ArticleCreatedEvent>
 {
   constructor(
     @InjectRepository(ArticleEntity, ReadConnection)
@@ -17,7 +17,7 @@ export class CreatedArticleEventHandler
     @InjectRepository(UserEntity, ReadConnection)
     private readonly userRepository: Repository<UserEntity>
   ) {}
-  async handle({ userId, article }: CreatedArticleEvent) {
+  async handle({ userId, article }: ArticleCreatedEvent) {
     await this.articleRepository.save(article);
 
     const author = await this.userRepository.findOne({
