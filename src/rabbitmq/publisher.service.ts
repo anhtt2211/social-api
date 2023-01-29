@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { ConfirmChannel, Connection, Channel } from "amqplib";
+import { Connection, Channel } from "amqplib";
 
 @Injectable()
 export class PublisherService {

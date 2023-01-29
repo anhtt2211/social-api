@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
-import { CommandHandler, EventBus, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { WriteConnection } from "../../../config";
@@ -8,7 +8,6 @@ import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
 import { ArticleEntity } from "../../article.entity";
 import { ArticleRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
-import { ArticleCreatedEvent } from "../../events";
 import { CreateArticleCommand } from "../impl";
 
 @CommandHandler(CreateArticleCommand)
@@ -19,7 +18,6 @@ export class CreateArticleCommandHandler
     @InjectRepository(ArticleEntity, WriteConnection)
     private readonly articleRepository: Repository<ArticleEntity>,
 
-    private readonly eventBus: EventBus,
     private readonly articleService: ArticleService,
     private readonly publisher: PublisherService
   ) {}
@@ -39,10 +37,9 @@ export class CreateArticleCommandHandler
         })
       );
 
-      this.eventBus.publish(new ArticleCreatedEvent(article));
       this.publisher.publish(QUEUE_NAME, {
         type: "article_created",
-        payload: { userId, article },
+        payload: { article },
       });
 
       return {

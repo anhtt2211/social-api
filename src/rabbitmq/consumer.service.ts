@@ -1,30 +1,30 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { ConfirmChannel, Connection } from "amqplib";
+import { Connection, Channel } from "amqplib";
 
 @Injectable()
 export class ConsumerService {
-  private channel: ConfirmChannel;
+  private channel: Channel;
 
   constructor(
     @Inject("RABBIT_MQ_CONNECTION")
     private connection: Connection
   ) {
-    this.connection
-      .createConfirmChannel()
-      .then((confirmChannel) => (this.channel = confirmChannel));
+    this.init();
+  }
+
+  async init() {
+    this.channel = await this.connection.createChannel();
   }
 
   async consume(queueName: string, callback: (msg: any) => void) {
-    await this.channel.assertQueue(queueName);
-    this.channel.consume(
-      queueName,
-      (msg) => {
+    if (this.channel) {
+      await this.channel.assertQueue(queueName);
+      this.channel.consume(queueName, (msg) => {
         if (msg !== null) {
           callback(JSON.parse(msg.content.toString()));
           this.channel.ack(msg);
         }
-      },
-      { noAck: true }
-    );
+      });
+    }
   }
 }

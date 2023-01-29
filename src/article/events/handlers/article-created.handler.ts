@@ -1,3 +1,4 @@
+import { HttpException, HttpStatus } from "@nestjs/common";
 import { IEventHandler } from "@nestjs/cqrs";
 import { EventsHandler } from "@nestjs/cqrs/dist/decorators/events-handler.decorator";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -15,6 +16,10 @@ export class ArticleCreatedEventHandler
     private readonly articleRepository: Repository<ArticleEntity>
   ) {}
   async handle({ article }: ArticleCreatedEvent) {
-    await this.articleRepository.save(article);
+    try {
+      await this.articleRepository.save(article);
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 }
