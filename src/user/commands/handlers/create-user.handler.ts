@@ -39,11 +39,12 @@ export class CreateUserCommandHandler
     }
 
     // create new user
-    let newUser = new UserEntity();
-    newUser.username = username;
-    newUser.email = email;
-    newUser.password = password;
-    newUser.articles = [];
+    let newUser = new UserEntity({
+      username,
+      email,
+      password,
+      articles: [],
+    });
 
     const errors = await validate(newUser);
     if (errors.length > 0) {

@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
-import { CommandHandler, EventBus, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { WriteConnection } from "../../../config";
-import { UserEntity } from "../../../user/user.entity";
+import { PublisherService } from "../../../rabbitmq/publisher.service";
+import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
 import { ArticleEntity } from "../../article.entity";
 import { ArticleRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
-import { ArticleCreatedEvent } from "../../events";
 import { CreateArticleCommand } from "../impl";
 
 @CommandHandler(CreateArticleCommand)
@@ -17,11 +17,9 @@ export class CreateArticleCommandHandler
   constructor(
     @InjectRepository(ArticleEntity, WriteConnection)
     private readonly articleRepository: Repository<ArticleEntity>,
-    @InjectRepository(UserEntity, WriteConnection)
-    private readonly userRepository: Repository<UserEntity>,
 
-    private readonly eventBus: EventBus,
-    private readonly articleService: ArticleService
+    private readonly articleService: ArticleService,
+    private readonly publisher: PublisherService
   ) {}
 
   async execute({
@@ -29,24 +27,23 @@ export class CreateArticleCommandHandler
     articleData,
   }: CreateArticleCommand): Promise<ArticleRO> {
     try {
-      let article = new ArticleEntity({
-        ...articleData,
-        slug: this.articleService.slugify(articleData.title),
+      const article = await this.articleRepository.save(
+        new ArticleEntity({
+          ...articleData,
+          slug: this.articleService.slugify(articleData.title),
+          author: {
+            id: userId,
+          },
+        })
+      );
+
+      this.publisher.publish(QUEUE_NAME, {
+        type: "article_created",
+        payload: { article },
       });
-      const newArticle = await this.articleRepository.save(article);
-
-      const author = await this.userRepository.findOne({
-        where: { id: userId },
-        relations: ["articles"],
-      });
-      author.articles.push(article);
-
-      await this.userRepository.save(author);
-
-      this.eventBus.publish(new ArticleCreatedEvent(userId, newArticle));
 
       return {
-        article: this.articleService.buildArticleRO(newArticle),
+        article: this.articleService.buildArticleRO(article),
       };
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);

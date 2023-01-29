@@ -5,6 +5,7 @@ import { AppController } from "./app.controller";
 import { ArticleModule } from "./article/article.module";
 import { MediaModule } from "./media/media.module";
 import { ProfileModule } from "./profile/profile.module";
+import { RabbitMqModule } from "./rabbitmq/rabbitMQ.module";
 import { TagModule } from "./tag/tag.module";
 import { UserModule } from "./user/user.module";
 
@@ -55,6 +56,7 @@ const defaultOptions = {
     ProfileModule,
     TagModule,
     MediaModule,
+    RabbitMqModule,
   ],
   controllers: [AppController],
   providers: [],
