@@ -16,11 +16,15 @@ export class ConsumerService {
 
   async consume(queueName: string, callback: (msg: any) => void) {
     await this.channel.assertQueue(queueName);
-    this.channel.consume(queueName, (msg) => {
-      if (msg !== null) {
-        callback(JSON.parse(msg.content.toString()));
-        this.channel.ack(msg);
-      }
-    });
+    this.channel.consume(
+      queueName,
+      (msg) => {
+        if (msg !== null) {
+          callback(JSON.parse(msg.content.toString()));
+          this.channel.ack(msg);
+        }
+      },
+      { noAck: true }
+    );
   }
 }

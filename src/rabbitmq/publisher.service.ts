@@ -1,17 +1,17 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { ConfirmChannel, Connection } from "amqplib";
+import { ConfirmChannel, Connection, Channel } from "amqplib";
 
 @Injectable()
 export class PublisherService {
-  private channel: ConfirmChannel;
+  private channel: Channel;
 
   constructor(
     @Inject("RABBIT_MQ_CONNECTION")
     private connection: Connection
   ) {
     this.connection
-      .createConfirmChannel()
-      .then((confirmChannel) => (this.channel = confirmChannel));
+      .createChannel()
+      .then((channelCreated) => (this.channel = channelCreated));
   }
 
   async publish(queueName: string, message: any) {
