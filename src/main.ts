@@ -5,13 +5,16 @@ import { json, urlencoded } from "express";
 import { ArticleProjection } from "./article/article.projection";
 import { INestApplication } from "@nestjs/common";
 import { UserProjection } from "./user/user.projection";
+import { ProfileProjection } from "./profile/profile.projection";
 
 async function executeProjection(app: INestApplication) {
   const articleProjection = app.get(ArticleProjection);
   const userProjection = app.get(UserProjection);
+  const profileProjection = app.get(ProfileProjection);
 
   await articleProjection.handle();
   await userProjection.handle();
+  await profileProjection.handle();
 }
 
 async function bootstrap() {

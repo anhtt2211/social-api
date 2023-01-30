@@ -1,7 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { IFollow } from "./profile.interface";
 
-@Entity('follows')
+@Entity("follows")
 export class FollowsEntity {
+  constructor(props: IFollow) {
+    Object.assign(this, props);
+  }
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -11,5 +15,4 @@ export class FollowsEntity {
 
   @Column()
   followingId: number;
-
 }

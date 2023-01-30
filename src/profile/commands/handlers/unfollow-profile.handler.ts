@@ -3,8 +3,11 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { WriteConnection } from "../../../config";
+import { PublisherService } from "../../../rabbitmq/publisher.service";
+import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
 import { UserEntity } from "../../../user/user.entity";
 import { FollowsEntity } from "../../follows.entity";
+import { MessageType } from "../../profile.enum";
 import { ProfileData, ProfileRO } from "../../profile.interface";
 import { UnFollowProfileCommand } from "../impl";
 
@@ -16,7 +19,9 @@ export class UnFollowProfileCommandHandler
     @InjectRepository(UserEntity, WriteConnection)
     private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(FollowsEntity, WriteConnection)
-    private readonly followsRepository: Repository<FollowsEntity>
+    private readonly followsRepository: Repository<FollowsEntity>,
+
+    private readonly publisher: PublisherService
   ) {}
 
   async execute({
@@ -38,8 +43,18 @@ export class UnFollowProfileCommandHandler
         HttpStatus.BAD_REQUEST
       );
     }
-    const followingId = followingUser.id;
-    await this.followsRepository.delete({ followerId, followingId });
+    const follow = {
+      followerId,
+      followingId: followingUser.id,
+    };
+    await this.followsRepository.delete(follow);
+
+    this.publisher.publish(QUEUE_NAME, {
+      type: MessageType.PROFILE_FOLLOWED,
+      payload: {
+        follow,
+      },
+    });
 
     let profile: ProfileData = {
       username: followingUser.username,
