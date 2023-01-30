@@ -1,4 +1,4 @@
-import { HttpException } from "@nestjs/common";
+import { HttpException, HttpStatus } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
@@ -28,6 +28,9 @@ export class DeleteCommentCommandHandler
     commentId,
   }: DeleteCommentCommand): Promise<ArticleRO> {
     let article = await this.articleRepository.findOne({ slug });
+    if (!article) {
+      throw new HttpException("Article not found", HttpStatus.BAD_REQUEST);
+    }
 
     const comment = await this.commentRepository.findOne(commentId, {
       relations: ["author"],

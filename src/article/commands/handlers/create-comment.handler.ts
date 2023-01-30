@@ -1,9 +1,13 @@
+import { HttpException, HttpStatus } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { WriteConnection } from "../../../config";
+import { PublisherService } from "../../../rabbitmq/publisher.service";
+import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
 import { UserEntity } from "../../../user/user.entity";
 import { ArticleEntity } from "../../article.entity";
+import { MessageType } from "../../article.enum";
 import { CommentRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
 import { Comment } from "../../comment.entity";
@@ -21,7 +25,8 @@ export class CreateCommentCommandHandler
     @InjectRepository(Comment, WriteConnection)
     private readonly commentRepository: Repository<Comment>,
 
-    private readonly articleService: ArticleService
+    private readonly articleService: ArticleService,
+    private readonly publisher: PublisherService
   ) {}
 
   async execute({
@@ -29,20 +34,37 @@ export class CreateCommentCommandHandler
     slug,
     commentData,
   }: CreateCommentCommand): Promise<CommentRO> {
-    let article = await this.articleRepository.findOne({ slug });
-    const author = await this.userRepository.findOne(userId);
+    try {
+      let article = await this.articleRepository.findOne(
+        { slug },
+        { select: ["id"] }
+      );
+      const author = await this.userRepository.findOne(userId);
 
-    const comment = new Comment();
-    comment.body = commentData.body;
-    comment.author = author;
-    await this.commentRepository.save(comment);
+      if (!article) {
+        throw new HttpException("Article not found!", HttpStatus.BAD_REQUEST);
+      }
 
-    article.comments.push(comment);
-    await this.articleRepository.save(article);
+      const comment = new Comment({
+        ...commentData,
+        author,
+        article: {
+          id: article.id,
+        },
+      });
+      await this.commentRepository.save(comment);
 
-    const commentRO = this.articleService.buildCommentRO(comment);
-    return {
-      comment: commentRO,
-    };
+      this.publisher.publish(QUEUE_NAME, {
+        type: MessageType.COMMENT_CREATED,
+        payload: { comment },
+      });
+
+      const commentRO = this.articleService.buildCommentRO(comment);
+      return {
+        comment: commentRO,
+      };
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 }

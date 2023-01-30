@@ -53,3 +53,12 @@ export interface IArticle {
   favoriteCount?: number;
   blocks?: BlockEntity[];
 }
+
+export interface IComment {
+  id?: number;
+  body?: string;
+  created?: Date;
+  updated?: Date;
+  article?: IArticle;
+  author?: IUser;
+}

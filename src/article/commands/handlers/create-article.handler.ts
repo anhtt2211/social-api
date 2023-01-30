@@ -6,6 +6,7 @@ import { WriteConnection } from "../../../config";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
 import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
 import { ArticleEntity } from "../../article.entity";
+import { MessageType } from "../../article.enum";
 import { ArticleRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
 import { CreateArticleCommand } from "../impl";
@@ -38,7 +39,7 @@ export class CreateArticleCommandHandler
       );
 
       this.publisher.publish(QUEUE_NAME, {
-        type: "article_created",
+        type: MessageType.ARTICLE_CREATED,
         payload: { article },
       });
 
