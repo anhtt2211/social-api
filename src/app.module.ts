@@ -22,7 +22,6 @@ const defaultOptions = {
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    // write db
     TypeOrmModule.forRootAsync({
       name: "write_db",
       useFactory: () => ({
@@ -36,7 +35,6 @@ const defaultOptions = {
         entities: ["src/**/**.entity{.ts,.js}"],
       }),
     }),
-    // read db
     TypeOrmModule.forRootAsync({
       name: "read_db",
       useFactory: () => ({

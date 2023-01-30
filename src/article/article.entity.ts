@@ -10,10 +10,15 @@ import {
 } from "typeorm";
 import { BlockEntity } from "../block/block.entity";
 import { UserEntity } from "../user/user.entity";
+import { IArticle } from "./article.interface";
 import { Comment } from "./comment.entity";
 
 @Entity("article")
 export class ArticleEntity {
+  constructor(props: IArticle) {
+    Object.assign(this, props);
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 

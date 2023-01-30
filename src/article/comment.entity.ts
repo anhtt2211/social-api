@@ -7,9 +7,14 @@ import {
 } from "typeorm";
 import { UserEntity } from "./../user/user.entity";
 import { ArticleEntity } from "./article.entity";
+import { IComment } from "./article.interface";
 
 @Entity()
 export class Comment {
+  constructor(props: IComment) {
+    Object.assign(this, props);
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 

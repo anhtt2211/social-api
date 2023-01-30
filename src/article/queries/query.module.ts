@@ -6,7 +6,6 @@ import { ReadConnection } from "../../config";
 import { FollowsEntity } from "../../profile/follows.entity";
 import { UserEntity } from "../../user/user.entity";
 import { UserModule } from "../../user/user.module";
-import { ArticleController } from "../article.controller";
 import { ArticleEntity } from "../article.entity";
 import { ArticleService } from "../article.service";
 import { Comment } from "../comment.entity";
@@ -21,6 +20,6 @@ import { Comment } from "../comment.entity";
     CqrsModule,
   ],
   providers: [ArticleService, ...QueryHandlers],
-  controllers: [ArticleController],
+  controllers: [],
 })
 export class QueryModule {}

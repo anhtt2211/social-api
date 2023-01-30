@@ -8,3 +8,9 @@ export interface ProfileData {
 export interface ProfileRO {
   profile: ProfileData;
 }
+
+export interface IFollow {
+  id?: number;
+  followerId?: number;
+  followingId?: number;
+}

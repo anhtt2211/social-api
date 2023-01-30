@@ -3,8 +3,11 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { WriteConnection } from "../../../config";
+import { PublisherService } from "../../../rabbitmq/publisher.service";
+import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
 import { UserEntity } from "../../../user/user.entity";
 import { FollowsEntity } from "../../follows.entity";
+import { MessageType } from "../../profile.enum";
 import { ProfileData, ProfileRO } from "../../profile.interface";
 import { FollowProfileCommand } from "../impl";
 
@@ -16,7 +19,9 @@ export class FollowProfileCommandHandler
     @InjectRepository(UserEntity, WriteConnection)
     private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(FollowsEntity, WriteConnection)
-    private readonly followsRepository: Repository<FollowsEntity>
+    private readonly followsRepository: Repository<FollowsEntity>,
+
+    private readonly publisher: PublisherService
   ) {}
 
   async execute({
@@ -48,10 +53,19 @@ export class FollowProfileCommandHandler
     });
 
     if (!_follows) {
-      const follows = new FollowsEntity();
-      follows.followerId = followerUser.id;
-      follows.followingId = followingUser.id;
-      await this.followsRepository.save(follows);
+      const follow = await this.followsRepository.save(
+        new FollowsEntity({
+          followerId: followerUser.id,
+          followingId: followingUser.id,
+        })
+      );
+
+      this.publisher.publish(QUEUE_NAME, {
+        type: MessageType.PROFILE_FOLLOWED,
+        payload: {
+          follow,
+        },
+      });
     }
 
     let profile: ProfileData = {

@@ -1,19 +1,22 @@
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { BlockEntity } from "../../block/block.entity";
 import { ReadConnection } from "../../config";
 import { UserEntity } from "../../user/user.entity";
-import { ArticleController } from "../article.controller";
 import { ArticleEntity } from "../article.entity";
-import { ArticleService } from "../article.service";
+import { Comment } from "../comment.entity";
 import { EventHandlers } from "../events";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ArticleEntity, UserEntity], ReadConnection),
+    TypeOrmModule.forFeature(
+      [ArticleEntity, UserEntity, BlockEntity, Comment],
+      ReadConnection
+    ),
     CqrsModule,
   ],
-  providers: [ArticleService, ...EventHandlers],
-  controllers: [ArticleController],
+  providers: [...EventHandlers],
+  controllers: [],
 })
 export class EventModule {}

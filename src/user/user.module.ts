@@ -5,15 +5,24 @@ import {
   RequestMethod,
 } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
+import { RabbitMqModule } from "../rabbitmq/rabbitMQ.module";
 import { AuthMiddleware } from "./auth.middleware";
 import { CommandModule } from "./commands/command.module";
+import { EventModule } from "./events/event.module";
 import { QueryModule } from "./queries/query.module";
 import { UserController } from "./user.controller";
+import { UserProjection } from "./user.projection";
 import { UserService } from "./user.service";
 
 @Module({
-  imports: [CqrsModule, CommandModule, QueryModule],
-  providers: [UserService],
+  imports: [
+    CqrsModule,
+    CommandModule,
+    QueryModule,
+    EventModule,
+    RabbitMqModule,
+  ],
+  providers: [UserService, UserProjection],
   controllers: [UserController],
   exports: [UserService],
 })

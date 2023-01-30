@@ -7,6 +7,9 @@ import { ArticleRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
 import { ArticleEntity } from "../../article.entity";
 import { UnFavoriteArticleCommand } from "../impl";
+import { PublisherService } from "../../../rabbitmq/publisher.service";
+import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
+import { MessageType } from "../../article.enum";
 
 @CommandHandler(UnFavoriteArticleCommand)
 export class UnFavoriteArticleCommandHandler
@@ -18,7 +21,8 @@ export class UnFavoriteArticleCommandHandler
     @InjectRepository(UserEntity, WriteConnection)
     private readonly userRepository: Repository<UserEntity>,
 
-    private readonly articleService: ArticleService
+    private readonly articleService: ArticleService,
+    private readonly publisher: PublisherService
   ) {}
 
   async execute({
@@ -45,6 +49,14 @@ export class UnFavoriteArticleCommandHandler
 
       await this.userRepository.save(user);
       article = await this.articleRepository.save(article);
+
+      this.publisher.publish(QUEUE_NAME, {
+        type: MessageType.ARTICLE_UNFAVORITED,
+        payload: {
+          user,
+          article,
+        },
+      });
     }
 
     return { article: this.articleService.buildArticleRO(article, user) };

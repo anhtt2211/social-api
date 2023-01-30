@@ -1,3 +1,4 @@
+import { HttpException, HttpStatus } from "@nestjs/common";
 import { IEventHandler } from "@nestjs/cqrs";
 import { EventsHandler } from "@nestjs/cqrs/dist/decorators/events-handler.decorator";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -5,11 +6,11 @@ import { Repository } from "typeorm";
 import { ReadConnection } from "../../../config";
 import { UserEntity } from "../../../user/user.entity";
 import { ArticleEntity } from "../../article.entity";
-import { CreatedArticleEvent } from "../impl";
+import { ArticleUnFavoritedEvent } from "../impl";
 
-@EventsHandler(CreatedArticleEvent)
-export class CreatedArticleEventHandler
-  implements IEventHandler<CreatedArticleEvent>
+@EventsHandler(ArticleUnFavoritedEvent)
+export class ArticleUnFavoritedEventHandler
+  implements IEventHandler<ArticleUnFavoritedEvent>
 {
   constructor(
     @InjectRepository(ArticleEntity, ReadConnection)
@@ -17,15 +18,12 @@ export class CreatedArticleEventHandler
     @InjectRepository(UserEntity, ReadConnection)
     private readonly userRepository: Repository<UserEntity>
   ) {}
-  async handle({ userId, article }: CreatedArticleEvent) {
-    await this.articleRepository.save(article);
-
-    const author = await this.userRepository.findOne({
-      where: { id: userId },
-      relations: ["articles"],
-    });
-    author.articles.push(article);
-
-    await this.userRepository.save(author);
+  async handle({ user, article }: ArticleUnFavoritedEvent) {
+    try {
+      await this.userRepository.save(user);
+      await this.articleRepository.save(article);
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 }
