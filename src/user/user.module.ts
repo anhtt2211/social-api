@@ -11,6 +11,7 @@ import { CommandModule } from "./commands/command.module";
 import { EventModule } from "./events/event.module";
 import { QueryModule } from "./queries/query.module";
 import { UserController } from "./user.controller";
+import { UserProjection } from "./user.projection";
 import { UserService } from "./user.service";
 
 @Module({
@@ -21,7 +22,7 @@ import { UserService } from "./user.service";
     EventModule,
     RabbitMqModule,
   ],
-  providers: [UserService],
+  providers: [UserService, UserProjection],
   controllers: [UserController],
   exports: [UserService],
 })
