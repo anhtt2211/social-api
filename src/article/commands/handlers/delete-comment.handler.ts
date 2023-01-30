@@ -8,6 +8,9 @@ import { ArticleService } from "../../article.service";
 import { ArticleEntity } from "../../article.entity";
 import { Comment } from "../../comment.entity";
 import { DeleteCommentCommand } from "../impl";
+import { PublisherService } from "../../../rabbitmq/publisher.service";
+import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
+import { MessageType } from "../../article.enum";
 
 @CommandHandler(DeleteCommentCommand)
 export class DeleteCommentCommandHandler
@@ -19,7 +22,8 @@ export class DeleteCommentCommandHandler
     @InjectRepository(Comment, WriteConnection)
     private readonly commentRepository: Repository<Comment>,
 
-    private readonly articleService: ArticleService
+    private readonly articleService: ArticleService,
+    private readonly publisher: PublisherService
   ) {}
 
   async execute({
@@ -48,6 +52,13 @@ export class DeleteCommentCommandHandler
       const deleteComments = article.comments.splice(deleteIndex, 1);
       await this.commentRepository.delete(deleteComments[0].id);
       article = await this.articleRepository.save(article);
+
+      this.publisher.publish(QUEUE_NAME, {
+        type: MessageType.COMMENT_DELETED,
+        payload: {
+          comment: deleteComments[0],
+        },
+      });
 
       return { article: this.articleService.buildArticleRO(article) };
     } else {

@@ -13,6 +13,7 @@ import {
   ArticleUnFavoritedEvent,
   ArticleUpdatedEvent,
   CommentCreatedEvent,
+  CommentDeletedEvent,
 } from "./events";
 
 interface IProjection {
@@ -68,6 +69,9 @@ export class ArticleProjection implements IProjection {
         break;
       case MessageType.COMMENT_CREATED:
         this.eventBus.publish(new CommentCreatedEvent(payload.comment));
+        break;
+      case MessageType.COMMENT_DELETED:
+        this.eventBus.publish(new CommentDeletedEvent(payload.comment));
         break;
       default:
         break;

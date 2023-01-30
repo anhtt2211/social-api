@@ -5,3 +5,4 @@ export * from "./article-favorited.event";
 export * from "./article-unfavorited.event";
 
 export * from "./comment-created.event";
+export * from "./comment-deleted.event";

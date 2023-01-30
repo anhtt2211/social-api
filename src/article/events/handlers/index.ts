@@ -5,3 +5,4 @@ export * from "./article-favorited.handler";
 export * from "./article-unfavorited.handler";
 
 export * from "./comment-created.handler";
+export * from "./comment-deleted.handler";

@@ -5,6 +5,7 @@ import {
   ArticleUnFavoritedEventHandler,
   ArticleUpdatedEventHandler,
   CommentCreatedEventHandler,
+  CommentDeletedEventHandler,
 } from "./handlers";
 
 export * from "./handlers";
@@ -17,4 +18,5 @@ export const EventHandlers = [
   ArticleFavoritedEventHandler,
   ArticleUnFavoritedEventHandler,
   CommentCreatedEventHandler,
+  CommentDeletedEventHandler,
 ];
