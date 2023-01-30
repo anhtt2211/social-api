@@ -50,15 +50,15 @@ export class FavoriteArticleCommandHandler
 
         await this.userRepository.save(user);
         article = await this.articleRepository.save(article);
-      }
 
-      this.publisher.publish(QUEUE_NAME, {
-        type: MessageType.ARTICLE_FAVORITED,
-        payload: {
-          user,
-          article,
-        },
-      });
+        this.publisher.publish(QUEUE_NAME, {
+          type: MessageType.ARTICLE_FAVORITED,
+          payload: {
+            user,
+            article,
+          },
+        });
+      }
 
       return { article: this.articleService.buildArticleRO(article, user) };
     } catch (error) {

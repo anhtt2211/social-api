@@ -49,15 +49,15 @@ export class UnFavoriteArticleCommandHandler
 
       await this.userRepository.save(user);
       article = await this.articleRepository.save(article);
-    }
 
-    this.publisher.publish(QUEUE_NAME, {
-      type: MessageType.ARTICLE_UNFAVORITED,
-      payload: {
-        user,
-        article,
-      },
-    });
+      this.publisher.publish(QUEUE_NAME, {
+        type: MessageType.ARTICLE_UNFAVORITED,
+        payload: {
+          user,
+          article,
+        },
+      });
+    }
 
     return { article: this.articleService.buildArticleRO(article, user) };
   }
