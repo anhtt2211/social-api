@@ -2,11 +2,8 @@ import { Controller, Delete, Get, Param, Post } from "@nestjs/common";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { User } from "../user/user.decorator";
-import {
-  FollowProfileCommand,
-  UnFollowProfileCommand,
-} from "./handlers/commands";
-import { FindProfileQuery } from "./handlers/queries";
+import { FollowProfileCommand, UnFollowProfileCommand } from "./commands";
+import { FindProfileQuery } from "./queries";
 import { ProfileRO } from "./profile.interface";
 
 @ApiBearerAuth()

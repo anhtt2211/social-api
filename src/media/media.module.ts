@@ -4,13 +4,14 @@ import {
   NestModule,
   RequestMethod,
 } from "@nestjs/common";
+import { CqrsModule } from "@nestjs/cqrs";
 import { AuthMiddleware } from "../user/auth.middleware";
 import { UserModule } from "../user/user.module";
 import { DropboxService } from "./dropbox.service";
 import { MediaController } from "./media.controller";
 
 @Module({
-  imports: [UserModule],
+  imports: [UserModule, CqrsModule],
   providers: [DropboxService],
   controllers: [MediaController],
   exports: [DropboxService],

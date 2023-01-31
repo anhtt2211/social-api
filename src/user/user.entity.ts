@@ -12,9 +12,14 @@ import { IsEmail } from "class-validator";
 import * as argon2 from "argon2";
 import { ArticleEntity } from "../article/article.entity";
 import { Comment } from "../article/comment.entity";
+import { IUser } from "./user.interface";
 
 @Entity("user")
 export class UserEntity {
+  constructor(props: IUser) {
+    Object.assign(this, props);
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 

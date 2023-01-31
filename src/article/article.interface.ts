@@ -1,6 +1,7 @@
-import { BlockDto } from "../block/block.dto";
+import { BlockEntity } from "../block/block.entity";
 import { IBlock } from "../block/block.interface";
 import { ProfileData } from "../profile/profile.interface";
+import { IUser } from "../user/user.interface";
 export interface Comment {
   id: number;
   body: string;
@@ -37,4 +38,27 @@ export interface ArticleRO {
 export interface ArticlesRO {
   articles: ArticleData[];
   articlesCount: number;
+}
+
+export interface IArticle {
+  id?: number;
+  slug?: string;
+  title?: string;
+  description?: string;
+  created?: Date;
+  updated?: Date;
+  tagList?: string[];
+  author?: IUser;
+  comments?: Comment[];
+  favoriteCount?: number;
+  blocks?: BlockEntity[];
+}
+
+export interface IComment {
+  id?: number;
+  body?: string;
+  created?: Date;
+  updated?: Date;
+  article?: IArticle;
+  author?: IUser;
 }
