@@ -7,15 +7,24 @@ import { MediaModule } from "./media/media.module";
 import { ProfileModule } from "./profile/profile.module";
 import { TagModule } from "./tag/tag.module";
 import { UserModule } from "./user/user.module";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 const defaultOptions = {
-  migrations: ["src/database/migrations/*{.ts,.js}"],
-  logging: true,
-  synchronize: false,
-  migrationsRun: false,
+  type: process.env.DATABASE_ENGINE,
+  host: process.env.DATABASE_HOST,
+  port: parseInt(process.env.DATABASE_PORT),
+  username: process.env.DATABASE_USERNAME,
+  password: process.env.DATABASE_PASSWORD,
+  entities: [process.env.TYPEORM_ENTITIES],
+  migrations: [process.env.TYPEORM_MIGRATIONS],
+  logging: process.env.TYPEORM_LOGGING === "true" ? true : false,
+  synchronize: process.env.TYPEORM_SYNCHRONIZE === "true" ? true : false,
+  migrationsRun: process.env.TYPEORM_MIGRATION_RUN === "true" ? true : false,
   migrationsTableName: "migrations",
   cli: {
-    migrationsDir: "src/database/migrations",
+    migrationsDir: process.env.TYPEORM_MIGRATIONS_DIR,
   },
 };
 
@@ -27,12 +36,7 @@ const defaultOptions = {
       useFactory: () => ({
         ...defaultOptions,
         type: "postgres",
-        host: "localhost",
-        port: 5432,
-        username: "anhtran",
-        password: "_briantran",
-        database: "social_write",
-        entities: ["src/**/**.entity{.ts,.js}"],
+        database: process.env.WRITE_DATABASE_NAME,
       }),
     }),
     TypeOrmModule.forRootAsync({
@@ -40,12 +44,7 @@ const defaultOptions = {
       useFactory: () => ({
         ...defaultOptions,
         type: "postgres",
-        host: "localhost",
-        port: 5432,
-        username: "anhtran",
-        password: "_briantran",
-        database: "social_read",
-        entities: ["src/**/**.entity{.ts,.js}"],
+        database: process.env.READ_DATABASE_NAME,
       }),
     }),
     ArticleModule,
