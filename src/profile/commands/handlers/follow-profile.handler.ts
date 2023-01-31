@@ -2,7 +2,7 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { WriteConnection } from "../../../config";
+import { WRITE_CONNECTION } from "../../../config";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
 import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
 import { UserEntity } from "../../../user/user.entity";
@@ -16,9 +16,9 @@ export class FollowProfileCommandHandler
   implements ICommandHandler<FollowProfileCommand>
 {
   constructor(
-    @InjectRepository(UserEntity, WriteConnection)
+    @InjectRepository(UserEntity, WRITE_CONNECTION)
     private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(FollowsEntity, WriteConnection)
+    @InjectRepository(FollowsEntity, WRITE_CONNECTION)
     private readonly followsRepository: Repository<FollowsEntity>,
 
     private readonly publisher: PublisherService

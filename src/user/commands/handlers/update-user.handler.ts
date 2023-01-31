@@ -2,7 +2,7 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { WriteConnection } from "../../../config";
+import { WRITE_CONNECTION } from "../../../config";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
 import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
 import { UserEntity } from "../../user.entity";
@@ -16,7 +16,7 @@ export class UpdateUserCommandHandler
   implements ICommandHandler<UpdateUserCommand>
 {
   constructor(
-    @InjectRepository(UserEntity, WriteConnection)
+    @InjectRepository(UserEntity, WRITE_CONNECTION)
     private readonly userRepository: Repository<UserEntity>,
 
     private readonly userService: UserService,

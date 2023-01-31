@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { BlockEntity } from "../../block/block.entity";
-import { ReadConnection } from "../../config";
+import { READ_CONNECTION } from "../../config";
 import { UserEntity } from "../../user/user.entity";
 import { ArticleEntity } from "../article.entity";
 import { Comment } from "../comment.entity";
@@ -12,7 +12,7 @@ import { EventHandlers } from "../events";
   imports: [
     TypeOrmModule.forFeature(
       [ArticleEntity, UserEntity, BlockEntity, Comment],
-      ReadConnection
+      READ_CONNECTION
     ),
     CqrsModule,
   ],

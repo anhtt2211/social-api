@@ -4,7 +4,7 @@ import { EventsHandler } from "@nestjs/cqrs/dist/decorators/events-handler.decor
 import { InjectRepository } from "@nestjs/typeorm";
 import { In, Repository } from "typeorm";
 import { BlockEntity } from "../../../block/block.entity";
-import { ReadConnection } from "../../../config";
+import { READ_CONNECTION } from "../../../config";
 import { ArticleEntity } from "../../article.entity";
 import { ArticleDeletedEvent } from "../impl";
 
@@ -13,9 +13,9 @@ export class ArticleDeletedEventHandler
   implements IEventHandler<ArticleDeletedEvent>
 {
   constructor(
-    @InjectRepository(ArticleEntity, ReadConnection)
+    @InjectRepository(ArticleEntity, READ_CONNECTION)
     private readonly articleRepository: Repository<ArticleEntity>,
-    @InjectRepository(BlockEntity, ReadConnection)
+    @InjectRepository(BlockEntity, READ_CONNECTION)
     private readonly blockRepository: Repository<BlockEntity>
   ) {}
   async handle({ userId, slug }: ArticleDeletedEvent) {

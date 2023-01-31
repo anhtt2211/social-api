@@ -3,7 +3,7 @@ import { IEventHandler } from "@nestjs/cqrs";
 import { EventsHandler } from "@nestjs/cqrs/dist/decorators/events-handler.decorator";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { ReadConnection } from "../../../config";
+import { READ_CONNECTION } from "../../../config";
 import { FollowsEntity } from "../../follows.entity";
 import { ProfileFollowedEvent } from "../impl";
 
@@ -12,7 +12,7 @@ export class ProfileFollowedEventHandler
   implements IEventHandler<ProfileFollowedEvent>
 {
   constructor(
-    @InjectRepository(FollowsEntity, ReadConnection)
+    @InjectRepository(FollowsEntity, READ_CONNECTION)
     private readonly followsRepository: Repository<FollowsEntity>
   ) {}
   async handle({ follow }: ProfileFollowedEvent) {

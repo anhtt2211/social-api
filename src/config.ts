@@ -1,4 +1,4 @@
 export const SECRET = "jwt-secret-key";
 
-export const WriteConnection = "write_db";
-export const ReadConnection = "read_db";
+export const WRITE_CONNECTION = "write_db";
+export const READ_CONNECTION = "read_db";

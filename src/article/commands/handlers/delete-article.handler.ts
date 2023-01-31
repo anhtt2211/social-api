@@ -3,7 +3,7 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeleteResult, In, Repository } from "typeorm";
 import { BlockEntity } from "../../../block/block.entity";
-import { WriteConnection } from "../../../config";
+import { WRITE_CONNECTION } from "../../../config";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
 import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
 import { ArticleEntity } from "../../article.entity";
@@ -15,9 +15,9 @@ export class DeleteArticleCommandHandler
   implements ICommandHandler<DeleteArticleCommand>
 {
   constructor(
-    @InjectRepository(ArticleEntity, WriteConnection)
+    @InjectRepository(ArticleEntity, WRITE_CONNECTION)
     private readonly articleRepository: Repository<ArticleEntity>,
-    @InjectRepository(BlockEntity, WriteConnection)
+    @InjectRepository(BlockEntity, WRITE_CONNECTION)
     private readonly blockRepository: Repository<BlockEntity>,
 
     private readonly publisher: PublisherService

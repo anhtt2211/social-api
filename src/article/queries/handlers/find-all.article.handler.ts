@@ -2,7 +2,7 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { getRepository, Repository } from "typeorm";
-import { ReadConnection } from "../../../config";
+import { READ_CONNECTION } from "../../../config";
 import { FollowsEntity } from "../../../profile/follows.entity";
 import { UserEntity } from "../../../user/user.entity";
 import { ArticleEntity } from "../../article.entity";
@@ -15,9 +15,9 @@ export class FindAllArticleQueryHandler
   implements IQueryHandler<FindAllArticleQuery>
 {
   constructor(
-    @InjectRepository(UserEntity, ReadConnection)
+    @InjectRepository(UserEntity, READ_CONNECTION)
     private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(ArticleEntity, ReadConnection)
+    @InjectRepository(ArticleEntity, READ_CONNECTION)
     private readonly articleRepository: Repository<ArticleEntity>,
 
     private readonly articleService: ArticleService
@@ -78,7 +78,7 @@ export class FindAllArticleQueryHandler
         user = await this.userRepository.findOne(userId, {
           relations: ["favorites"],
         });
-        const followsBuilder = getRepository(FollowsEntity, ReadConnection)
+        const followsBuilder = getRepository(FollowsEntity, READ_CONNECTION)
           .createQueryBuilder("follows")
           .where("follows.followerId = :followerId", { followerId: userId });
         if (authorIds.length > 0) {

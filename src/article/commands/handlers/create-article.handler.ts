@@ -2,7 +2,7 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { WriteConnection } from "../../../config";
+import { WRITE_CONNECTION } from "../../../config";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
 import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
 import { ArticleEntity } from "../../article.entity";
@@ -16,7 +16,7 @@ export class CreateArticleCommandHandler
   implements ICommandHandler<CreateArticleCommand>
 {
   constructor(
-    @InjectRepository(ArticleEntity, WriteConnection)
+    @InjectRepository(ArticleEntity, WRITE_CONNECTION)
     private readonly articleRepository: Repository<ArticleEntity>,
 
     private readonly articleService: ArticleService,

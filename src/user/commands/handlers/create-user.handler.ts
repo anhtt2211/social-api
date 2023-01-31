@@ -3,7 +3,7 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { validate } from "class-validator";
 import { getRepository, Repository } from "typeorm";
-import { WriteConnection } from "../../../config";
+import { WRITE_CONNECTION } from "../../../config";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
 import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
 import { UserEntity } from "../../user.entity";
@@ -17,7 +17,7 @@ export class CreateUserCommandHandler
   implements ICommandHandler<CreateUserCommand>
 {
   constructor(
-    @InjectRepository(UserEntity, WriteConnection)
+    @InjectRepository(UserEntity, WRITE_CONNECTION)
     private readonly userRepository: Repository<UserEntity>,
 
     private readonly userService: UserService,
@@ -28,7 +28,7 @@ export class CreateUserCommandHandler
     try {
       // check uniqueness of username/email
       const { username, email, password } = dto;
-      const qb = await getRepository(UserEntity, WriteConnection)
+      const qb = await getRepository(UserEntity, WRITE_CONNECTION)
         .createQueryBuilder("user")
         .where("user.username = :username", { username })
         .orWhere("user.email = :email", { email });

@@ -1,7 +1,7 @@
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { ReadConnection } from "../../../config";
+import { READ_CONNECTION } from "../../../config";
 import { UserEntity } from "../../../user/user.entity";
 import { FollowsEntity } from "../../follows.entity";
 import { ProfileData, ProfileRO } from "../../profile.interface";
@@ -12,9 +12,9 @@ export class FindProfileQueryHandler
   implements IQueryHandler<FindProfileQuery>
 {
   constructor(
-    @InjectRepository(UserEntity, ReadConnection)
+    @InjectRepository(UserEntity, READ_CONNECTION)
     private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(FollowsEntity, ReadConnection)
+    @InjectRepository(FollowsEntity, READ_CONNECTION)
     private readonly followsRepository: Repository<FollowsEntity>
   ) {}
 

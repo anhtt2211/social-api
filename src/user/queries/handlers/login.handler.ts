@@ -3,7 +3,7 @@ import { QueryHandler, IQueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import * as argon2 from "argon2";
-import { ReadConnection } from "../../../config";
+import { READ_CONNECTION } from "../../../config";
 import { LoginUserDto } from "../../dto";
 import { UserEntity } from "../../user.entity";
 import { UserRO } from "../../user.interface";
@@ -13,7 +13,7 @@ import { LoginQuery } from "../impl";
 @QueryHandler(LoginQuery)
 export class LoginQueryHandler implements IQueryHandler<LoginQuery> {
   constructor(
-    @InjectRepository(UserEntity, ReadConnection)
+    @InjectRepository(UserEntity, READ_CONNECTION)
     private readonly userRepository: Repository<UserEntity>,
     private readonly userService: UserService
   ) {}

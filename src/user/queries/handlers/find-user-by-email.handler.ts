@@ -1,7 +1,7 @@
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { ReadConnection } from "../../../config";
+import { READ_CONNECTION } from "../../../config";
 import { UserEntity } from "../../user.entity";
 import { UserRO } from "../../user.interface";
 import { FindUserByEmailQuery } from "../impl";
@@ -11,7 +11,7 @@ export class FindUserByEmailQueryHandler
   implements IQueryHandler<FindUserByEmailQuery>
 {
   constructor(
-    @InjectRepository(UserEntity, ReadConnection)
+    @InjectRepository(UserEntity, READ_CONNECTION)
     private readonly userRepository: Repository<UserEntity>
   ) {}
 

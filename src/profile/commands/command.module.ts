@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { CommandHandlers } from ".";
-import { WriteConnection } from "../../config";
+import { WRITE_CONNECTION } from "../../config";
 import { RabbitMqModule } from "../../rabbitmq/rabbitMQ.module";
 import { UserEntity } from "../../user/user.entity";
 import { UserModule } from "../../user/user.module";
@@ -12,7 +12,7 @@ import { ProfileService } from "../profile.service";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity, FollowsEntity], WriteConnection),
+    TypeOrmModule.forFeature([UserEntity, FollowsEntity], WRITE_CONNECTION),
     UserModule,
     CqrsModule,
     RabbitMqModule,

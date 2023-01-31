@@ -2,7 +2,7 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { ReadConnection } from "../../../config";
+import { READ_CONNECTION } from "../../../config";
 import { FollowsEntity } from "../../../profile/follows.entity";
 import { UserEntity } from "../../../user/user.entity";
 import { ArticleEntity } from "../../article.entity";
@@ -15,11 +15,11 @@ export class FindOneArticleQueryHandler
   implements IQueryHandler<FindOneArticleQuery>
 {
   constructor(
-    @InjectRepository(ArticleEntity, ReadConnection)
+    @InjectRepository(ArticleEntity, READ_CONNECTION)
     private readonly articleRepository: Repository<ArticleEntity>,
-    @InjectRepository(UserEntity, ReadConnection)
+    @InjectRepository(UserEntity, READ_CONNECTION)
     private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(FollowsEntity, ReadConnection)
+    @InjectRepository(FollowsEntity, READ_CONNECTION)
     private readonly followsRepository: Repository<FollowsEntity>,
 
     private readonly articleService: ArticleService

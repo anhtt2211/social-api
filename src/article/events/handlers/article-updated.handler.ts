@@ -3,7 +3,7 @@ import { IEventHandler } from "@nestjs/cqrs";
 import { EventsHandler } from "@nestjs/cqrs/dist/decorators/events-handler.decorator";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { ReadConnection } from "../../../config";
+import { READ_CONNECTION } from "../../../config";
 import { ArticleEntity } from "../../article.entity";
 import { ArticleUpdatedEvent } from "../impl";
 
@@ -12,7 +12,7 @@ export class ArticleUpdatedEventHandler
   implements IEventHandler<ArticleUpdatedEvent>
 {
   constructor(
-    @InjectRepository(ArticleEntity, ReadConnection)
+    @InjectRepository(ArticleEntity, READ_CONNECTION)
     private readonly articleRepository: Repository<ArticleEntity>
   ) {}
   async handle({ article }: ArticleUpdatedEvent) {

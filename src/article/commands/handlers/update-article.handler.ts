@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { WriteConnection } from "../../../config";
+import { WRITE_CONNECTION } from "../../../config";
 import { ArticleRO } from "../../article.interface";
 import { ArticleService } from "../../article.service";
 import { ArticleEntity } from "../../article.entity";
@@ -16,7 +16,7 @@ export class UpdateArticleCommandHandler
   implements ICommandHandler<UpdateArticleCommand>
 {
   constructor(
-    @InjectRepository(ArticleEntity, WriteConnection)
+    @InjectRepository(ArticleEntity, WRITE_CONNECTION)
     private readonly articleRepository: Repository<ArticleEntity>,
 
     private readonly articleService: ArticleService,

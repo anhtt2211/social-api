@@ -8,6 +8,7 @@ import { ProfileModule } from "./profile/profile.module";
 import { TagModule } from "./tag/tag.module";
 import { UserModule } from "./user/user.module";
 import * as dotenv from "dotenv";
+import { READ_CONNECTION, WRITE_CONNECTION } from "./config";
 
 dotenv.config();
 
@@ -32,7 +33,7 @@ const defaultOptions = {
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
-      name: "write_db",
+      name: WRITE_CONNECTION,
       useFactory: () => ({
         ...defaultOptions,
         type: "postgres",
@@ -40,7 +41,7 @@ const defaultOptions = {
       }),
     }),
     TypeOrmModule.forRootAsync({
-      name: "read_db",
+      name: READ_CONNECTION,
       useFactory: () => ({
         ...defaultOptions,
         type: "postgres",
