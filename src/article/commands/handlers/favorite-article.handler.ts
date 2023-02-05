@@ -3,13 +3,13 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { WRITE_CONNECTION } from "../../../config";
 import { UserEntity } from "../../../user/user.entity";
-import { ArticleRO } from "../../article.interface";
-import { ArticleService } from "../../article.service";
-import { ArticleEntity } from "../../article.entity";
+import { ArticleRO } from "../../core/interfaces/article.interface";
+import { ArticleService } from "../../services/article.service";
+import { ArticleEntity } from "../../core/entities/article.entity";
 import { FavoriteArticleCommand } from "../impl";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
 import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
-import { MessageType } from "../../article.enum";
+import { MessageType } from "../../core/enums/article.enum";
 import { HttpException, HttpStatus } from "@nestjs/common";
 
 @CommandHandler(FavoriteArticleCommand)

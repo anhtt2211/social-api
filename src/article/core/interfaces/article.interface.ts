@@ -1,14 +1,15 @@
-import { BlockEntity } from "../block/block.entity";
-import { IBlock } from "../block/block.interface";
-import { ProfileData } from "../profile/profile.interface";
-import { IUser } from "../user/user.interface";
-export interface Comment {
-  id: number;
-  body: string;
-  created: Date;
-  updated?: Date;
-  author: ProfileData;
-}
+import { BlockEntity } from "../entities/block.entity";
+import { IBlock } from "./block.interface";
+import { ProfileData } from "../../../profile/profile.interface";
+import { IUser } from "../../../user/user.interface";
+
+// export interface Comment {
+//   id: number;
+//   body: string;
+//   created: Date;
+//   updated?: Date;
+//   author: ProfileData;
+// }
 
 export interface ArticleData {
   slug: string;
@@ -24,11 +25,11 @@ export interface ArticleData {
 }
 
 export interface CommentsRO {
-  comments: Comment[];
+  comments: IComment[];
 }
 
 export interface CommentRO {
-  comment: Comment;
+  comment: IComment;
 }
 
 export interface ArticleRO {
@@ -49,7 +50,7 @@ export interface IArticle {
   updated?: Date;
   tagList?: string[];
   author?: IUser;
-  comments?: Comment[];
+  comments?: IComment[];
   favoriteCount?: number;
   blocks?: BlockEntity[];
 }
@@ -60,5 +61,5 @@ export interface IComment {
   created?: Date;
   updated?: Date;
   article?: IArticle;
-  author?: IUser;
+  author?: IUser | ProfileData;
 }

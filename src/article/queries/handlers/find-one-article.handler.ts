@@ -5,9 +5,9 @@ import { Repository } from "typeorm";
 import { READ_CONNECTION } from "../../../config";
 import { FollowsEntity } from "../../../profile/follows.entity";
 import { UserEntity } from "../../../user/user.entity";
-import { ArticleEntity } from "../../article.entity";
-import { ArticleRO } from "../../article.interface";
-import { ArticleService } from "../../article.service";
+import { ArticleEntity } from "../../core/entities/article.entity";
+import { ArticleRO } from "../../core/interfaces/article.interface";
+import { ArticleService } from "../../services/article.service";
 import { FindOneArticleQuery } from "../impl";
 
 @QueryHandler(FindOneArticleQuery)

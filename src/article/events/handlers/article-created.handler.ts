@@ -4,7 +4,7 @@ import { EventsHandler } from "@nestjs/cqrs/dist/decorators/events-handler.decor
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { READ_CONNECTION } from "../../../config";
-import { ArticleEntity } from "../../article.entity";
+import { ArticleEntity } from "../../core/entities/article.entity";
 import { ArticleCreatedEvent } from "../impl";
 
 @EventsHandler(ArticleCreatedEvent)

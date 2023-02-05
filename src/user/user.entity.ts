@@ -10,8 +10,8 @@ import {
 } from "typeorm";
 import { IsEmail } from "class-validator";
 import * as argon2 from "argon2";
-import { ArticleEntity } from "../article/article.entity";
-import { Comment } from "../article/comment.entity";
+import { ArticleEntity } from "../article/core/entities/article.entity";
+import { Comment } from "../article/core/entities/comment.entity";
 import { IUser } from "./user.interface";
 
 @Entity("user")

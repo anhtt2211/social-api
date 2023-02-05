@@ -5,7 +5,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { READ_CONNECTION } from "../../../config";
 import { UserEntity } from "../../../user/user.entity";
-import { ArticleEntity } from "../../article.entity";
+import { ArticleEntity } from "../../core/entities/article.entity";
 import { ArticleUnFavoritedEvent } from "../impl";
 
 @EventsHandler(ArticleUnFavoritedEvent)

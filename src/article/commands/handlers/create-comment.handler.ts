@@ -6,11 +6,11 @@ import { WRITE_CONNECTION } from "../../../config";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
 import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
 import { UserEntity } from "../../../user/user.entity";
-import { ArticleEntity } from "../../article.entity";
-import { MessageType } from "../../article.enum";
-import { CommentRO } from "../../article.interface";
-import { ArticleService } from "../../article.service";
-import { Comment } from "../../comment.entity";
+import { ArticleEntity } from "../../core/entities/article.entity";
+import { MessageType } from "../../core/enums/article.enum";
+import { CommentRO } from "../../core/interfaces/article.interface";
+import { ArticleService } from "../../services/article.service";
+import { Comment } from "../../core/entities/comment.entity";
 import { CreateCommentCommand } from "../impl";
 
 @CommandHandler(CreateCommentCommand)

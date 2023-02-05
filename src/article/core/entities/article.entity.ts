@@ -8,9 +8,9 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { BlockEntity } from "../block/block.entity";
-import { UserEntity } from "../user/user.entity";
-import { IArticle } from "./article.interface";
+import { BlockEntity } from "./block.entity";
+import { UserEntity } from "../../../user/user.entity";
+import { IArticle } from "../interfaces/article.interface";
 import { Comment } from "./comment.entity";
 
 @Entity("article")
