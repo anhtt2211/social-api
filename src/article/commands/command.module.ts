@@ -5,7 +5,7 @@ import { CommandHandlers } from ".";
 import { WRITE_CONNECTION } from "../../config";
 import { FollowsEntity } from "../../profile/core/entities/follows.entity";
 import { RabbitMqModule } from "../../rabbitmq/rabbitMQ.module";
-import { UserEntity } from "../../user/user.entity";
+import { UserEntity } from "../../user/core";
 import { UserModule } from "../../user/user.module";
 import { ArticleEntity, Comment, BlockEntity } from "../core";
 import { ArticleService } from "../services/article.service";
