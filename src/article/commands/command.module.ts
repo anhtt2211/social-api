@@ -3,7 +3,7 @@ import { CqrsModule } from "@nestjs/cqrs";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { CommandHandlers } from ".";
 import { WRITE_CONNECTION } from "../../config";
-import { FollowsEntity } from "../../profile/follows.entity";
+import { FollowsEntity } from "../../profile/core/entities/follows.entity";
 import { RabbitMqModule } from "../../rabbitmq/rabbitMQ.module";
 import { UserEntity } from "../../user/user.entity";
 import { UserModule } from "../../user/user.module";

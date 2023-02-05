@@ -1,6 +1,6 @@
 import { BlockEntity } from "../entities/block.entity";
 import { IBlock } from "./block.interface";
-import { ProfileData } from "../../../profile/profile.interface";
+import { ProfileData } from "../../../profile/core/interfaces/profile.interface";
 import { IUser } from "../../../user/user.interface";
 
 // export interface Comment {

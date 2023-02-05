@@ -6,9 +6,9 @@ import { WRITE_CONNECTION } from "../../../config";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
 import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
 import { UserEntity } from "../../../user/user.entity";
-import { FollowsEntity } from "../../follows.entity";
-import { MessageType } from "../../profile.enum";
-import { ProfileData, ProfileRO } from "../../profile.interface";
+import { FollowsEntity } from "../../core/entities/follows.entity";
+import { MessageType } from "../../core/enums/profile.enum";
+import { ProfileData, ProfileRO } from "../../core/interfaces/profile.interface";
 import { FollowProfileCommand } from "../impl";
 
 @CommandHandler(FollowProfileCommand)

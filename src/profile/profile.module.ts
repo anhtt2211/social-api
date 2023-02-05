@@ -12,7 +12,7 @@ import { CommandModule } from "./commands/command.module";
 import { EventModule } from "./events/event.module";
 import { ProfileController } from "./profile.controller";
 import { ProfileProjection } from "./profile.projection";
-import { ProfileService } from "./profile.service";
+import { ProfileService } from "./services/profile.service";
 import { QueryModule } from "./queries/query.module";
 
 @Module({
