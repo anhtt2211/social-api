@@ -7,7 +7,7 @@ import { READ_CONNECTION } from "../../../config";
 import { LoginUserDto } from "../../dto";
 import { UserEntity } from "../../user.entity";
 import { UserRO } from "../../user.interface";
-import { UserService } from "../../user.service";
+import { UserService } from "../../services/user.service";
 import { LoginQuery } from "../impl";
 
 @QueryHandler(LoginQuery)

@@ -8,7 +8,7 @@ import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
 import { UserEntity } from "../../user.entity";
 import { MessageType } from "../../user.enum";
 import { UserRO } from "../../user.interface";
-import { UserService } from "../../user.service";
+import { UserService } from "../../services/user.service";
 import { UpdateUserCommand } from "../impl";
 
 @CommandHandler(UpdateUserCommand)

@@ -5,7 +5,7 @@ import { QueryHandlers } from ".";
 import { READ_CONNECTION } from "../../config";
 import { UserController } from "../user.controller";
 import { UserEntity } from "../user.entity";
-import { UserService } from "../user.service";
+import { UserService } from "../services/user.service";
 
 @Module({
   imports: [
