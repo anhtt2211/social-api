@@ -8,7 +8,10 @@ import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
 import { UserEntity } from "../../../user/user.entity";
 import { FollowsEntity } from "../../core/entities/follows.entity";
 import { MessageType } from "../../core/enums/profile.enum";
-import { ProfileData, ProfileRO } from "../../core/interfaces/profile.interface";
+import {
+  ProfileData,
+  ProfileRO,
+} from "../../core/interfaces/profile.interface";
 import { UnFollowProfileCommand } from "../impl";
 
 @CommandHandler(UnFollowProfileCommand)
