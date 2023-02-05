@@ -1,7 +1,7 @@
 import { BlockEntity } from "../entities/block.entity";
 import { IBlock } from "./block.interface";
 import { ProfileData } from "../../../profile/core/interfaces/profile.interface";
-import { IUser } from "../../../user/user.interface";
+import { IUser } from "../../../user/core/interfaces/user.interface";
 
 // export interface Comment {
 //   id: number;

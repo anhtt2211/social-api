@@ -4,7 +4,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { QueryHandlers } from ".";
 import { READ_CONNECTION } from "../../config";
 import { UserController } from "../user.controller";
-import { UserEntity } from "../user.entity";
+import { UserEntity } from "../core";
 import { UserService } from "../services/user.service";
 
 @Module({

@@ -2,20 +2,9 @@ import { Injectable } from "@nestjs/common";
 import { EventBus } from "@nestjs/cqrs";
 import { ConsumerService } from "../rabbitmq/consumer.service";
 import { QUEUE_NAME } from "../rabbitmq/rabbitmq.constants";
+import { IMessage, IProjection } from "./core";
+import { MessageType } from "./core/enums/user.enum";
 import { UserCreatedEvent, UserUpdatedEvent } from "./events";
-import { UserEntity } from "./user.entity";
-import { MessageType } from "./user.enum";
-
-interface IProjection {
-  handle(): Promise<void>;
-}
-
-interface IMessage {
-  type: string;
-  payload: {
-    user?: UserEntity;
-  };
-}
 
 @Injectable()
 export class UserProjection implements IProjection {

@@ -5,7 +5,7 @@ import { CommandHandlers } from ".";
 import { WRITE_CONNECTION } from "../../config";
 import { RabbitMqModule } from "../../rabbitmq/rabbitMQ.module";
 import { UserController } from "../user.controller";
-import { UserEntity } from "../user.entity";
+import { UserEntity } from "../core";
 import { UserService } from "../services/user.service";
 
 @Module({

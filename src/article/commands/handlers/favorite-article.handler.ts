@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { WRITE_CONNECTION } from "../../../config";
-import { UserEntity } from "../../../user/user.entity";
+import { UserEntity } from "../../../user/core/entities/user.entity";
 import { ArticleRO } from "../../core/interfaces/article.interface";
 import { ArticleService } from "../../services/article.service";
 import { ArticleEntity } from "../../core/entities/article.entity";

@@ -5,8 +5,8 @@ import { Repository } from "typeorm";
 import * as argon2 from "argon2";
 import { READ_CONNECTION } from "../../../config";
 import { LoginUserDto } from "../../dto";
-import { UserEntity } from "../../user.entity";
-import { UserRO } from "../../user.interface";
+import { UserEntity } from "../../core/entities/user.entity";
+import { UserRO } from "../../core/interfaces/user.interface";
 import { UserService } from "../../services/user.service";
 import { LoginQuery } from "../impl";
 

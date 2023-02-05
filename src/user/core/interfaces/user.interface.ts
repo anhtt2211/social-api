@@ -1,5 +1,5 @@
-import { ArticleEntity } from "../article/core/entities/article.entity";
-import { Comment } from "../article/core/entities/comment.entity";
+import { ArticleEntity } from "../../../article/core/entities/article.entity";
+import { Comment } from "../../../article/core/entities/comment.entity";
 
 export interface UserData {
   username: string;

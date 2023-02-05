@@ -1,4 +1,4 @@
-import { UserEntity } from "../../../user/user.entity";
+import { UserEntity } from "../../../user/core/entities/user.entity";
 import { ArticleEntity } from "../entities/article.entity";
 import { IComment } from "./article.interface";
 

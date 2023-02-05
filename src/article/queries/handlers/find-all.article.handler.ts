@@ -4,7 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { getRepository, Repository } from "typeorm";
 import { READ_CONNECTION } from "../../../config";
 import { FollowsEntity } from "../../../profile/core/entities/follows.entity";
-import { UserEntity } from "../../../user/user.entity";
+import { UserEntity } from "../../../user/core/entities/user.entity";
 import { ArticleEntity } from "../../core/entities/article.entity";
 import { ArticlesRO } from "../../core/interfaces/article.interface";
 import { ArticleService } from "../../services/article.service";

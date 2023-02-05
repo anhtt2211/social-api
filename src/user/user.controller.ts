@@ -6,7 +6,7 @@ import { CreateUserDto, LoginUserDto, UpdateUserDto } from "./dto";
 import { CreateUserCommand, UpdateUserCommand } from "./commands";
 import { FindUserByEmailQuery, LoginQuery } from "./queries";
 import { User } from "./user.decorator";
-import { UserRO } from "./user.interface";
+import { UserRO } from "./core/interfaces/user.interface";
 
 @ApiBearerAuth()
 @ApiTags("user")

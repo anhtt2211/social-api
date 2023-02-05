@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { UserEntity } from "../../user/user.entity";
+import { UserEntity } from "../../user/core/entities/user.entity";
 import {
   ArticleData,
   IComment,

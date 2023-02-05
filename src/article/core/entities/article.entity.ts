@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { BlockEntity } from "./block.entity";
-import { UserEntity } from "../../../user/user.entity";
+import { UserEntity } from "../../../user/core/entities/user.entity";
 import { IArticle } from "../interfaces/article.interface";
 import { Comment } from "./comment.entity";
 

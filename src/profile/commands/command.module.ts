@@ -4,7 +4,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { CommandHandlers } from ".";
 import { WRITE_CONNECTION } from "../../config";
 import { RabbitMqModule } from "../../rabbitmq/rabbitMQ.module";
-import { UserEntity } from "../../user/user.entity";
+import { UserEntity } from "../../user/core/entities/user.entity";
 import { UserModule } from "../../user/user.module";
 import { FollowsEntity } from "../core/entities/follows.entity";
 import { ProfileController } from "../profile.controller";
