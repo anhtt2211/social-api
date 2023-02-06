@@ -9,7 +9,7 @@ import { UserEntity } from "../../../user/core/entities/user.entity";
 import { ArticleEntity } from "./article.entity";
 import { IComment } from "../interfaces/article.interface";
 
-@Entity()
+@Entity("comment")
 export class CommentEntity {
   constructor(props: IComment) {
     Object.assign(this, props);

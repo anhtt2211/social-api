@@ -1,25 +1,26 @@
-version: '2.6'
+version: "2.6"
 
 services:
-  social-api:
+  socia-api:
     build:
       context: .
       dockerfile: Dockerfile
     image: social-api
-    container_name: social-api-app
-    restart: always
     ports:
       - "8000:8000"
-    # working directory
-    working_dir: /social-api
-    environment: 
+    depends_on:
+      - db
+      - rabbitmq
+    environment:
       - NODE_ENV=${NODE_ENV}
+      # - DATABASE_HOST=postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@db:5432
       - DATABASE_HOST=host.docker.internal
-      - DATABASE_PORT=5432
-      - DATABASE_ENGINE=postgres
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_ENGINE=${DATABASE_ENGINE}
       - DATABASE_USERNAME=${DATABASE_USERNAME}
       - DATABASE_PASSWORD=${DATABASE_PASSWORD}
-      - DATABASE_NAME=${DATABASE_NAME}
+      - WRITE_DATABASE_NAME=${WRITE_DATABASE_NAME}
+      - READ_DATABASE_NAME=${READ_DATABASE_NAME}
 
       - TYPEORM_ENTITIES=${TYPEORM_ENTITIES}
       - TYPEORM_MIGRATIONS=${TYPEORM_MIGRATIONS}
@@ -31,3 +32,13 @@ services:
       - DROPBOX_TOKEN=${DROPBOX_TOKEN}
       - DROPBOX_KEY=${DROPBOX_KEY}
       - DROPBOX_SECRET=${DROPBOX_SECRET}
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"

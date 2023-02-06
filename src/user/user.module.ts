@@ -5,7 +5,7 @@ import {
   RequestMethod,
 } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { RabbitMqModule } from "../rabbitmq/rabbitMQ.module";
+import { RabbitMqModule } from "../rabbitmq/rabbitmq.module";
 import { AuthMiddleware } from "./auth.middleware";
 import { CommandModule } from "./commands/command.module";
 import { EventModule } from "./events/event.module";
