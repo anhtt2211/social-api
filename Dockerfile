@@ -1,17 +1,25 @@
-FROM node:16
+# Use an official Node.js image as the base image
+FROM node:14.19.1-alpine
 
-# Create app directory
-WORKDIR /social-api/
+# Set the working directory in the image
+WORKDIR /social
 
-COPY --chown=node:node package*.json ./
-COPY ormconfig.js ./ormconfig.js
-COPY --chown=node:node . .
-COPY .env ./
+# Copy the package.json and yarn.lock files to the container
+COPY package.json package*.json yarn.lock ./
 
-RUN npm i
-RUN npm run migration:run
+RUN apk add g++ make py3-pip
 
-USER node
+# Install dependencies
+RUN npm install
 
-# Start the server using the production build
-CMD [ "npm", "run", "start" ]
+# Copy the rest of the application code to the container
+COPY . .
+
+# Build the NestJS application
+# RUN npm run build
+
+# Expose port 8000 for incoming traffic
+EXPOSE 8000
+
+# Specify the command to run when the container starts
+CMD ["npm", "run", "start"]
