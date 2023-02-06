@@ -10,7 +10,7 @@ import { ArticleEntity } from "../../core/entities/article.entity";
 import { MessageType } from "../../core/enums/article.enum";
 import { CommentRO } from "../../core/interfaces/article.interface";
 import { ArticleService } from "../../services/article.service";
-import { Comment } from "../../core/entities/comment.entity";
+import { CommentEntity } from "../../core/entities/comment.entity";
 import { CreateCommentCommand } from "../impl";
 
 @CommandHandler(CreateCommentCommand)
@@ -22,8 +22,8 @@ export class CreateCommentCommandHandler
     private readonly articleRepository: Repository<ArticleEntity>,
     @InjectRepository(UserEntity, WRITE_CONNECTION)
     private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(Comment, WRITE_CONNECTION)
-    private readonly commentRepository: Repository<Comment>,
+    @InjectRepository(CommentEntity, WRITE_CONNECTION)
+    private readonly commentRepository: Repository<CommentEntity>,
 
     private readonly articleService: ArticleService,
     private readonly publisher: PublisherService
@@ -45,7 +45,7 @@ export class CreateCommentCommandHandler
         throw new HttpException("Article not found!", HttpStatus.BAD_REQUEST);
       }
 
-      const comment = new Comment({
+      const comment = new CommentEntity({
         ...commentData,
         author,
         article: {

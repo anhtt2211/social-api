@@ -3,13 +3,14 @@ import { CqrsModule } from "@nestjs/cqrs";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { READ_CONNECTION } from "../../config";
 import { UserEntity } from "../../user/core/entities/user.entity";
-import { ArticleEntity, BlockEntity, Comment } from "../core";
+import { ArticleEntity, BlockEntity } from "../core";
+import { CommentEntity } from "../core/entities/comment.entity";
 import { EventHandlers } from "../events";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature(
-      [ArticleEntity, UserEntity, BlockEntity, Comment],
+      [ArticleEntity, UserEntity, BlockEntity, CommentEntity],
       READ_CONNECTION
     ),
     CqrsModule,

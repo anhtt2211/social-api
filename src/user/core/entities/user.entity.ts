@@ -10,9 +10,8 @@ import {
 } from "typeorm";
 import { IsEmail } from "class-validator";
 import * as argon2 from "argon2";
-import { ArticleEntity } from "../../../article/core/entities/article.entity";
-import { Comment } from "../../../article/core/entities/comment.entity";
 import { IUser } from "../interfaces/user.interface";
+import { ArticleEntity, CommentEntity } from "../../../article/core";
 
 @Entity("user")
 export class UserEntity {
@@ -53,6 +52,6 @@ export class UserEntity {
   @OneToMany((type) => ArticleEntity, (article) => article.author)
   articles: ArticleEntity[];
 
-  @OneToMany((type) => Comment, (comment) => comment.author)
-  comments: Comment[];
+  @OneToMany((type) => CommentEntity, (comment) => comment.author)
+  comments: CommentEntity[];
 }

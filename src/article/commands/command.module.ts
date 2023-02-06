@@ -7,13 +7,14 @@ import { FollowsEntity } from "../../profile/core/entities/follows.entity";
 import { RabbitMqModule } from "../../rabbitmq/rabbitMQ.module";
 import { UserEntity } from "../../user/core";
 import { UserModule } from "../../user/user.module";
-import { ArticleEntity, Comment, BlockEntity } from "../core";
+import { ArticleEntity, BlockEntity } from "../core";
+import { CommentEntity } from "../core/entities/comment.entity";
 import { ArticleService } from "../services/article.service";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature(
-      [ArticleEntity, UserEntity, Comment, FollowsEntity, BlockEntity],
+      [ArticleEntity, UserEntity, CommentEntity, FollowsEntity, BlockEntity],
       WRITE_CONNECTION
     ),
     UserModule,

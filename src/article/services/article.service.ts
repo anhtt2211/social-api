@@ -5,7 +5,7 @@ import {
   IComment,
   ArticleEntity,
   BlockEntity,
-  Comment as CommentEntity,
+  CommentEntity,
 } from "../core";
 const slug = require("slug");
 

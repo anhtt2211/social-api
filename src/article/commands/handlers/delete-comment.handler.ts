@@ -6,7 +6,7 @@ import { WRITE_CONNECTION } from "../../../config";
 import { ArticleRO } from "../../core/interfaces/article.interface";
 import { ArticleService } from "../../services/article.service";
 import { ArticleEntity } from "../../core/entities/article.entity";
-import { Comment } from "../../core/entities/comment.entity";
+import { CommentEntity } from "../../core/entities/comment.entity";
 import { DeleteCommentCommand } from "../impl";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
 import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
@@ -19,8 +19,8 @@ export class DeleteCommentCommandHandler
   constructor(
     @InjectRepository(ArticleEntity, WRITE_CONNECTION)
     private readonly articleRepository: Repository<ArticleEntity>,
-    @InjectRepository(Comment, WRITE_CONNECTION)
-    private readonly commentRepository: Repository<Comment>,
+    @InjectRepository(CommentEntity, WRITE_CONNECTION)
+    private readonly commentRepository: Repository<CommentEntity>,
 
     private readonly articleService: ArticleService,
     private readonly publisher: PublisherService

@@ -10,7 +10,7 @@ import { ArticleEntity } from "./article.entity";
 import { IComment } from "../interfaces/article.interface";
 
 @Entity()
-export class Comment {
+export class CommentEntity {
   constructor(props: IComment) {
     Object.assign(this, props);
   }
