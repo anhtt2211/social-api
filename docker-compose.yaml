@@ -13,7 +13,6 @@ services:
       - rabbitmq
     environment:
       - NODE_ENV=${NODE_ENV}
-      # - DATABASE_HOST=postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@db:5432
       - DATABASE_HOST=host.docker.internal
       - DATABASE_PORT=${DATABASE_PORT}
       - DATABASE_ENGINE=${DATABASE_ENGINE}
