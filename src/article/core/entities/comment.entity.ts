@@ -5,12 +5,12 @@ import {
   ManyToOne,
   BeforeUpdate,
 } from "typeorm";
-import { UserEntity } from "./../user/user.entity";
+import { UserEntity } from "../../../user/core/entities/user.entity";
 import { ArticleEntity } from "./article.entity";
-import { IComment } from "./article.interface";
+import { IComment } from "../interfaces/article.interface";
 
 @Entity()
-export class Comment {
+export class CommentEntity {
   constructor(props: IComment) {
     Object.assign(this, props);
   }

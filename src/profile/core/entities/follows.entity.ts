@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-import { IFollow } from "./profile.interface";
+import { IFollow } from "../interfaces/profile.interface";
 
 @Entity("follows")
 export class FollowsEntity {

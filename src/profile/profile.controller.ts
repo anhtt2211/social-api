@@ -4,7 +4,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { User } from "../user/user.decorator";
 import { FollowProfileCommand, UnFollowProfileCommand } from "./commands";
 import { FindProfileQuery } from "./queries";
-import { ProfileRO } from "./profile.interface";
+import { ProfileRO } from "./core/interfaces/profile.interface";
 
 @ApiBearerAuth()
 @ApiTags("profiles")

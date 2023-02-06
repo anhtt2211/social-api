@@ -4,7 +4,7 @@ import { EventsHandler } from "@nestjs/cqrs/dist/decorators/events-handler.decor
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { READ_CONNECTION } from "../../../config";
-import { Comment } from "../../comment.entity";
+import { CommentEntity } from "../../core/entities/comment.entity";
 import { CommentDeletedEvent } from "../impl";
 
 @EventsHandler(CommentDeletedEvent)
@@ -12,8 +12,8 @@ export class CommentDeletedEventHandler
   implements IEventHandler<CommentDeletedEvent>
 {
   constructor(
-    @InjectRepository(Comment, READ_CONNECTION)
-    private readonly commentRepository: Repository<Comment>
+    @InjectRepository(CommentEntity, READ_CONNECTION)
+    private readonly commentRepository: Repository<CommentEntity>
   ) {}
   async handle({ comment }: CommentDeletedEvent) {
     try {

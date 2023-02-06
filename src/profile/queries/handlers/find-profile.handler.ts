@@ -2,9 +2,12 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { READ_CONNECTION } from "../../../config";
-import { UserEntity } from "../../../user/user.entity";
-import { FollowsEntity } from "../../follows.entity";
-import { ProfileData, ProfileRO } from "../../profile.interface";
+import { UserEntity } from "../../../user/core/entities/user.entity";
+import { FollowsEntity } from "../../core/entities/follows.entity";
+import {
+  ProfileData,
+  ProfileRO,
+} from "../../core/interfaces/profile.interface";
 import { FindProfileQuery } from "../impl";
 
 @QueryHandler(FindProfileQuery)

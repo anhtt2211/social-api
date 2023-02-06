@@ -3,20 +3,9 @@ import { EventBus } from "@nestjs/cqrs";
 import { ConsumerService } from "../rabbitmq/consumer.service";
 import { QUEUE_NAME } from "../rabbitmq/rabbitmq.constants";
 import { ProfileFollowedEvent, ProfileUnFollowedEvent } from "./events";
-import { FollowsEntity } from "./follows.entity";
-import { MessageType } from "./profile.enum";
-import { IFollow } from "./profile.interface";
-
-interface IProjection {
-  handle(): Promise<void>;
-}
-
-interface IMessage {
-  type: string;
-  payload: {
-    follow: FollowsEntity | IFollow;
-  };
-}
+import { FollowsEntity } from "./core/entities/follows.entity";
+import { MessageType } from "./core/enums/profile.enum";
+import { IMessage, IProjection } from "./core";
 
 @Injectable()
 export class ProfileProjection implements IProjection {

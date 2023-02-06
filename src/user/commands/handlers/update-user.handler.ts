@@ -5,10 +5,10 @@ import { Repository } from "typeorm";
 import { WRITE_CONNECTION } from "../../../config";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
 import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
-import { UserEntity } from "../../user.entity";
-import { MessageType } from "../../user.enum";
-import { UserRO } from "../../user.interface";
-import { UserService } from "../../user.service";
+import { UserEntity } from "../../core/entities/user.entity";
+import { MessageType } from "../../core/enums/user.enum";
+import { UserRO } from "../../core/interfaces/user.interface";
+import { UserService } from "../../services/user.service";
 import { UpdateUserCommand } from "../impl";
 
 @CommandHandler(UpdateUserCommand)

@@ -8,10 +8,6 @@ import {
   Put,
   Query,
 } from "@nestjs/common";
-import { User } from "../user/user.decorator";
-import { ArticleRO, ArticlesRO, CommentsRO } from "./article.interface";
-import { ArticleService } from "./article.service";
-import { CreateArticleDto, CreateCommentDto } from "./dto";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import {
   ApiBearerAuth,
@@ -21,13 +17,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { ArticleFilters } from "./dto/article-query";
-import {
-  FindAllArticleQuery,
-  FindCommentQuery,
-  FindFeedArticleQuery,
-  FindOneArticleQuery,
-} from "./queries";
+import { User } from "../user/user.decorator";
 import {
   CreateArticleCommand,
   CreateCommentCommand,
@@ -37,13 +27,20 @@ import {
   UnFavoriteArticleCommand,
   UpdateArticleCommand,
 } from "./commands";
+import { ArticleRO, ArticlesRO, CommentsRO } from "./core";
+import { ArticleFilters, CreateArticleDto, CreateCommentDto } from "./dto";
+import {
+  FindAllArticleQuery,
+  FindCommentQuery,
+  FindFeedArticleQuery,
+  FindOneArticleQuery,
+} from "./queries";
 
 @ApiBearerAuth()
 @ApiTags("articles")
 @Controller("articles")
 export class ArticleController {
   constructor(
-    private readonly articleService: ArticleService,
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus
   ) {}

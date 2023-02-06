@@ -8,10 +8,10 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { BlockEntity } from "../block/block.entity";
-import { UserEntity } from "../user/user.entity";
-import { IArticle } from "./article.interface";
-import { Comment } from "./comment.entity";
+import { BlockEntity } from "./block.entity";
+import { UserEntity } from "../../../user/core/entities/user.entity";
+import { IArticle } from "../interfaces/article.interface";
+import { CommentEntity } from "./comment.entity";
 
 @Entity("article")
 export class ArticleEntity {
@@ -49,11 +49,11 @@ export class ArticleEntity {
   @ManyToOne((type) => UserEntity, (user) => user.articles)
   author: UserEntity;
 
-  @OneToMany((type) => Comment, (comment) => comment.article, {
+  @OneToMany((type) => CommentEntity, (comment) => comment.article, {
     eager: true,
   })
   @JoinColumn()
-  comments: Comment[];
+  comments: CommentEntity[];
 
   @Column({ default: 0 })
   favoriteCount: number;

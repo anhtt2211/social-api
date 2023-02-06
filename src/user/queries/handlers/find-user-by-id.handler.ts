@@ -3,9 +3,9 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { READ_CONNECTION } from "../../../config";
-import { UserEntity } from "../../user.entity";
-import { UserRO } from "../../user.interface";
-import { UserService } from "../../user.service";
+import { UserEntity } from "../../core/entities/user.entity";
+import { UserRO } from "../../core/interfaces/user.interface";
+import { UserService } from "../../services/user.service";
 import { FindUserById } from "../impl";
 
 @QueryHandler(FindUserById)

@@ -3,9 +3,9 @@ import { IEventHandler } from "@nestjs/cqrs";
 import { EventsHandler } from "@nestjs/cqrs/dist/decorators/events-handler.decorator";
 import { InjectRepository } from "@nestjs/typeorm";
 import { In, Repository } from "typeorm";
-import { BlockEntity } from "../../../block/block.entity";
+import { BlockEntity } from "../../core/entities/block.entity";
 import { READ_CONNECTION } from "../../../config";
-import { ArticleEntity } from "../../article.entity";
+import { ArticleEntity } from "../../core/entities/article.entity";
 import { ArticleDeletedEvent } from "../impl";
 
 @EventsHandler(ArticleDeletedEvent)

@@ -1,9 +1,12 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { BlockEntity } from "../block/block.entity";
-import { UserEntity } from "../user/user.entity";
-import { ArticleEntity } from "./article.entity";
-import { ArticleData, Comment as IComment } from "./article.interface";
-import { Comment } from "./comment.entity";
+import { Injectable } from "@nestjs/common";
+import { UserEntity } from "../../user/core/entities/user.entity";
+import {
+  ArticleData,
+  IComment,
+  ArticleEntity,
+  BlockEntity,
+  CommentEntity,
+} from "../core";
 const slug = require("slug");
 
 @Injectable()
@@ -51,7 +54,7 @@ export class ArticleService {
     return articleData;
   }
 
-  buildCommentRO({ author, ...Comment }: Comment): IComment {
+  buildCommentRO({ author, ...Comment }: CommentEntity): IComment {
     const comment: IComment = {
       ...Comment,
       author: {

@@ -10,7 +10,7 @@ import { AuthMiddleware } from "../user/auth.middleware";
 import { UserModule } from "../user/user.module";
 import { ArticleController } from "./article.controller";
 import { ArticleProjection } from "./article.projection";
-import { ArticleService } from "./article.service";
+import { ArticleService } from "./services/article.service";
 import { CommandModule } from "./commands/command.module";
 import { EventModule } from "./events/event.module";
 import { QueryModule } from "./queries/query.module";

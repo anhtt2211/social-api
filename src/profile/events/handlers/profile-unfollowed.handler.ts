@@ -4,7 +4,7 @@ import { EventsHandler } from "@nestjs/cqrs/dist/decorators/events-handler.decor
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { READ_CONNECTION } from "../../../config";
-import { FollowsEntity } from "../../follows.entity";
+import { FollowsEntity } from "../../core/entities/follows.entity";
 import { ProfileUnFollowedEvent } from "../impl";
 
 @EventsHandler(ProfileUnFollowedEvent)
