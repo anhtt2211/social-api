@@ -54,10 +54,12 @@ export class CreateCommentCommandHandler
       });
       await this.commentRepository.save(comment);
 
-      this.publisher.publish(QUEUE_NAME, {
-        type: MessageType.COMMENT_CREATED,
-        payload: { comment },
-      });
+      if (comment) {
+        this.publisher.publish(QUEUE_NAME, {
+          type: MessageType.COMMENT_CREATED,
+          payload: { comment },
+        });
+      }
 
       const commentRO = this.articleService.buildCommentRO(comment);
       return {

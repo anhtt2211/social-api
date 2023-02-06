@@ -38,10 +38,12 @@ export class CreateArticleCommandHandler
         })
       );
 
-      this.publisher.publish(QUEUE_NAME, {
-        type: MessageType.ARTICLE_CREATED,
-        payload: { article },
-      });
+      if (article) {
+        this.publisher.publish(QUEUE_NAME, {
+          type: MessageType.ARTICLE_CREATED,
+          payload: { article },
+        });
+      }
 
       return {
         article: this.articleService.buildArticleRO(article),

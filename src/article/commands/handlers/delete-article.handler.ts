@@ -46,10 +46,12 @@ export class DeleteArticleCommandHandler
 
       const _deleted = await this.articleRepository.delete({ slug: slug });
 
-      this.publisher.publish(QUEUE_NAME, {
-        type: MessageType.ARTICLE_DELETED,
-        payload: { userId, slug },
-      });
+      if (_deleted) {
+        this.publisher.publish(QUEUE_NAME, {
+          type: MessageType.ARTICLE_DELETED,
+          payload: { userId, slug },
+        });
+      }
 
       return _deleted;
     } catch (error) {

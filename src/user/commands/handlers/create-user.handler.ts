@@ -61,12 +61,14 @@ export class CreateUserCommandHandler
       } else {
         const savedUser = await this.userRepository.save(newUser);
 
-        this.publisher.publish(QUEUE_NAME, {
-          type: MessageType.USER_CREATED,
-          payload: {
-            user: savedUser,
-          },
-        });
+        if (savedUser) {
+          this.publisher.publish(QUEUE_NAME, {
+            type: MessageType.USER_CREATED,
+            payload: {
+              user: savedUser,
+            },
+          });
+        }
 
         return this.userService.buildUserRO(savedUser);
       }

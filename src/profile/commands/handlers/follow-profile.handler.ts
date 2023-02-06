@@ -63,12 +63,14 @@ export class FollowProfileCommandHandler
         })
       );
 
-      this.publisher.publish(QUEUE_NAME, {
-        type: MessageType.PROFILE_FOLLOWED,
-        payload: {
-          follow,
-        },
-      });
+      if (follow) {
+        this.publisher.publish(QUEUE_NAME, {
+          type: MessageType.PROFILE_FOLLOWED,
+          payload: {
+            follow,
+          },
+        });
+      }
     }
 
     let profile: ProfileData = {
