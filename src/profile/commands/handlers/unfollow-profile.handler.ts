@@ -50,14 +50,16 @@ export class UnFollowProfileCommandHandler
       followerId,
       followingId: followingUser.id,
     };
-    await this.followsRepository.delete(follow);
+    const _deleted = await this.followsRepository.delete(follow);
 
-    this.publisher.publish(QUEUE_NAME, {
-      type: MessageType.PROFILE_FOLLOWED,
-      payload: {
-        follow,
-      },
-    });
+    if (_deleted) {
+      this.publisher.publish(QUEUE_NAME, {
+        type: MessageType.PROFILE_FOLLOWED,
+        payload: {
+          follow,
+        },
+      });
+    }
 
     let profile: ProfileData = {
       username: followingUser.username,

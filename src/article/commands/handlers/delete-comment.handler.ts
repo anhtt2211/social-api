@@ -50,15 +50,19 @@ export class DeleteCommentCommandHandler
 
     if (deleteIndex >= 0) {
       const deleteComments = article.comments.splice(deleteIndex, 1);
-      await this.commentRepository.delete(deleteComments[0].id);
+      const _deleted = await this.commentRepository.delete(
+        deleteComments[0].id
+      );
       article = await this.articleRepository.save(article);
 
-      this.publisher.publish(QUEUE_NAME, {
-        type: MessageType.COMMENT_DELETED,
-        payload: {
-          comment: deleteComments[0],
-        },
-      });
+      if (_deleted && article) {
+        this.publisher.publish(QUEUE_NAME, {
+          type: MessageType.COMMENT_DELETED,
+          payload: {
+            comment: deleteComments[0],
+          },
+        });
+      }
 
       return { article: this.articleService.buildArticleRO(article) };
     } else {

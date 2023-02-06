@@ -32,12 +32,14 @@ export class UpdateUserCommandHandler
       let updated = Object.assign(toUpdate, dto);
       const userUpdated = await this.userRepository.save(updated);
 
-      this.publisher.publish(QUEUE_NAME, {
-        type: MessageType.USER_UPDATED,
-        payload: {
-          user: userUpdated,
-        },
-      });
+      if (userUpdated) {
+        this.publisher.publish(QUEUE_NAME, {
+          type: MessageType.USER_UPDATED,
+          payload: {
+            user: userUpdated,
+          },
+        });
+      }
 
       return this.userService.buildUserRO(userUpdated);
     } catch (error) {

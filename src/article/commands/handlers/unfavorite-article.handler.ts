@@ -47,16 +47,18 @@ export class UnFavoriteArticleCommandHandler
       user.favorites.splice(deleteIndex, 1);
       article.favoriteCount--;
 
-      await this.userRepository.save(user);
+      const _user = await this.userRepository.save(user);
       article = await this.articleRepository.save(article);
 
-      this.publisher.publish(QUEUE_NAME, {
-        type: MessageType.ARTICLE_UNFAVORITED,
-        payload: {
-          user,
-          article,
-        },
-      });
+      if (_user && article) {
+        this.publisher.publish(QUEUE_NAME, {
+          type: MessageType.ARTICLE_UNFAVORITED,
+          payload: {
+            user,
+            article,
+          },
+        });
+      }
     }
 
     return { article: this.articleService.buildArticleRO(article, user) };

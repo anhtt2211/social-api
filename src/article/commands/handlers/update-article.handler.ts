@@ -32,10 +32,12 @@ export class UpdateArticleCommandHandler
       let updated = Object.assign(toUpdate, articleData);
       const article = await this.articleRepository.save(updated);
 
-      this.publisher.publish(QUEUE_NAME, {
-        type: MessageType.ARTICLE_UPDATED,
-        payload: { article },
-      });
+      if (article) {
+        this.publisher.publish(QUEUE_NAME, {
+          type: MessageType.ARTICLE_UPDATED,
+          payload: { article },
+        });
+      }
 
       return {
         article: this.articleService.buildArticleRO(article),
