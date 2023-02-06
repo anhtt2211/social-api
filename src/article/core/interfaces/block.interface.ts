@@ -1,4 +1,4 @@
-import { BlockType } from "./block.enum";
+import { BlockType } from "../enums/block.enum";
 
 interface Info {
   width?: number;

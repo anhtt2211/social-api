@@ -2,12 +2,12 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeleteResult, In, Repository } from "typeorm";
-import { BlockEntity } from "../../../block/block.entity";
+import { BlockEntity } from "../../core/entities/block.entity";
 import { WRITE_CONNECTION } from "../../../config";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
 import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
-import { ArticleEntity } from "../../article.entity";
-import { MessageType } from "../../article.enum";
+import { ArticleEntity } from "../../core/entities/article.entity";
+import { MessageType } from "../../core/enums/article.enum";
 import { DeleteArticleCommand } from "../impl";
 
 @CommandHandler(DeleteArticleCommand)
@@ -46,10 +46,12 @@ export class DeleteArticleCommandHandler
 
       const _deleted = await this.articleRepository.delete({ slug: slug });
 
-      this.publisher.publish(QUEUE_NAME, {
-        type: MessageType.ARTICLE_DELETED,
-        payload: { userId, slug },
-      });
+      if (_deleted) {
+        this.publisher.publish(QUEUE_NAME, {
+          type: MessageType.ARTICLE_DELETED,
+          payload: { userId, slug },
+        });
+      }
 
       return _deleted;
     } catch (error) {

@@ -2,9 +2,9 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { READ_CONNECTION } from "../../../config";
-import { ArticleEntity } from "../../article.entity";
-import { CommentsRO } from "../../article.interface";
-import { ArticleService } from "../../article.service";
+import { ArticleEntity } from "../../core/entities/article.entity";
+import { CommentsRO } from "../../core/interfaces/article.interface";
+import { ArticleService } from "../../services/article.service";
 import { FindCommentQuery } from "../impl";
 
 @QueryHandler(FindCommentQuery)

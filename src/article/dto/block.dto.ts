@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BlockType } from "./block.enum";
+import { BlockType } from "../core/enums/block.enum";
 
 class Info {
   @ApiProperty()

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { BlockDto } from "../../block/block.dto";
+import { BlockDto } from "./block.dto";
 
 export class CreateArticleDto {
   @ApiProperty({

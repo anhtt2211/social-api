@@ -1,5 +1,5 @@
-import { ArticleEntity } from "../article/article.entity";
-import { Comment } from "../article/comment.entity";
+import { ArticleEntity } from "../../../article/core/entities/article.entity";
+import { CommentEntity } from "../../../article/core/entities/comment.entity";
 
 export interface UserData {
   username: string;
@@ -30,5 +30,5 @@ export interface IUser {
   password?: string;
   favorites?: ArticleEntity[];
   articles?: ArticleEntity[];
-  comments?: Comment[];
+  comments?: CommentEntity[];
 }

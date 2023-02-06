@@ -5,10 +5,13 @@ import { Repository } from "typeorm";
 import { WRITE_CONNECTION } from "../../../config";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
 import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
-import { UserEntity } from "../../../user/user.entity";
-import { FollowsEntity } from "../../follows.entity";
-import { MessageType } from "../../profile.enum";
-import { ProfileData, ProfileRO } from "../../profile.interface";
+import { UserEntity } from "../../../user/core/entities/user.entity";
+import { FollowsEntity } from "../../core/entities/follows.entity";
+import { MessageType } from "../../core/enums/profile.enum";
+import {
+  ProfileData,
+  ProfileRO,
+} from "../../core/interfaces/profile.interface";
 import { UnFollowProfileCommand } from "../impl";
 
 @CommandHandler(UnFollowProfileCommand)
@@ -47,14 +50,16 @@ export class UnFollowProfileCommandHandler
       followerId,
       followingId: followingUser.id,
     };
-    await this.followsRepository.delete(follow);
+    const _deleted = await this.followsRepository.delete(follow);
 
-    this.publisher.publish(QUEUE_NAME, {
-      type: MessageType.PROFILE_FOLLOWED,
-      payload: {
-        follow,
-      },
-    });
+    if (_deleted) {
+      this.publisher.publish(QUEUE_NAME, {
+        type: MessageType.PROFILE_FOLLOWED,
+        payload: {
+          follow,
+        },
+      });
+    }
 
     let profile: ProfileData = {
       username: followingUser.username,

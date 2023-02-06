@@ -1,5 +1,5 @@
-import { UserEntity } from "../../../user/user.entity";
-import { ArticleEntity } from "../../article.entity";
+import { UserEntity } from "../../../user/core/entities/user.entity";
+import { ArticleEntity } from "../../core/entities/article.entity";
 
 export class ArticleFavoritedEvent {
   constructor(

@@ -12,7 +12,7 @@ import { EventModule } from "./events/event.module";
 import { QueryModule } from "./queries/query.module";
 import { UserController } from "./user.controller";
 import { UserProjection } from "./user.projection";
-import { UserService } from "./user.service";
+import { UserService } from "./services/user.service";
 
 @Module({
   imports: [

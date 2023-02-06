@@ -3,7 +3,7 @@ import { CqrsModule } from "@nestjs/cqrs";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { READ_CONNECTION } from "../../config";
 import { EventHandlers } from "../events";
-import { FollowsEntity } from "../follows.entity";
+import { FollowsEntity } from "../core/entities/follows.entity";
 
 @Module({
   imports: [

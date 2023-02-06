@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
-import { ArticleEntity } from "../article/article.entity";
-import { BlockType } from "./block.enum";
+import { ArticleEntity } from "./article.entity";
+import { BlockType } from "../enums/block.enum";
 
 export class Info {
   @Column({ nullable: true })

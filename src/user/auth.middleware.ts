@@ -6,7 +6,7 @@ import { IncomingHttpHeaders } from "http";
 import * as jwt from "jsonwebtoken";
 import { SECRET } from "../config";
 import { FindUserById } from "./queries";
-import { UserData } from "./user.interface";
+import { UserData } from "./core/interfaces/user.interface";
 
 interface IRequestCustom extends Request {
   user: UserData;

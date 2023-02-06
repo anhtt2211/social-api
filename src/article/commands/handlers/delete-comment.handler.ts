@@ -3,14 +3,14 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { WRITE_CONNECTION } from "../../../config";
-import { ArticleRO } from "../../article.interface";
-import { ArticleService } from "../../article.service";
-import { ArticleEntity } from "../../article.entity";
-import { Comment } from "../../comment.entity";
+import { ArticleRO } from "../../core/interfaces/article.interface";
+import { ArticleService } from "../../services/article.service";
+import { ArticleEntity } from "../../core/entities/article.entity";
+import { CommentEntity } from "../../core/entities/comment.entity";
 import { DeleteCommentCommand } from "../impl";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
 import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
-import { MessageType } from "../../article.enum";
+import { MessageType } from "../../core/enums/article.enum";
 
 @CommandHandler(DeleteCommentCommand)
 export class DeleteCommentCommandHandler
@@ -19,8 +19,8 @@ export class DeleteCommentCommandHandler
   constructor(
     @InjectRepository(ArticleEntity, WRITE_CONNECTION)
     private readonly articleRepository: Repository<ArticleEntity>,
-    @InjectRepository(Comment, WRITE_CONNECTION)
-    private readonly commentRepository: Repository<Comment>,
+    @InjectRepository(CommentEntity, WRITE_CONNECTION)
+    private readonly commentRepository: Repository<CommentEntity>,
 
     private readonly articleService: ArticleService,
     private readonly publisher: PublisherService
@@ -50,15 +50,19 @@ export class DeleteCommentCommandHandler
 
     if (deleteIndex >= 0) {
       const deleteComments = article.comments.splice(deleteIndex, 1);
-      await this.commentRepository.delete(deleteComments[0].id);
+      const _deleted = await this.commentRepository.delete(
+        deleteComments[0].id
+      );
       article = await this.articleRepository.save(article);
 
-      this.publisher.publish(QUEUE_NAME, {
-        type: MessageType.COMMENT_DELETED,
-        payload: {
-          comment: deleteComments[0],
-        },
-      });
+      if (_deleted && article) {
+        this.publisher.publish(QUEUE_NAME, {
+          type: MessageType.COMMENT_DELETED,
+          payload: {
+            comment: deleteComments[0],
+          },
+        });
+      }
 
       return { article: this.articleService.buildArticleRO(article) };
     } else {

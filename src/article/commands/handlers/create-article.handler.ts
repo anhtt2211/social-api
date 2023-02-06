@@ -5,10 +5,10 @@ import { Repository } from "typeorm";
 import { WRITE_CONNECTION } from "../../../config";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
 import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
-import { ArticleEntity } from "../../article.entity";
-import { MessageType } from "../../article.enum";
-import { ArticleRO } from "../../article.interface";
-import { ArticleService } from "../../article.service";
+import { ArticleEntity } from "../../core/entities/article.entity";
+import { MessageType } from "../../core/enums/article.enum";
+import { ArticleRO } from "../../core/interfaces/article.interface";
+import { ArticleService } from "../../services/article.service";
 import { CreateArticleCommand } from "../impl";
 
 @CommandHandler(CreateArticleCommand)
@@ -38,10 +38,12 @@ export class CreateArticleCommandHandler
         })
       );
 
-      this.publisher.publish(QUEUE_NAME, {
-        type: MessageType.ARTICLE_CREATED,
-        payload: { article },
-      });
+      if (article) {
+        this.publisher.publish(QUEUE_NAME, {
+          type: MessageType.ARTICLE_CREATED,
+          payload: { article },
+        });
+      }
 
       return {
         article: this.articleService.buildArticleRO(article),
