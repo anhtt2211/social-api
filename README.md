@@ -20,9 +20,18 @@ Create file .env from .env.example and fill it
 
 Run migration
 
-    npm run migration:run
+    npm run migration:run <db_name>
 
 ---
+
+## Running on docker
+Build images
+
+    docker-compose build
+
+Run on docker
+
+    docker-compose up
 
 ## NPM scripts
 
@@ -30,19 +39,6 @@ Run migration
 - `npm run start:watch` - Start application in watch mode
 - `npm run test` - run Jest test runner
 - `npm run start:prod` - Build application
-
----
-
-## Start application
-
-- `npm start`
-- Test api with `http://localhost:8000/api/articles` in your favourite browser
-
----
-
-# Authentication
-
-This applications uses JSON Web Token (JWT) to handle authentication. The token is passed with each request using the `Authorization` header with `Token` scheme. The JWT authentication middleware handles the validation and authentication of the token. Please check the following sources to learn more about JWT.
 
 ---
 
