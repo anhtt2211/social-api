@@ -3,17 +3,14 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { WRITE_CONNECTION } from "../../../config";
-import { ArticleRO } from "../../core/interfaces/article.interface";
-import { ArticleService } from "../../services/article.service";
+import { PublisherService } from "../../../rabbitmq/publisher.service";
+import { ARTICLE_QUEUE } from "../../../rabbitmq/rabbitmq.constants";
 import { ArticleEntity } from "../../core/entities/article.entity";
 import { CommentEntity } from "../../core/entities/comment.entity";
-import { DeleteCommentCommand } from "../impl";
-import { PublisherService } from "../../../rabbitmq/publisher.service";
-import {
-  ARTICLE_QUEUE,
-  QUEUE_NAME,
-} from "../../../rabbitmq/rabbitmq.constants";
 import { MessageType } from "../../core/enums/article.enum";
+import { ArticleRO } from "../../core/interfaces/article.interface";
+import { ArticleService } from "../../services/article.service";
+import { DeleteCommentCommand } from "../impl";
 
 @CommandHandler(DeleteCommentCommand)
 export class DeleteCommentCommandHandler
