@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { EventBus } from "@nestjs/cqrs";
 import { ConsumerService } from "../rabbitmq/consumer.service";
-import { QUEUE_NAME } from "../rabbitmq/rabbitmq.constants";
+import { ARTICLE_QUEUE } from "../rabbitmq/rabbitmq.constants";
 import { IMessage, IProjection } from "./core";
 import { MessageType } from "./core/enums/article.enum";
 import {
@@ -22,7 +22,7 @@ export class ArticleProjection implements IProjection {
   ) {}
 
   async handle() {
-    await this.consumer.consume(QUEUE_NAME, (msg: IMessage) => {
+    await this.consumer.consume(ARTICLE_QUEUE, (msg: IMessage) => {
       this.handleMessage(msg);
     });
   }
