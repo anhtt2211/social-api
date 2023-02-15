@@ -4,7 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { WRITE_CONNECTION } from "../../../config";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
-import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
+import { PROFILE_QUEUE } from "../../../rabbitmq/rabbitmq.constants";
 import { UserEntity } from "../../../user/core/entities/user.entity";
 import { FollowsEntity } from "../../core/entities/follows.entity";
 import { MessageType } from "../../core/enums/profile.enum";
@@ -64,7 +64,7 @@ export class FollowProfileCommandHandler
       );
 
       if (follow) {
-        this.publisher.publish(QUEUE_NAME, {
+        this.publisher.publish(PROFILE_QUEUE, {
           type: MessageType.PROFILE_FOLLOWED,
           payload: {
             follow,

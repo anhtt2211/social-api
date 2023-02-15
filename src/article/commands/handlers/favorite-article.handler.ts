@@ -1,16 +1,16 @@
+import { HttpException, HttpStatus } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { WRITE_CONNECTION } from "../../../config";
+import { PublisherService } from "../../../rabbitmq/publisher.service";
+import { ARTICLE_QUEUE } from "../../../rabbitmq/rabbitmq.constants";
 import { UserEntity } from "../../../user/core/entities/user.entity";
+import { ArticleEntity } from "../../core/entities/article.entity";
+import { MessageType } from "../../core/enums/article.enum";
 import { ArticleRO } from "../../core/interfaces/article.interface";
 import { ArticleService } from "../../services/article.service";
-import { ArticleEntity } from "../../core/entities/article.entity";
 import { FavoriteArticleCommand } from "../impl";
-import { PublisherService } from "../../../rabbitmq/publisher.service";
-import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
-import { MessageType } from "../../core/enums/article.enum";
-import { HttpException, HttpStatus } from "@nestjs/common";
 
 @CommandHandler(FavoriteArticleCommand)
 export class FavoriteArticleCommandHandler
@@ -52,7 +52,7 @@ export class FavoriteArticleCommandHandler
         article = await this.articleRepository.save(article);
 
         if (_user && article) {
-          this.publisher.publish(QUEUE_NAME, {
+          this.publisher.publish(ARTICLE_QUEUE, {
             type: MessageType.ARTICLE_FAVORITED,
             payload: {
               user,

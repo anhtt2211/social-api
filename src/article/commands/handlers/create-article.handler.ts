@@ -4,7 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { WRITE_CONNECTION } from "../../../config";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
-import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
+import { ARTICLE_QUEUE } from "../../../rabbitmq/rabbitmq.constants";
 import { ArticleEntity } from "../../core/entities/article.entity";
 import { MessageType } from "../../core/enums/article.enum";
 import { ArticleRO } from "../../core/interfaces/article.interface";
@@ -39,7 +39,7 @@ export class CreateArticleCommandHandler
       );
 
       if (article) {
-        this.publisher.publish(QUEUE_NAME, {
+        this.publisher.publish(ARTICLE_QUEUE, {
           type: MessageType.ARTICLE_CREATED,
           payload: { article },
         });

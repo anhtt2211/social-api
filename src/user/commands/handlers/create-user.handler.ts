@@ -5,7 +5,7 @@ import { validate } from "class-validator";
 import { getRepository, Repository } from "typeorm";
 import { WRITE_CONNECTION } from "../../../config";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
-import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
+import { USER_QUEUE } from "../../../rabbitmq/rabbitmq.constants";
 import { UserEntity } from "../../core/entities/user.entity";
 import { MessageType } from "../../core/enums/user.enum";
 import { UserRO } from "../../core/interfaces/user.interface";
@@ -62,7 +62,7 @@ export class CreateUserCommandHandler
         const savedUser = await this.userRepository.save(newUser);
 
         if (savedUser) {
-          this.publisher.publish(QUEUE_NAME, {
+          this.publisher.publish(USER_QUEUE, {
             type: MessageType.USER_CREATED,
             payload: {
               user: savedUser,

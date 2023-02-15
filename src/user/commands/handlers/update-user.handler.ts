@@ -4,7 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { WRITE_CONNECTION } from "../../../config";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
-import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
+import { USER_QUEUE } from "../../../rabbitmq/rabbitmq.constants";
 import { UserEntity } from "../../core/entities/user.entity";
 import { MessageType } from "../../core/enums/user.enum";
 import { UserRO } from "../../core/interfaces/user.interface";
@@ -33,7 +33,7 @@ export class UpdateUserCommandHandler
       const userUpdated = await this.userRepository.save(updated);
 
       if (userUpdated) {
-        this.publisher.publish(QUEUE_NAME, {
+        this.publisher.publish(USER_QUEUE, {
           type: MessageType.USER_UPDATED,
           payload: {
             user: userUpdated,

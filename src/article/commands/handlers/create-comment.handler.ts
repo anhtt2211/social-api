@@ -4,13 +4,13 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { WRITE_CONNECTION } from "../../../config";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
-import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
+import { ARTICLE_QUEUE } from "../../../rabbitmq/rabbitmq.constants";
 import { UserEntity } from "../../../user/core/entities/user.entity";
 import { ArticleEntity } from "../../core/entities/article.entity";
+import { CommentEntity } from "../../core/entities/comment.entity";
 import { MessageType } from "../../core/enums/article.enum";
 import { CommentRO } from "../../core/interfaces/article.interface";
 import { ArticleService } from "../../services/article.service";
-import { CommentEntity } from "../../core/entities/comment.entity";
 import { CreateCommentCommand } from "../impl";
 
 @CommandHandler(CreateCommentCommand)
@@ -55,7 +55,7 @@ export class CreateCommentCommandHandler
       await this.commentRepository.save(comment);
 
       if (comment) {
-        this.publisher.publish(QUEUE_NAME, {
+        this.publisher.publish(ARTICLE_QUEUE, {
           type: MessageType.COMMENT_CREATED,
           payload: { comment },
         });

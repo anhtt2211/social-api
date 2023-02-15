@@ -9,7 +9,10 @@ import { ArticleEntity } from "../../core/entities/article.entity";
 import { CommentEntity } from "../../core/entities/comment.entity";
 import { DeleteCommentCommand } from "../impl";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
-import { QUEUE_NAME } from "../../../rabbitmq/rabbitmq.constants";
+import {
+  ARTICLE_QUEUE,
+  QUEUE_NAME,
+} from "../../../rabbitmq/rabbitmq.constants";
 import { MessageType } from "../../core/enums/article.enum";
 
 @CommandHandler(DeleteCommentCommand)
@@ -56,7 +59,7 @@ export class DeleteCommentCommandHandler
       article = await this.articleRepository.save(article);
 
       if (_deleted && article) {
-        this.publisher.publish(QUEUE_NAME, {
+        this.publisher.publish(ARTICLE_QUEUE, {
           type: MessageType.COMMENT_DELETED,
           payload: {
             comment: deleteComments[0],
