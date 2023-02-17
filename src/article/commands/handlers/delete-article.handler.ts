@@ -40,7 +40,7 @@ export class DeleteArticleCommandHandler
       if (article.author.id !== userId) {
         throw new HttpException(
           { message: "Cannot delete this article because you is not author" },
-          400
+          HttpStatus.BAD_REQUEST
         );
       }
 
