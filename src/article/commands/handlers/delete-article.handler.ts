@@ -1,13 +1,16 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
-import { DeleteResult, In, Repository } from "typeorm";
+import { DeleteResult, Repository } from "typeorm";
 import { WRITE_CONNECTION } from "../../../config";
 import { PublisherService } from "../../../rabbitmq/publisher.service";
 import { ARTICLE_QUEUE } from "../../../rabbitmq/rabbitmq.constants";
-import { ArticleEntity } from "../../core/entities/article.entity";
-import { BlockEntity } from "../../core/entities/block.entity";
-import { MessageType } from "../../core/enums/article.enum";
+import {
+  CommentEntity,
+  ArticleEntity,
+  BlockEntity,
+  MessageType,
+} from "../../core";
 import { DeleteArticleCommand } from "../impl";
 
 @CommandHandler(DeleteArticleCommand)
@@ -19,6 +22,8 @@ export class DeleteArticleCommandHandler
     private readonly articleRepository: Repository<ArticleEntity>,
     @InjectRepository(BlockEntity, WRITE_CONNECTION)
     private readonly blockRepository: Repository<BlockEntity>,
+    @InjectRepository(CommentEntity, WRITE_CONNECTION)
+    private readonly commentRepository: Repository<CommentEntity>,
 
     private readonly publisher: PublisherService
   ) {}
@@ -28,7 +33,7 @@ export class DeleteArticleCommandHandler
       const article = await this.articleRepository.findOne(
         { slug },
         {
-          relations: ["author", "blocks"],
+          relations: ["author"],
         }
       );
 
@@ -39,9 +44,15 @@ export class DeleteArticleCommandHandler
         );
       }
 
-      const blockIds = article.blocks.map((block) => block.id);
       await this.blockRepository.delete({
-        id: In(blockIds),
+        article: {
+          id: article.id,
+        },
+      });
+      await this.commentRepository.delete({
+        article: {
+          id: article.id,
+        },
       });
 
       const _deleted = await this.articleRepository.delete({ slug: slug });

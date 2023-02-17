@@ -2,11 +2,10 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 import { IEventHandler } from "@nestjs/cqrs";
 import { EventsHandler } from "@nestjs/cqrs/dist/decorators/events-handler.decorator";
 import { InjectRepository } from "@nestjs/typeorm";
-import { In, Repository } from "typeorm";
-import { BlockEntity } from "../../core/entities/block.entity";
+import { Repository } from "typeorm";
 import { READ_CONNECTION } from "../../../config";
-import { ArticleEntity } from "../../core/entities/article.entity";
 import { ArticleDeletedEvent } from "../impl";
+import { CommentEntity, ArticleEntity, BlockEntity } from "../../core";
 
 @EventsHandler(ArticleDeletedEvent)
 export class ArticleDeletedEventHandler
@@ -16,14 +15,16 @@ export class ArticleDeletedEventHandler
     @InjectRepository(ArticleEntity, READ_CONNECTION)
     private readonly articleRepository: Repository<ArticleEntity>,
     @InjectRepository(BlockEntity, READ_CONNECTION)
-    private readonly blockRepository: Repository<BlockEntity>
+    private readonly blockRepository: Repository<BlockEntity>,
+    @InjectRepository(CommentEntity, READ_CONNECTION)
+    private readonly commentRepository: Repository<CommentEntity>
   ) {}
   async handle({ userId, slug }: ArticleDeletedEvent) {
     try {
       const article = await this.articleRepository.findOne(
         { slug },
         {
-          relations: ["author", "blocks"],
+          relations: ["author"],
         }
       );
 
@@ -34,9 +35,15 @@ export class ArticleDeletedEventHandler
         );
       }
 
-      const blockIds = article.blocks.map((block) => block.id);
       await this.blockRepository.delete({
-        id: In(blockIds),
+        article: {
+          id: article.id,
+        },
+      });
+      await this.commentRepository.delete({
+        article: {
+          id: article.id,
+        },
       });
 
       await this.articleRepository.delete({ slug: slug });
