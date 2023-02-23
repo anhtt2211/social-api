@@ -1,9 +1,10 @@
 import { UserEntity } from "../../../user/core/entities/user.entity";
 import { ArticleEntity } from "../entities/article.entity";
+import { MessageType } from "../enums";
 import { IComment } from "./article.interface";
 
 export interface IMessage {
-  type: string;
+  type: MessageType;
   payload: {
     article?: ArticleEntity;
     user?: UserEntity;
