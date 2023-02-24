@@ -1,9 +1,12 @@
 import { NestFactory } from "@nestjs/core";
-import { ApplicationModule } from "./app.module";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { json, urlencoded } from "express";
-import { ArticleProjection } from "./article/article.projection";
 import { INestApplication } from "@nestjs/common";
+import * as cluster from "cluster";
+import * as os from "os";
+
+import { ApplicationModule } from "./app.module";
+import { ArticleProjection } from "./article/article.projection";
 import { UserProjection } from "./user/user.projection";
 import { ProfileProjection } from "./profile/profile.projection";
 
@@ -18,24 +21,45 @@ async function executeProjection(app: INestApplication) {
 }
 
 async function bootstrap() {
-  const appOptions = { cors: true };
-  const app = await NestFactory.create(ApplicationModule, appOptions);
-  app.use(json({ limit: "50mb" }));
-  app.use(urlencoded({ extended: true, limit: "50mb" }));
-  app.setGlobalPrefix("api");
+  if (cluster.isMaster) {
+    const numWorkers = os.cpus().length;
+    console.log(`Master cluster setting up ${numWorkers} workers...`);
 
-  await executeProjection(app);
+    for (let i = 0; i < numWorkers; i++) {
+      cluster.fork();
+    }
 
-  const options = new DocumentBuilder()
-    .setTitle("Social API")
-    .setDescription("The Boilerplate API description")
-    .setVersion("1.0")
-    .setBasePath("api")
-    .addBearerAuth()
-    .build();
-  const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup("/docs", app, document);
+    cluster.on("online", (worker) => {
+      console.log(`Worker ${worker.process.pid} is online`);
+    });
 
-  await app.listen(8000);
+    cluster.on("exit", (worker, code, signal) => {
+      console.log(
+        `Worker ${worker.process.pid} died with code: ${code}, and signal: ${signal}`
+      );
+      console.log("Starting a new worker");
+      cluster.fork();
+    });
+  } else {
+    const appOptions = { cors: true };
+    const app = await NestFactory.create(ApplicationModule, appOptions);
+    app.use(json({ limit: "50mb" }));
+    app.use(urlencoded({ extended: true, limit: "50mb" }));
+    app.setGlobalPrefix("api");
+
+    await executeProjection(app);
+
+    const options = new DocumentBuilder()
+      .setTitle("Social API")
+      .setDescription("The Boilerplate API description")
+      .setVersion("1.0")
+      .setBasePath("api")
+      .addBearerAuth()
+      .build();
+    const document = SwaggerModule.createDocument(app, options);
+    SwaggerModule.setup("/docs", app, document);
+
+    await app.listen(8000);
+  }
 }
 bootstrap();
