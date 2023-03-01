@@ -18,7 +18,7 @@ export class ConsumerService {
 
   async consume(queueName: string, callback: (msg: any) => void) {
     if (this.channel) {
-      await this.channel.assertQueue(queueName);
+      await this.channel.assertQueue(queueName, { durable: true });
       this.channel.consume(queueName, (msg) => {
         if (msg !== null) {
           callback(JSON.parse(msg.content.toString()));

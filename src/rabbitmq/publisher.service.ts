@@ -15,7 +15,7 @@ export class PublisherService {
   }
 
   async publish(queueName: string, message: any) {
-    await this.channel.assertQueue(queueName);
+    await this.channel.assertQueue(queueName, { durable: true });
     this.channel.sendToQueue(queueName, Buffer.from(JSON.stringify(message)));
   }
 }
