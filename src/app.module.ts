@@ -1,14 +1,14 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import * as dotenv from "dotenv";
 import { AppController } from "./app.controller";
 import { ArticleModule } from "./article/article.module";
+import { READ_CONNECTION, WRITE_CONNECTION } from "./config";
 import { MediaModule } from "./media/media.module";
 import { ProfileModule } from "./profile/profile.module";
 import { TagModule } from "./tag/tag.module";
 import { UserModule } from "./user/user.module";
-import * as dotenv from "dotenv";
-import { READ_CONNECTION, WRITE_CONNECTION } from "./config";
 
 dotenv.config();
 

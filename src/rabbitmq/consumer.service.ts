@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 import { Connection, Channel } from "amqplib";
 
 @Injectable()
@@ -26,7 +26,7 @@ export class ConsumerService {
         }
       });
 
-      console.log(`Started consuming messages from queue '${queueName}'`);
+      Logger.log(`Started consuming messages from queue '${queueName}'`);
     }
   }
 }

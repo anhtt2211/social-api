@@ -10,7 +10,9 @@ import { PublisherService } from "./publisher.service";
       provide: "RABBIT_MQ_CONNECTION",
       useFactory: async (): Promise<Connection> => {
         if (process.env.NODE_ENV === "development") {
-          return connect("amqp://localhost") || connect(process.env.RABBIT_URL_DEV);
+          return (
+            connect("amqp://localhost") || connect(process.env.RABBIT_URL_DEV)
+          );
         }
         if (process.env.NODE_ENV === "staging") {
           return connect(process.env.RABBIT_URL);

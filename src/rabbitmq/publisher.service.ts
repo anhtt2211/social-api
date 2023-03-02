@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 import { Connection, Channel } from "amqplib";
 import {
   ARTICLE_QUEUE,
@@ -45,7 +45,7 @@ export class PublisherService {
           }
         );
 
-        console.log(
+        Logger.log(
           `Message '${message}' sent to exchange ${RABBIT_EXCHANGE} with route key ${ARTICLE_ROUTE_KEY}`
         );
         break;
@@ -64,7 +64,7 @@ export class PublisherService {
           }
         );
 
-        console.log(
+        Logger.log(
           `Message '${message}' sent to exchange ${RABBIT_EXCHANGE} with route key ${USER_ROUTE_KEY}`
         );
         break;
@@ -83,7 +83,7 @@ export class PublisherService {
           }
         );
 
-        console.log(
+        Logger.log(
           `Message '${message}' sent to exchange ${RABBIT_EXCHANGE} with route key ${PROFILE_ROUTE_KEY}`
         );
         break;
