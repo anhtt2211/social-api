@@ -46,7 +46,7 @@ export class PublisherService {
         );
 
         Logger.log(
-          `Message '${message}' sent to exchange ${RABBIT_EXCHANGE} with route key ${ARTICLE_ROUTE_KEY}`
+          `Message type: ${message.type} sent to exchange ${RABBIT_EXCHANGE} with route key ${ARTICLE_ROUTE_KEY}`
         );
         break;
       case USER_QUEUE:
@@ -65,7 +65,7 @@ export class PublisherService {
         );
 
         Logger.log(
-          `Message '${message}' sent to exchange ${RABBIT_EXCHANGE} with route key ${USER_ROUTE_KEY}`
+          `Message type: ${message.type} sent to exchange ${RABBIT_EXCHANGE} with route key ${USER_ROUTE_KEY}`
         );
         break;
       case PROFILE_QUEUE:
@@ -84,7 +84,7 @@ export class PublisherService {
         );
 
         Logger.log(
-          `Message '${message}' sent to exchange ${RABBIT_EXCHANGE} with route key ${PROFILE_ROUTE_KEY}`
+          `Message type: ${message.type} sent to exchange ${RABBIT_EXCHANGE} with route key ${PROFILE_ROUTE_KEY}`
         );
         break;
       default:
