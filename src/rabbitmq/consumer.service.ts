@@ -25,6 +25,8 @@ export class ConsumerService {
           this.channel.ack(msg);
         }
       });
+
+      console.log(`Started consuming messages from queue '${queueName}'`);
     }
   }
 }
