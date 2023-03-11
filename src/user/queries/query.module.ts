@@ -6,11 +6,13 @@ import { READ_CONNECTION } from "../../config";
 import { UserController } from "../user.controller";
 import { UserEntity } from "../core";
 import { UserService } from "../services/user.service";
+import { RedisModule } from "../../redis/redis.module";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([UserEntity], READ_CONNECTION),
     CqrsModule,
+    RedisModule,
   ],
   providers: [UserService, ...QueryHandlers],
   controllers: [UserController],
