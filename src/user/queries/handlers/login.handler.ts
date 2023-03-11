@@ -9,13 +9,16 @@ import { UserEntity } from "../../core/entities/user.entity";
 import { UserRO } from "../../core/interfaces/user.interface";
 import { UserService } from "../../services/user.service";
 import { LoginQuery } from "../impl";
+import { RedisService } from "../../../redis/redis.service";
+import { TIME_TO_LIVE } from "../../../redis/redis.constant";
 
 @QueryHandler(LoginQuery)
 export class LoginQueryHandler implements IQueryHandler<LoginQuery> {
   constructor(
     @InjectRepository(UserEntity, READ_CONNECTION)
     private readonly userRepository: Repository<UserEntity>,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly redisCacheService: RedisService
   ) {}
 
   async execute({ loginUserDto }: LoginQuery): Promise<UserRO> {
@@ -27,6 +30,9 @@ export class LoginQueryHandler implements IQueryHandler<LoginQuery> {
     const token = await this.userService.generateJWT(_user);
     const { email, username, bio, image } = _user;
     const user = { email, token, username, bio, image };
+
+    await this.redisCacheService.set(email, user, TIME_TO_LIVE);
+
     return { user };
   }
 
