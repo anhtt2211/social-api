@@ -1,11 +1,16 @@
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { Connection, Channel } from "amqplib";
 import {
+  ARTICLE_DLQ,
+  ARTICLE_DL_ROUTE_KEY,
   ARTICLE_QUEUE,
   ARTICLE_ROUTE_KEY,
+  PROFILE_DL_ROUTE_KEY,
   PROFILE_QUEUE,
   PROFILE_ROUTE_KEY,
+  RABBIT_DL_EXCHANGE,
   RABBIT_EXCHANGE,
+  USER_DL_ROUTE_KEY,
   USER_QUEUE,
   USER_ROUTE_KEY,
 } from "./rabbitmq.constants";
@@ -27,7 +32,10 @@ export class PublisherService {
     await this.channel.assertExchange(RABBIT_EXCHANGE, "direct", {
       durable: true,
     });
-    await this.channel.assertQueue(queueName, { durable: true });
+
+    await this.channel.assertQueue(queueName, {
+      durable: true,
+    });
 
     switch (queueName) {
       case ARTICLE_QUEUE:
