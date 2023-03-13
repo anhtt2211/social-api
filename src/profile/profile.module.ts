@@ -14,6 +14,7 @@ import { ProfileController } from "./profile.controller";
 import { ProfileProjection } from "./profile.projection";
 import { ProfileService } from "./services/profile.service";
 import { QueryModule } from "./queries/query.module";
+import { RedisModule } from "../redis/redis.module";
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { QueryModule } from "./queries/query.module";
     QueryModule,
     EventModule,
     RabbitMqModule,
+    RedisModule,
   ],
   providers: [ProfileService, ProfileProjection],
   controllers: [ProfileController],

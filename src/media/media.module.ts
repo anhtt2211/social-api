@@ -9,9 +9,10 @@ import { AuthMiddleware } from "../user/auth.middleware";
 import { UserModule } from "../user/user.module";
 import { DropboxService } from "./services/dropbox.service";
 import { MediaController } from "./media.controller";
+import { RedisModule } from "../redis/redis.module";
 
 @Module({
-  imports: [UserModule, CqrsModule],
+  imports: [UserModule, CqrsModule, RedisModule],
   providers: [DropboxService],
   controllers: [MediaController],
   exports: [DropboxService],

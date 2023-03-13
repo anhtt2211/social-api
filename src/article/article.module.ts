@@ -14,6 +14,7 @@ import { ArticleService } from "./services/article.service";
 import { CommandModule } from "./commands/command.module";
 import { EventModule } from "./events/event.module";
 import { QueryModule } from "./queries/query.module";
+import { RedisModule } from "../redis/redis.module";
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { QueryModule } from "./queries/query.module";
     QueryModule,
     EventModule,
     RabbitMqModule,
+    RedisModule,
   ],
   providers: [ArticleService, ArticleProjection],
   controllers: [ArticleController],
