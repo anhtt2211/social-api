@@ -28,10 +28,14 @@ export class LoginQueryHandler implements IQueryHandler<LoginQuery> {
     if (!_user) throw new HttpException({ errors }, 401);
 
     const token = await this.userService.generateJWT(_user);
-    const { email, username, bio, image } = _user;
+    const { id, email, username, bio, image } = _user;
     const user = { email, token, username, bio, image };
 
-    await this.redisCacheService.set(email, user, TIME_TO_LIVE);
+    await this.redisCacheService.set(
+      id.toString(),
+      { ...user, id },
+      TIME_TO_LIVE
+    );
 
     return { user };
   }

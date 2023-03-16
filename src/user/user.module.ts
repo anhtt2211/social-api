@@ -13,6 +13,7 @@ import { QueryModule } from "./queries/query.module";
 import { UserController } from "./user.controller";
 import { UserProjection } from "./user.projection";
 import { UserService } from "./services/user.service";
+import { RedisModule } from "../redis/redis.module";
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { UserService } from "./services/user.service";
     QueryModule,
     EventModule,
     RabbitMqModule,
+    RedisModule,
   ],
   providers: [UserService, UserProjection],
   controllers: [UserController],

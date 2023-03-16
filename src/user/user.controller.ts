@@ -4,7 +4,7 @@ import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { ValidationPipe } from "../shared/pipes/validation.pipe";
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from "./dto";
 import { CreateUserCommand, UpdateUserCommand } from "./commands";
-import { FindUserByEmailQuery, LoginQuery } from "./queries";
+import { FindUserByEmailQuery, FindUserById, LoginQuery } from "./queries";
 import { User } from "./user.decorator";
 import { UserRO } from "./core/interfaces/user.interface";
 
@@ -19,8 +19,8 @@ export class UserController {
 
   @ApiOperation({ summary: "get current user" })
   @Get("user")
-  async findMe(@User("email") email: string): Promise<UserRO> {
-    return this.queryBus.execute(new FindUserByEmailQuery(email));
+  async findMe(@User("id") id: number): Promise<UserRO> {
+    return this.queryBus.execute(new FindUserById(id));
   }
 
   @ApiOperation({ summary: "update user" })
