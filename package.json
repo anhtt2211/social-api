@@ -35,6 +35,7 @@
     "@nestjs/websockets": "^7.0.5",
     "amqplib": "^0.10.3",
     "argon2": "^0.26.2",
+    "aws-sdk": "^2.1301.0",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.11.1",
     "cluster": "^0.7.7",
