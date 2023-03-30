@@ -28,7 +28,7 @@ export class CreateUserCommandHandler
     try {
       // check uniqueness of username/email
       const { username, email, password } = dto;
-      const qb = await getRepository(UserEntity, WRITE_CONNECTION)
+      const qb = getRepository(UserEntity, WRITE_CONNECTION)
         .createQueryBuilder("user")
         .where("user.username = :username", { username })
         .orWhere("user.email = :email", { email });
