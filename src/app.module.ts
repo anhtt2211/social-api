@@ -20,9 +20,9 @@ const defaultOptions = {
   password: process.env.DATABASE_PASSWORD,
   entities: [__dirname + process.env.TYPEORM_ENTITIES],
   migrations: [__dirname + process.env.TYPEORM_MIGRATIONS],
-  logging: process.env.TYPEORM_LOGGING === "true" ? true : false,
-  synchronize: process.env.TYPEORM_SYNCHRONIZE === "true" ? true : false,
-  migrationsRun: process.env.TYPEORM_MIGRATION_RUN === "true" ? true : false,
+  logging: process.env.TYPEORM_LOGGING === "true",
+  synchronize: process.env.TYPEORM_SYNCHRONIZE === "true",
+  migrationsRun: process.env.TYPEORM_MIGRATION_RUN === "true",
   migrationsTableName: "migrations",
   cli: {
     migrationsDir: process.env.TYPEORM_MIGRATIONS_DIR,
