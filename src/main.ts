@@ -1,31 +1,24 @@
+import { Logger } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
-import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
-import { json, urlencoded } from "express";
-import { INestApplication } from "@nestjs/common";
+import { Transport } from "@nestjs/microservices";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import * as cluster from "cluster";
+import { json, urlencoded } from "express";
 import * as os from "os";
 
 import { ApplicationModule } from "./app.module";
-import { ArticleProjection } from "./article/article.projection";
-import { UserProjection } from "./user/user.projection";
-import { ProfileProjection } from "./profile/profile.projection";
-
-async function executeProjection(app: INestApplication) {
-  const articleProjection = app.get(ArticleProjection);
-  const userProjection = app.get(UserProjection);
-  const profileProjection = app.get(ProfileProjection);
-
-  await articleProjection.handle();
-  await userProjection.handle();
-  await profileProjection.handle();
-}
+import {
+  ARTICLE_QUEUE,
+  PROFILE_QUEUE,
+  USER_QUEUE,
+} from "./rabbitmq/rabbitmq.constants";
 
 async function bootstrap() {
   if (cluster.isMaster) {
     const numWorkers = os.cpus().length;
     console.log(`Master cluster setting up ${numWorkers} workers...`);
 
-    for (let i = 0; i < numWorkers; i++) {
+    for (let i = 0; i < 1; i++) {
       cluster.fork();
     }
 
@@ -47,7 +40,56 @@ async function bootstrap() {
     app.use(urlencoded({ extended: true, limit: "50mb" }));
     app.setGlobalPrefix("api");
 
-    await executeProjection(app);
+    app.connectMicroservice(
+      {
+        transport: Transport.RMQ,
+        options: {
+          urls: ["amqp://localhost", "amqp://guest:guest@rabbitmq:5672"],
+          queue: ARTICLE_QUEUE,
+          queueOptions: {
+            durable: true,
+          },
+          connectionOptions: {
+            timeout: 10000,
+          },
+        },
+      },
+      { inheritAppConfig: true }
+    );
+    app.connectMicroservice(
+      {
+        transport: Transport.RMQ,
+        options: {
+          urls: ["amqp://localhost", "amqp://guest:guest@rabbitmq:5672"],
+          queue: USER_QUEUE,
+          queueOptions: {
+            durable: true,
+          },
+          connectionOptions: {
+            timeout: 10000,
+          },
+        },
+      },
+      { inheritAppConfig: true }
+    );
+    app.connectMicroservice(
+      {
+        transport: Transport.RMQ,
+        options: {
+          urls: ["amqp://localhost", "amqp://guest:guest@rabbitmq:5672"],
+          queue: PROFILE_QUEUE,
+          queueOptions: {
+            durable: true,
+          },
+          connectionOptions: {
+            timeout: 10000,
+          },
+        },
+      },
+      { inheritAppConfig: true }
+    );
+
+    app.startAllMicroservices();
 
     const options = new DocumentBuilder()
       .setTitle("Social API")
@@ -59,7 +101,9 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup("/docs", app, document);
 
-    await app.listen(8000);
+    await app.listen(8000, () => {
+      Logger.log(`Application running on port ${8000} bootstrap`);
+    });
   }
 }
 bootstrap();
