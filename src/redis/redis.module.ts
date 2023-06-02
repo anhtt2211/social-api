@@ -7,10 +7,18 @@ import { RedisService } from "./redis.service";
     {
       provide: "REDIS_CLIENT",
       useFactory: () => {
-        return new Redis({
-          host: "localhost",
-          port: 6379,
-        });
+        if (process.env.NODE_ENV === "development") {
+          return new Redis({
+            host: "localhost",
+            port: 6379,
+          });
+        }
+        if (process.env.NODE_ENV === "staging") {
+          return new Redis({
+            host: process.env.REDIS_HOST,
+            port: parseInt(process.env.REDIS_PORT),
+          });
+        }
       },
     },
     RedisService,

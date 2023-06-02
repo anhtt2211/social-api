@@ -11,8 +11,10 @@ services:
     depends_on:
       - db
       - rabbitmq
+      - redis
     environment:
-      - NODE_ENV=${NODE_ENV}
+      # - NODE_ENV=${NODE_ENV}
+      - NODE_ENV=staging
       - DATABASE_HOST=host.docker.internal
       - DATABASE_PORT=${DATABASE_PORT}
       - DATABASE_ENGINE=${DATABASE_ENGINE}
@@ -31,6 +33,11 @@ services:
       - DROPBOX_TOKEN=${DROPBOX_TOKEN}
       - DROPBOX_KEY=${DROPBOX_KEY}
       - DROPBOX_SECRET=${DROPBOX_SECRET}
+
+      - RABBIT_URL=${RABBIT_URL}
+
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
   db:
     image: postgres
     environment:
@@ -41,3 +48,7 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
