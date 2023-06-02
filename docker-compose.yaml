@@ -1,13 +1,50 @@
 version: "2.6"
 
 services:
-  socia-api:
+  social-api-1:
     build:
       context: .
       dockerfile: Dockerfile
     image: social-api
     ports:
-      - "8000:8000"
+      - "81:8000"
+    depends_on:
+      - db
+      - rabbitmq
+      - redis
+    environment:
+      # - NODE_ENV=${NODE_ENV}
+      - NODE_ENV=staging
+      - DATABASE_HOST=host.docker.internal
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_ENGINE=${DATABASE_ENGINE}
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - WRITE_DATABASE_NAME=${WRITE_DATABASE_NAME}
+      - READ_DATABASE_NAME=${READ_DATABASE_NAME}
+
+      - TYPEORM_ENTITIES=${TYPEORM_ENTITIES}
+      - TYPEORM_MIGRATIONS=${TYPEORM_MIGRATIONS}
+      - TYPEORM_MIGRATIONS_DIR=${TYPEORM_MIGRATIONS_DIR}
+      - TYPEORM_LOGGING=${TYPEORM_LOGGING}
+      - TYPEORM_SYNCHRONIZE=${TYPEORM_SYNCHRONIZE}
+      - TYPEORM_MIGRATION_RUN=${TYPEORM_MIGRATION_RUN}
+
+      - DROPBOX_TOKEN=${DROPBOX_TOKEN}
+      - DROPBOX_KEY=${DROPBOX_KEY}
+      - DROPBOX_SECRET=${DROPBOX_SECRET}
+
+      - RABBIT_URL=${RABBIT_URL}
+
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+  social-api-2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: social-api
+    ports:
+      - "82:8000"
     depends_on:
       - db
       - rabbitmq
@@ -52,3 +89,10 @@ services:
     image: "redis:alpine"
     ports:
       - "6379:6379"
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - social-api-1
+      - social-api-2
