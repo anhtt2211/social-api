@@ -36,7 +36,7 @@
     "amqplib": "^0.10.3",
     "argon2": "^0.26.2",
     "aws-sdk": "^2.1301.0",
-    "class-transformer": "^0.2.3",
+    "class-transformer": "^0.3.1",
     "class-validator": "^0.14.0",
     "cluster": "^0.7.7",
     "crypto": "^1.0.1",
