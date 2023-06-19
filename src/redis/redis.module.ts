@@ -19,6 +19,9 @@ import { RedisService } from "./redis.service";
             port: parseInt(process.env.REDIS_PORT),
           });
         }
+        if (process.env.NODE_ENV === "RENDER") {
+          return new Redis(process.env.REDIS_URL);
+        }
       },
     },
     RedisService,
