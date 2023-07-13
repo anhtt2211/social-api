@@ -12,74 +12,20 @@ services:
       - db
       - rabbitmq
       - redis
+    env_file:
+      - .env
     environment:
-      # - NODE_ENV=${NODE_ENV}
       - NODE_ENV=staging
       - DATABASE_HOST=host.docker.internal
-      - DATABASE_PORT=${DATABASE_PORT}
-      - DATABASE_ENGINE=${DATABASE_ENGINE}
-      - DATABASE_USERNAME=${DATABASE_USERNAME}
-      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
-      - WRITE_DATABASE_NAME=${WRITE_DATABASE_NAME}
-      - READ_DATABASE_NAME=${READ_DATABASE_NAME}
-
-      - TYPEORM_ENTITIES=${TYPEORM_ENTITIES}
-      - TYPEORM_MIGRATIONS=${TYPEORM_MIGRATIONS}
-      - TYPEORM_MIGRATIONS_DIR=${TYPEORM_MIGRATIONS_DIR}
-      - TYPEORM_LOGGING=${TYPEORM_LOGGING}
-      - TYPEORM_SYNCHRONIZE=${TYPEORM_SYNCHRONIZE}
-      - TYPEORM_MIGRATION_RUN=${TYPEORM_MIGRATION_RUN}
-
-      - DROPBOX_TOKEN=${DROPBOX_TOKEN}
-      - DROPBOX_KEY=${DROPBOX_KEY}
-      - DROPBOX_SECRET=${DROPBOX_SECRET}
-
-      - RABBIT_URL=${RABBIT_URL}
-
-      - REDIS_HOST=${REDIS_HOST}
-      - REDIS_PORT=${REDIS_PORT}
-  social-api-2:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: social-api
-    ports:
-      - "82:8000"
-    depends_on:
-      - db
-      - rabbitmq
-      - redis
-    environment:
-      # - NODE_ENV=${NODE_ENV}
-      - NODE_ENV=staging
-      - DATABASE_HOST=host.docker.internal
-      - DATABASE_PORT=${DATABASE_PORT}
-      - DATABASE_ENGINE=${DATABASE_ENGINE}
-      - DATABASE_USERNAME=${DATABASE_USERNAME}
-      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
-      - WRITE_DATABASE_NAME=${WRITE_DATABASE_NAME}
-      - READ_DATABASE_NAME=${READ_DATABASE_NAME}
-
-      - TYPEORM_ENTITIES=${TYPEORM_ENTITIES}
-      - TYPEORM_MIGRATIONS=${TYPEORM_MIGRATIONS}
-      - TYPEORM_MIGRATIONS_DIR=${TYPEORM_MIGRATIONS_DIR}
-      - TYPEORM_LOGGING=${TYPEORM_LOGGING}
-      - TYPEORM_SYNCHRONIZE=${TYPEORM_SYNCHRONIZE}
-      - TYPEORM_MIGRATION_RUN=${TYPEORM_MIGRATION_RUN}
-
-      - DROPBOX_TOKEN=${DROPBOX_TOKEN}
-      - DROPBOX_KEY=${DROPBOX_KEY}
-      - DROPBOX_SECRET=${DROPBOX_SECRET}
-
-      - RABBIT_URL=${RABBIT_URL}
-
-      - REDIS_HOST=${REDIS_HOST}
-      - REDIS_PORT=${REDIS_PORT}
   db:
-    image: postgres
+    image: postgres:14-alpine
     environment:
       POSTGRES_USER: ${DATABASE_USERNAME}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - /data/postgres/
+    ports:
+      - 5432:5432
   rabbitmq:
     image: rabbitmq:3-management
     ports:
@@ -95,4 +41,3 @@ services:
       - "80:80"
     depends_on:
       - social-api-1
-      - social-api-2

@@ -1,7 +1,7 @@
 module.exports = [
   {
     type: process.env.DATABASE_ENGINE,
-    name: "write_db",
+    name: "master-db",
     host: process.env.DATABASE_HOST,
     port: parseInt(process.env.DATABASE_PORT),
     username: process.env.DATABASE_USERNAME,
@@ -19,7 +19,7 @@ module.exports = [
   },
   {
     type: process.env.DATABASE_ENGINE,
-    name: "read_db",
+    name: "slave-db",
     host: process.env.DATABASE_HOST,
     port: parseInt(process.env.DATABASE_PORT),
     username: process.env.DATABASE_USERNAME,
