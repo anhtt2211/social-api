@@ -6,6 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: social-api
+    container_name: social-api-1
     ports:
       - "81:8000"
     depends_on:
@@ -17,7 +18,26 @@ services:
     environment:
       - NODE_ENV=staging
       - DATABASE_HOST=host.docker.internal
+  social-api-2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: social-api
+    container_name: social-api-2
+    ports:
+      - "82:8000"
+    depends_on:
+      - db
+      - rabbitmq
+      - redis
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=staging
+      - DATABASE_HOST=host.docker.internal
+
   db:
+    container_name: social-postgres
     image: postgres:14-alpine
     environment:
       POSTGRES_USER: ${DATABASE_USERNAME}
@@ -27,17 +47,21 @@ services:
     ports:
       - 5432:5432
   rabbitmq:
+    container_name: social-rabbitmq
     image: rabbitmq:3-management
     ports:
       - "15672:15672"
       - "5672:5672"
   redis:
+    container_name: social-redis
     image: "redis:alpine"
     ports:
       - "6379:6379"
   nginx:
+    container_name: social-nginx
     build: ./nginx
     ports:
       - "80:80"
     depends_on:
       - social-api-1
+      - social-api-2
