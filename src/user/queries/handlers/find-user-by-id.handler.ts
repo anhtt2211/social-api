@@ -1,4 +1,4 @@
-import { HttpException } from "@nestjs/common";
+import { HttpException, HttpStatus } from "@nestjs/common";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
@@ -17,20 +17,20 @@ export class FindUserByIdHandler implements IQueryHandler<FindUserById> {
 
     private readonly userService: UserService,
     private readonly redisCacheService: RedisService
-  ) {}
+  ) { }
 
   async execute({ id }: FindUserById): Promise<UserRO> {
-    const _user = await this.redisCacheService.get(id.toString());
+    let user: UserEntity;
 
-    if (_user) {
-      return this.userService.buildUserRO(_user);
-    }
-
-    const user = await this.userRepository.findOne(id);
+    user = await this.redisCacheService.get(id.toString()) as UserEntity;
 
     if (!user) {
-      const errors = { User: " not found" };
-      throw new HttpException({ errors }, 401);
+      user = await this.userRepository.findOne(id);
+
+      if (!user) {
+        const errors = { User: "User not found" };
+        throw new HttpException({ errors }, HttpStatus.NOT_FOUND);
+      }
     }
 
     return this.userService.buildUserRO(user);

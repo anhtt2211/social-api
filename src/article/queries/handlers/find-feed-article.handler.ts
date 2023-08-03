@@ -18,9 +18,11 @@ export class FindFeedArticleQueryHandler
     private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(FollowsEntity, READ_CONNECTION)
     private readonly followsRepository: Repository<FollowsEntity>,
+    @InjectRepository(ArticleEntity, READ_CONNECTION)
+    private readonly articleRepository: Repository<ArticleEntity>,
 
     private readonly articleService: ArticleService
-  ) {}
+  ) { }
 
   async execute({ userId, query }: FindFeedArticleQuery): Promise<ArticlesRO> {
     const _follows = await this.followsRepository.find({ followerId: userId });
@@ -35,7 +37,7 @@ export class FindFeedArticleQueryHandler
 
     const ids = _follows.map((el) => el.followingId);
 
-    const qb = getRepository(ArticleEntity, READ_CONNECTION)
+    const qb = this.articleRepository
       .createQueryBuilder("article")
       .where("article.authorId IN (:...ids)", { ids })
       .leftJoinAndSelect("article.author", "author");
