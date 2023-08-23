@@ -21,6 +21,17 @@
     ==> READ HEAVY
     - No lost for image
 
+## API Design
+
+    Login: - request: { username, password} - response: { accessToken, refreshToken }
+    Logout - request: { token } - response: boolean
+    Post Article - request: { userId, title, description, content, hastag } - response: articleId
+    Upload File - request: { string base 64 } - response: file_url
+    Searching - request: { keyword } - response: [ article ]
+    Like - request: { userId, articleId } - response: boolean
+    Comment - request: { userId, articleId, content } - response: commentId | Comment
+    Follow - request: { currentUserId, toUserId } - response: boolean
+
 ## Design system
 
 ![alt text](./assets/architect.png)
