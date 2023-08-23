@@ -21,7 +21,7 @@
     ==> READ HEAVY
     - No lost for image
 
-## Architect
+## Design system
 
 ![alt text](./assets/architect.png)
 
