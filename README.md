@@ -32,6 +32,10 @@
     Comment - request: { userId, articleId, content } - response: commentId | Comment
     Follow - request: { currentUserId, toUserId } - response: boolean
 
+## DB Schema
+
+![alt text](./assets/db-schema.png)
+
 ## Design system
 
 ![alt text](./assets/architect.png)
