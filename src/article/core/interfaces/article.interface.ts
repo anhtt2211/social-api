@@ -2,6 +2,7 @@ import { BlockEntity } from "../entities/block.entity";
 import { IBlock } from "./block.interface";
 import { ProfileData } from "../../../profile/core/interfaces/profile.interface";
 import { IUser } from "../../../user/core/interfaces/user.interface";
+import { ArticleFilters } from "../../dto";
 
 // export interface Comment {
 //   id: number;
@@ -62,4 +63,13 @@ export interface IComment {
   updated?: Date;
   article?: IArticle;
   author?: IUser | ProfileData;
+}
+
+export interface IArticleSearchResult {
+  hits: {
+    total: number;
+    hits: Array<{
+      _source: ArticleFilters;
+    }>;
+  };
 }
