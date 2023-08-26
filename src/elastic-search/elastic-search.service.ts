@@ -5,34 +5,35 @@ import { ArticleEntity, IArticleSearchResult } from "../article/core";
 @Injectable()
 export class SearchService {
   private readonly articleIndexes = "articles";
+  private readonly articleType = "article";
 
   constructor(private readonly elasticsearchService: ElasticsearchService) {}
 
   async bulkIndexArticles(articles: ArticleEntity[]) {
-    const body = articles.reduce((acc, article) => {
-      acc.push({ index: { _index: this.articleIndexes, _id: article.id } });
-      acc.push({
-        id: article.id,
-        title: article.title,
-        slug: article.slug,
-        description: article.description,
-        author: article.author.username,
-        blockText: article.blocks.map((block) => block.data.text),
-      });
-      return acc;
-    }, []);
+    const body = articles
+      .map((article) => [
+        { index: { _index: this.articleIndexes, _id: article.id } },
+        {
+          id: article.id,
+          title: article.title,
+          description: article.description,
+          author: article.author.username,
+          blockText: article.blocks.map((block) => block.data.text).join(" "),
+        },
+      ])
+      .reduce((acc, val) => acc.concat(val), []);
 
     try {
-      const bulkResponse = await this.elasticsearchService.bulk({
+      const { body: bulkResponse } = await this.elasticsearchService.bulk({
         refresh: true, // Refresh the index after the bulk operation (for testing purposes)
         body,
       });
 
-      if (bulkResponse.body.errors) {
+      if (bulkResponse.errors) {
         // Handle errors in bulk indexing, if any
         const erroredDocuments = [];
         // Iterate through the items and collect errors, if any
-        bulkResponse.body.items.forEach((action, i) => {
+        bulkResponse.items.forEach((action, i) => {
           const operation = Object.keys(action)[0];
           if (action[operation].error) {
             erroredDocuments.push({
@@ -42,7 +43,7 @@ export class SearchService {
             });
           }
         });
-        Logger.error(`Bulk indexing errors: ${erroredDocuments}`);
+        Logger.error("Bulk indexing errors:", erroredDocuments.toString());
       } else {
         Logger.log("Bulk indexing successful");
       }
@@ -58,11 +59,11 @@ export class SearchService {
       body: {
         id: article.id,
         title: article.title,
-        slug: article.slug,
         description: article.description,
         author: article.author.username,
         blockText: article.blocks.map((block) => block.data.text),
       },
+      type: this.articleType,
     });
   }
 
@@ -74,7 +75,7 @@ export class SearchService {
           query: {
             multi_match: {
               query: search,
-              fields: ["title", "description"],
+              fields: ["title", "description", "author", "blockText"],
             },
           },
         },
