@@ -6,6 +6,7 @@ import {
   ArticleUpdatedEventHandler,
   CommentCreatedEventHandler,
   CommentDeletedEventHandler,
+  IndexingArticleEventHandler,
 } from "./handlers";
 
 export * from "./handlers";
@@ -19,4 +20,6 @@ export const EventHandlers = [
   ArticleUnFavoritedEventHandler,
   CommentCreatedEventHandler,
   CommentDeletedEventHandler,
+
+  IndexingArticleEventHandler,
 ];

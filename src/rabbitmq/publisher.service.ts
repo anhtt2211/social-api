@@ -5,6 +5,8 @@ import {
   ARTICLE_DL_ROUTE_KEY,
   ARTICLE_QUEUE,
   ARTICLE_ROUTE_KEY,
+  ES_ARTICLE_QUEUE,
+  ES_ARTICLE_ROUTE_KEY,
   PROFILE_DL_ROUTE_KEY,
   PROFILE_QUEUE,
   PROFILE_ROUTE_KEY,
@@ -93,6 +95,25 @@ export class PublisherService {
 
         Logger.log(
           `Message type: ${message.type} sent to exchange ${RABBIT_EXCHANGE} with route key ${PROFILE_ROUTE_KEY}`
+        );
+        break;
+      case ES_ARTICLE_QUEUE:
+        await this.channel.bindQueue(
+          ES_ARTICLE_QUEUE,
+          RABBIT_EXCHANGE,
+          ES_ARTICLE_ROUTE_KEY
+        );
+        this.channel.publish(
+          RABBIT_EXCHANGE,
+          ES_ARTICLE_ROUTE_KEY,
+          Buffer.from(JSON.stringify(message)),
+          {
+            persistent: true,
+          }
+        );
+
+        Logger.log(
+          `Message type: ${message.type} sent to exchange ${RABBIT_EXCHANGE} with route key ${ES_ARTICLE_ROUTE_KEY}`
         );
         break;
       default:

@@ -15,6 +15,7 @@ import { CommandModule } from "./commands/command.module";
 import { EventModule } from "./events/event.module";
 import { QueryModule } from "./queries/query.module";
 import { RedisModule } from "../redis/redis.module";
+import { ElasticSearchArticleProjection } from "./elastic-search-article.projection";
 
 @Module({
   imports: [
@@ -26,7 +27,11 @@ import { RedisModule } from "../redis/redis.module";
     RabbitMqModule,
     RedisModule,
   ],
-  providers: [ArticleService, ArticleProjection],
+  providers: [
+    ArticleService,
+    ArticleProjection,
+    ElasticSearchArticleProjection,
+  ],
   controllers: [ArticleController],
 })
 export class ArticleModule implements NestModule {

@@ -13,6 +13,6 @@ import { SearchService } from "./elastic-search.service";
     }),
   ],
   providers: [SearchService],
-  exports: [EsModule],
+  exports: [EsModule, SearchService],
 })
 export class ElasticSearchModule {}
