@@ -4,5 +4,4 @@ export * from "./find-one-article.handler";
 
 export * from "./find-comments.handler";
 
-export * from "./indexing-article.handler";
 export * from "./search-article.handler";

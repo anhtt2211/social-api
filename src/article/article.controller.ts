@@ -28,12 +28,18 @@ import {
   UpdateArticleCommand,
 } from "./commands";
 import { ArticleRO, ArticlesRO, CommentsRO } from "./core";
-import { ArticleFilters, CreateArticleDto, CreateCommentDto } from "./dto";
+import {
+  ArticleFilters,
+  CreateArticleDto,
+  CreateCommentDto,
+  SearchArticleDto,
+} from "./dto";
 import {
   FindAllArticleQuery,
   FindCommentQuery,
   FindFeedArticleQuery,
   FindOneArticleQuery,
+  SearchArticleQuery,
 } from "./queries";
 
 @ApiBearerAuth()
@@ -44,6 +50,16 @@ export class ArticleController {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus
   ) {}
+  @ApiOperation({ summary: "Unfavorite article" })
+  @ApiResponse({
+    status: 201,
+    description: "The article has been successfully unfavorited.",
+  })
+  @ApiResponse({ status: 403, description: "Forbidden." })
+  @Get("search")
+  async search(@Query() query: SearchArticleDto) {
+    return this.queryBus.execute(new SearchArticleQuery(query));
+  }
 
   @ApiOperation({ summary: "Get all articles" })
   @ApiResponse({ status: 200, description: "Return all articles." })
