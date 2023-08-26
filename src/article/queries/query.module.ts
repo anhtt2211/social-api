@@ -9,6 +9,7 @@ import { UserModule } from "../../user/user.module";
 import { ArticleEntity } from "../core";
 import { CommentEntity } from "../core/entities/comment.entity";
 import { ArticleService } from "../services/article.service";
+import { ElasticSearchModule } from "../../elastic-search/elastic-search.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ArticleService } from "../services/article.service";
     ),
     UserModule,
     CqrsModule,
+    ElasticSearchModule,
   ],
   providers: [ArticleService, ...QueryHandlers],
   controllers: [],
