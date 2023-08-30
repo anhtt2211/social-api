@@ -15,10 +15,18 @@ export class SearchService {
         { index: { _index: this.articleIndexes, _id: article.id } },
         {
           id: article.id,
-          title: article.title,
+          slug: article.slug,
           description: article.description,
-          author: article.author.username,
-          blockText: article.blocks.map((block) => block.data.text).join(" "),
+          blocks: article.blocks.map((block) => block.data.text),
+          tagList: article.tagList,
+          createdAt: article.created,
+          updatedAt: article.updated,
+          favoritesCount: article.favoriteCount,
+          author: {
+            username: article.author?.username,
+            bio: article.author?.bio,
+            image: article.author?.image,
+          },
         },
       ])
       .reduce((acc, val) => acc.concat(val), []);
@@ -58,10 +66,18 @@ export class SearchService {
       index: this.articleIndexes,
       body: {
         id: article.id,
-        title: article.title,
+        slug: article.slug,
         description: article.description,
-        author: article.author.username,
-        blockText: article.blocks.map((block) => block.data.text),
+        blocks: article.blocks.map((block) => block.data.text),
+        tagList: article.tagList,
+        createdAt: article.created,
+        updatedAt: article.updated,
+        favoritesCount: article.favoriteCount,
+        author: {
+          username: article.author?.username,
+          bio: article.author?.bio,
+          image: article.author?.image,
+        },
       },
       type: this.articleType,
     });
@@ -75,7 +91,7 @@ export class SearchService {
           query: {
             multi_match: {
               query: search,
-              fields: ["title", "description", "author", "blockText"],
+              fields: ["title", "description", "author", "blocks.data.text"],
             },
           },
         },

@@ -41,6 +41,7 @@ import {
   FindOneArticleQuery,
   SearchArticleQuery,
 } from "./queries";
+import { IndexingArticleQuery } from "./queries/handlers/indexing-article.handler";
 
 @ApiBearerAuth()
 @ApiTags("articles")
@@ -50,6 +51,18 @@ export class ArticleController {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus
   ) {}
+
+  @ApiOperation({ summary: "Unfavorite article" })
+  @ApiResponse({
+    status: 201,
+    description: "The article has been successfully unfavorited.",
+  })
+  @ApiResponse({ status: 403, description: "Forbidden." })
+  @Get("index")
+  async index() {
+    return this.queryBus.execute(new IndexingArticleQuery());
+  }
+
   @ApiOperation({ summary: "Unfavorite article" })
   @ApiResponse({
     status: 201,

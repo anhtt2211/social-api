@@ -15,7 +15,7 @@ import { ElasticSearchModule } from "../../elastic-search/elastic-search.module"
       READ_CONNECTION
     ),
     CqrsModule,
-    ElasticSearchModule
+    ElasticSearchModule,
   ],
   providers: [...EventHandlers],
   controllers: [],

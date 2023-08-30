@@ -1,3 +1,4 @@
+import { IndexingArticleQueryHandler } from "./handlers/indexing-article.handler";
 import {
   FindAllArticleQueryHandler,
   FindCommentQueryHandler,
@@ -14,6 +15,6 @@ export const QueryHandlers = [
   FindFeedArticleQueryHandler,
   FindOneArticleQueryHandler,
   FindCommentQueryHandler,
-
+  IndexingArticleQueryHandler,
   SearchArticleQueryHandler,
 ];

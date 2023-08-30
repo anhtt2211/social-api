@@ -9,13 +9,18 @@ import { ApplicationModule } from "./app.module";
 import { ArticleProjection } from "./article/article.projection";
 import { UserProjection } from "./user/user.projection";
 import { ProfileProjection } from "./profile/profile.projection";
+import { ElasticSearchArticleProjection } from "./article/elastic-search-article.projection";
 
 async function executeProjection(app: INestApplication) {
   const articleProjection = app.get(ArticleProjection);
+  const elasticSearchArticleProjection = app.get(
+    ElasticSearchArticleProjection
+  );
   const userProjection = app.get(UserProjection);
   const profileProjection = app.get(ProfileProjection);
 
   await articleProjection.handle();
+  await elasticSearchArticleProjection.handle();
   await userProjection.handle();
   await profileProjection.handle();
 }
@@ -25,7 +30,7 @@ async function bootstrap() {
     const numWorkers = os.cpus().length;
     console.log(`Master cluster setting up ${numWorkers} workers...`);
 
-    for (let i = 0; i < numWorkers; i++) {
+    for (let i = 0; i < 1; i++) {
       cluster.fork();
     }
 

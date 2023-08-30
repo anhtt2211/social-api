@@ -6,16 +6,16 @@ import {
 } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { RabbitMqModule } from "../rabbitmq/rabbitmq.module";
+import { RedisModule } from "../redis/redis.module";
 import { AuthMiddleware } from "../user/auth.middleware";
 import { UserModule } from "../user/user.module";
 import { ArticleController } from "./article.controller";
 import { ArticleProjection } from "./article.projection";
-import { ArticleService } from "./services/article.service";
 import { CommandModule } from "./commands/command.module";
+import { ElasticSearchArticleProjection } from "./elastic-search-article.projection";
 import { EventModule } from "./events/event.module";
 import { QueryModule } from "./queries/query.module";
-import { RedisModule } from "../redis/redis.module";
-import { ElasticSearchArticleProjection } from "./elastic-search-article.projection";
+import { ArticleService } from "./services/article.service";
 
 @Module({
   imports: [

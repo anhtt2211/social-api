@@ -8,5 +8,5 @@ export class SearchArticleDto {
   offset?: number;
 
   @ApiProperty({ required: true })
-  search?: string;
+  search: string;
 }

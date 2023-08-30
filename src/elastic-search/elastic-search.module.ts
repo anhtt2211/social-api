@@ -5,7 +5,9 @@ import { SearchService } from "./elastic-search.service";
 @Module({
   imports: [
     EsModule.register({
-      node: process.env.ELASTICSEARCH_NODE,
+      cloud: {
+        id: process.env.ELASTICSEARCH_CLOUD_ID,
+      },
       auth: {
         username: process.env.ELASTICSEARCH_USERNAME,
         password: process.env.ELASTICSEARCH_PASSWORD,
