@@ -1,7 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { json, urlencoded } from "express";
-import { INestApplication } from "@nestjs/common";
+import { INestApplication, NestApplicationOptions } from "@nestjs/common";
 import * as cluster from "cluster";
 import * as os from "os";
 
@@ -41,7 +41,11 @@ async function bootstrap() {
       cluster.fork();
     });
   } else {
-    const appOptions = { cors: true };
+    const appOptions: NestApplicationOptions = {
+      cors: {
+        origin: [process.env.CORS_ORIGIN],
+      },
+    };
     const app = await NestFactory.create(ApplicationModule, appOptions);
     app.use(json({ limit: "50mb" }));
     app.use(urlencoded({ extended: true, limit: "50mb" }));
