@@ -5,17 +5,18 @@ import {
   RequestMethod,
 } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
+
 import { RabbitMqModule } from "../rabbitmq/rabbitmq.module";
 import { RedisModule } from "../redis/redis.module";
 import { AuthMiddleware } from "../shared/middleware/auth.middleware";
 import { UserModule } from "../user/user.module";
-import { ArticleController } from "./article.controller";
-import { ArticleProjection } from "./article.projection";
-import { CommandModule } from "./commands/command.module";
+import { ArticleProjection } from "./application/article.projection";
+import { CommandModule } from "./application/commands/command.module";
+import { EventModule } from "./application/events/event.module";
+import { QueryModule } from "./application/queries/query.module";
+import { ArticleService } from "./application/services/article.service";
+import { ArticleController } from "./presentation/article.controller";
 import { ElasticSearchArticleProjection } from "./elastic-search-article.projection";
-import { EventModule } from "./events/event.module";
-import { QueryModule } from "./queries/query.module";
-import { ArticleService } from "./services/article.service";
 
 @Module({
   imports: [
