@@ -1,12 +1,12 @@
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { TypeOrmModule } from "@nestjs/typeorm";
+
 import { QueryHandlers } from ".";
-import { READ_CONNECTION } from "../../config";
-import { UserEntity } from "../../user/core/entities/user.entity";
-import { UserModule } from "../../user/user.module";
-import { FollowsEntity } from "../core/entities/follows.entity";
-import { ProfileController } from "../profile.controller";
+import { READ_CONNECTION } from "../../../config";
+import { UserEntity } from "../../../user/core/entities/user.entity";
+import { UserModule } from "../../../user/user.module";
+import { FollowsEntity } from "../../core/entities/follows.entity";
 import { ProfileService } from "../services/profile.service";
 
 @Module({
@@ -16,7 +16,7 @@ import { ProfileService } from "../services/profile.service";
     CqrsModule,
   ],
   providers: [ProfileService, ...QueryHandlers],
-  controllers: [ProfileController],
+  controllers: [],
   exports: [],
 })
 export class QueryModule {}
