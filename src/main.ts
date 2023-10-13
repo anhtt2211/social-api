@@ -6,9 +6,10 @@ import { json, urlencoded } from "express";
 import * as os from "os";
 
 import { ApplicationModule } from "./app.module";
-import { ArticleProjection } from "./article/application/projections";
-import { ProfileProjection } from "./profile/application/projections";
-import { UserProjection } from "./user/application/projections";
+import { ArticleProjection } from "./article/application/article.projection";
+import { ProfileProjection } from "./profile/application/profile.projection";
+import { UserProjection } from "./user/application/user.projection";
+import { ElasticSearchArticleProjection } from "./article/elastic-search-article.projection";
 
 async function executeProjection(app: INestApplication) {
   const articleProjection = app.get(ArticleProjection);
