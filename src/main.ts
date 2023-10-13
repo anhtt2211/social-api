@@ -1,14 +1,14 @@
-import { NestFactory } from "@nestjs/core";
-import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
-import { json, urlencoded } from "express";
 import { INestApplication, NestApplicationOptions } from "@nestjs/common";
+import { NestFactory } from "@nestjs/core";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import * as cluster from "cluster";
+import { json, urlencoded } from "express";
 import * as os from "os";
 
 import { ApplicationModule } from "./app.module";
-import { ArticleProjection } from "./article/article.projection";
+import { ArticleProjection } from "./article/application/article.projection";
+import { ProfileProjection } from "./profile/application/profile.projection";
 import { UserProjection } from "./user/application/user.projection";
-import { ProfileProjection } from "./profile/profile.projection";
 import { ElasticSearchArticleProjection } from "./article/elastic-search-article.projection";
 
 async function executeProjection(app: INestApplication) {
@@ -30,7 +30,7 @@ async function bootstrap() {
     const numWorkers = os.cpus().length;
     console.log(`Master cluster setting up ${numWorkers} workers...`);
 
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < numWorkers; i++) {
       cluster.fork();
     }
 
