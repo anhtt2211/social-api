@@ -3,14 +3,14 @@ import { QueryHandler, IQueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import * as argon2 from "argon2";
-import { READ_CONNECTION } from "../../../config";
-import { LoginUserDto } from "../../dto";
-import { UserEntity } from "../../core/entities/user.entity";
-import { UserRO } from "../../core/interfaces/user.interface";
+import { READ_CONNECTION } from "../../../../config";
+import { LoginUserDto } from "../../../core/dto";
+import { UserEntity } from "../../../core/entities/user.entity";
+import { UserRO } from "../../../core/interfaces/user.interface";
 import { UserService } from "../../services/user.service";
 import { LoginQuery } from "../impl";
-import { RedisService } from "../../../redis/redis.service";
-import { TIME_TO_LIVE } from "../../../redis/redis.constant";
+import { RedisService } from "../../../../redis/redis.service";
+import { TIME_TO_LIVE } from "../../../../redis/redis.constant";
 
 @QueryHandler(LoginQuery)
 export class LoginQueryHandler implements IQueryHandler<LoginQuery> {

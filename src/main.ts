@@ -7,7 +7,7 @@ import * as os from "os";
 
 import { ApplicationModule } from "./app.module";
 import { ArticleProjection } from "./article/article.projection";
-import { UserProjection } from "./user/user.projection";
+import { UserProjection } from "./user/application/user.projection";
 import { ProfileProjection } from "./profile/profile.projection";
 import { ElasticSearchArticleProjection } from "./article/elastic-search-article.projection";
 

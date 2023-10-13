@@ -5,7 +5,7 @@ import {
   RequestMethod,
 } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { AuthMiddleware } from "../user/auth.middleware";
+import { AuthMiddleware } from "../shared/middleware/auth.middleware";
 import { UserModule } from "../user/user.module";
 import { DropboxService } from "./services/dropbox.service";
 import { MediaController } from "./media.controller";
