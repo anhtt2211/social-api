@@ -1,13 +1,13 @@
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { TypeOrmModule } from "@nestjs/typeorm";
+
 import { CommandHandlers } from ".";
-import { WRITE_CONNECTION } from "../../config";
-import { RabbitMqModule } from "../../rabbitmq/rabbitmq.module";
-import { UserEntity } from "../../user/core/entities/user.entity";
-import { UserModule } from "../../user/user.module";
-import { FollowsEntity } from "../core/entities/follows.entity";
-import { ProfileController } from "../profile.controller";
+import { WRITE_CONNECTION } from "../../../config";
+import { RabbitMqModule } from "../../../rabbitmq/rabbitmq.module";
+import { UserEntity } from "../../../user/core/entities/user.entity";
+import { UserModule } from "../../../user/user.module";
+import { FollowsEntity } from "../../core/entities/follows.entity";
 import { ProfileService } from "../services/profile.service";
 
 @Module({
@@ -18,7 +18,7 @@ import { ProfileService } from "../services/profile.service";
     RabbitMqModule,
   ],
   providers: [ProfileService, ...CommandHandlers],
-  controllers: [ProfileController],
+  controllers: [],
   exports: [],
 })
 export class CommandModule {}
