@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { connect, Connection } from "amqplib";
+
 import { ConsumerService } from "./consumer.service";
 import { PublisherService } from "./publisher.service";
 

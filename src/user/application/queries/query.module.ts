@@ -1,12 +1,12 @@
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { TypeOrmModule } from "@nestjs/typeorm";
+
 import { QueryHandlers } from ".";
-import { READ_CONNECTION } from "../../config";
-import { UserController } from "../user.controller";
-import { UserEntity } from "../core";
+import { READ_CONNECTION } from "../../../config";
+import { UserEntity } from "../../core";
 import { UserService } from "../services/user.service";
-import { RedisModule } from "../../redis/redis.module";
+import { RedisModule } from "../../../redis/redis.module";
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { RedisModule } from "../../redis/redis.module";
     RedisModule,
   ],
   providers: [UserService, ...QueryHandlers],
-  controllers: [UserController],
+  controllers: [],
   exports: [UserService],
 })
 export class QueryModule {}

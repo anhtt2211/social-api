@@ -2,12 +2,12 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { WRITE_CONNECTION } from "../../../config";
-import { PublisherService } from "../../../rabbitmq/publisher.service";
-import { USER_QUEUE } from "../../../rabbitmq/rabbitmq.constants";
-import { UserEntity } from "../../core/entities/user.entity";
-import { MessageType } from "../../core/enums/user.enum";
-import { UserRO } from "../../core/interfaces/user.interface";
+import { WRITE_CONNECTION } from "../../../../config";
+import { PublisherService } from "../../../../rabbitmq/publisher.service";
+import { USER_QUEUE } from "../../../../rabbitmq/rabbitmq.constants";
+import { UserEntity } from "../../../core/entities/user.entity";
+import { MessageType } from "../../../core/enums/user.enum";
+import { UserRO } from "../../../core/interfaces/user.interface";
 import { UserService } from "../../services/user.service";
 import { UpdateUserCommand } from "../impl";
 

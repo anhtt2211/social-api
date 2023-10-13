@@ -17,7 +17,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { User } from "../user/user.decorator";
+import { User } from "../shared/middleware/user.decorator";
 import {
   CreateArticleCommand,
   CreateCommentCommand,

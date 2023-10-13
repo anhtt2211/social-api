@@ -6,7 +6,7 @@ import {
 } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { RabbitMqModule } from "../rabbitmq/rabbitmq.module";
-import { AuthMiddleware } from "../user/auth.middleware";
+import { AuthMiddleware } from "../shared/middleware/auth.middleware";
 import { UserModule } from "../user/user.module";
 import { ArticleController } from "./article.controller";
 import { ArticleProjection } from "./article.projection";

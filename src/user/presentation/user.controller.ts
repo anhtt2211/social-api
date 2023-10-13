@@ -1,12 +1,13 @@
 import { Body, Controller, Get, Post, Put, UsePipes } from "@nestjs/common";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { ValidationPipe } from "../shared/pipes/validation.pipe";
-import { CreateUserDto, LoginUserDto, UpdateUserDto } from "./dto";
-import { CreateUserCommand, UpdateUserCommand } from "./commands";
-import { FindUserByEmailQuery, FindUserById, LoginQuery } from "./queries";
-import { User } from "./user.decorator";
-import { UserRO } from "./core/interfaces/user.interface";
+
+import { User } from "../../shared/middleware/user.decorator";
+import { ValidationPipe } from "../../shared/pipes/validation.pipe";
+import { CreateUserCommand, UpdateUserCommand } from "../application/commands";
+import { FindUserById, LoginQuery } from "../application/queries";
+import { CreateUserDto, LoginUserDto, UpdateUserDto } from "../core/dto";
+import { UserRO } from "../core/interfaces/user.interface";
 
 @ApiBearerAuth()
 @ApiTags("user")

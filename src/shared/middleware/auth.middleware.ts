@@ -4,10 +4,10 @@ import { QueryBus } from "@nestjs/cqrs";
 import { NextFunction, Request, Response } from "express";
 import { IncomingHttpHeaders } from "http";
 import * as jwt from "jsonwebtoken";
-import { SECRET } from "../config";
-import { FindUserById } from "./queries";
-import { UserData } from "./core/interfaces/user.interface";
-import { RedisService } from "../redis/redis.service";
+import { SECRET } from "../../config";
+import { FindUserById } from "../../user/application/queries";
+import { UserData } from "../../user/core/interfaces/user.interface";
+import { RedisService } from "../../redis/redis.service";
 
 interface IRequestCustom extends Request {
   user: UserData;

@@ -1,7 +1,7 @@
 import { Controller, Delete, Get, Param, Post } from "@nestjs/common";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { User } from "../user/user.decorator";
+import { User } from "../shared/middleware/user.decorator";
 import { FollowProfileCommand, UnFollowProfileCommand } from "./commands";
 import { FindProfileQuery } from "./queries";
 import { ProfileRO } from "./core/interfaces/profile.interface";
