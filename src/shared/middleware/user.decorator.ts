@@ -1,6 +1,7 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
-import { SECRET } from "../../config";
 import * as jwt from "jsonwebtoken";
+
+import { JWT_SECRET_KEY } from "../../configs";
 import { CurrentUser } from "../../user/core/interfaces/user.interface";
 
 export const User = createParamDecorator((data: any, ctx: ExecutionContext) => {
@@ -15,7 +16,7 @@ export const User = createParamDecorator((data: any, ctx: ExecutionContext) => {
     ? (req.headers.authorization as string).split(" ")
     : null;
   if (token && token[1]) {
-    const decoded: CurrentUser = jwt.verify(token[1], SECRET);
+    const decoded: CurrentUser = jwt.verify(token[1], JWT_SECRET_KEY);
     return !!data ? decoded[data] : decoded;
   }
 });
