@@ -1,6 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { READ_CONNECTION } from "../config";
+import { READ_CONNECTION } from "../configs";
 import { UserModule } from "../user/user.module";
 import { TagController } from "./tag.controller";
 import { TagEntity } from "./core/entities/tag.entity";
