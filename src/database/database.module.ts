@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import * as dotenv from "dotenv";
 
-import { READ_CONNECTION, WRITE_CONNECTION } from "../config";
+import { READ_CONNECTION, WRITE_CONNECTION } from "../configs";
 import { join } from "path";
 
 dotenv.config();
