@@ -4,10 +4,11 @@ import { QueryBus } from "@nestjs/cqrs";
 import { NextFunction, Request, Response } from "express";
 import { IncomingHttpHeaders } from "http";
 import * as jwt from "jsonwebtoken";
-import { SECRET } from "../../config";
+
+import { JWT_SECRET_KEY } from "../../configs";
+import { RedisService } from "../../redis/redis.service";
 import { FindUserById } from "../../user/application/queries";
 import { UserData } from "../../user/core/interfaces/user.interface";
-import { RedisService } from "../../redis/redis.service";
 
 interface IRequestCustom extends Request {
   user: UserData;
@@ -25,7 +26,7 @@ export class AuthMiddleware implements NestMiddleware {
     const authHeaders = req.headers.authorization;
     if (authHeaders && (authHeaders as string).split(" ")[1]) {
       const token = (authHeaders as string).split(" ")[1];
-      const decoded: any = jwt.verify(token, SECRET);
+      const decoded: any = jwt.verify(token, JWT_SECRET_KEY);
 
       const _user = await this.redisCacheService.get(decoded.id);
       if (_user) {

@@ -3,7 +3,7 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { validate } from "class-validator";
 import { getRepository, Repository } from "typeorm";
-import { WRITE_CONNECTION } from "../../../../config";
+import { WRITE_CONNECTION } from "../../../../configs";
 import { PublisherService } from "../../../../rabbitmq/publisher.service";
 import { USER_QUEUE } from "../../../../rabbitmq/rabbitmq.constants";
 import { UserEntity } from "../../../core/entities/user.entity";

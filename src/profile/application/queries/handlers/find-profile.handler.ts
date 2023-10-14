@@ -1,7 +1,7 @@
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { READ_CONNECTION } from "../../../../config";
+import { READ_CONNECTION } from "../../../../configs";
 import { UserEntity } from "../../../../user/core/entities/user.entity";
 import { FollowsEntity } from "../../../core/entities/follows.entity";
 import {

@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { READ_CONNECTION } from "../config";
+import { READ_CONNECTION } from "../configs";
 import { TagEntity } from "./core/entities/tag.entity";
 import { TagRO } from "./core/interfaces/tag.interface";
 

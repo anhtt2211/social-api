@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { READ_CONNECTION } from "../../../config";
+import { READ_CONNECTION } from "../../../configs";
 import { UserEntity } from "../../core";
 import { EventHandlers } from ".";
 

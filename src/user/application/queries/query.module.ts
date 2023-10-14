@@ -3,7 +3,7 @@ import { CqrsModule } from "@nestjs/cqrs";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { QueryHandlers } from ".";
-import { READ_CONNECTION } from "../../../config";
+import { READ_CONNECTION } from "../../../configs";
 import { UserEntity } from "../../core";
 import { UserService } from "../services/user.service";
 import { RedisModule } from "../../../redis/redis.module";

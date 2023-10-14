@@ -1,7 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { SECRET } from "../../../config";
-import { UserEntity } from "../../core/entities/user.entity";
 const jwt = require("jsonwebtoken");
+
+import { JWT_SECRET_KEY } from "../../../configs";
+import { UserEntity } from "../../core/entities/user.entity";
 
 @Injectable()
 export class UserService {
@@ -19,7 +20,7 @@ export class UserService {
         email: user.email,
         exp: exp.getTime() / 1000,
       },
-      SECRET
+      JWT_SECRET_KEY
     );
   }
 

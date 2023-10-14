@@ -1,7 +1,7 @@
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { READ_CONNECTION } from "../../../../config";
+import { READ_CONNECTION } from "../../../../configs";
 import { RedisService } from "../../../../redis/redis.service";
 import { UserEntity } from "../../../core/entities/user.entity";
 import { UserRO } from "../../../core/interfaces/user.interface";

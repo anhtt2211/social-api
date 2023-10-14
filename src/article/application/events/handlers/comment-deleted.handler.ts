@@ -3,7 +3,7 @@ import { IEventHandler } from "@nestjs/cqrs";
 import { EventsHandler } from "@nestjs/cqrs/dist/decorators/events-handler.decorator";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { READ_CONNECTION } from "../../../../config";
+import { READ_CONNECTION } from "../../../../configs";
 import { CommentEntity } from "../../../core/entities/comment.entity";
 import { CommentDeletedEvent } from "../impl";
 

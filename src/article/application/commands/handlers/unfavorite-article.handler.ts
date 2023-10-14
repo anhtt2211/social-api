@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { WRITE_CONNECTION } from "../../../../config";
+import { WRITE_CONNECTION } from "../../../../configs";
 import { PublisherService } from "../../../../rabbitmq/publisher.service";
 import { ARTICLE_QUEUE } from "../../../../rabbitmq/rabbitmq.constants";
 import { UserEntity } from "../../../../user/core/entities/user.entity";

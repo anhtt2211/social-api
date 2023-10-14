@@ -2,7 +2,7 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { getRepository, Repository } from "typeorm";
-import { READ_CONNECTION } from "../../../../config";
+import { READ_CONNECTION } from "../../../../configs";
 import { FollowsEntity } from "../../../../profile/core/entities/follows.entity";
 import { UserEntity } from "../../../../user/core/entities/user.entity";
 import { ArticleEntity } from "../../../core/entities/article.entity";
