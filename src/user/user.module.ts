@@ -13,7 +13,7 @@ import { CommandModule } from "./application/commands/command.module";
 import { EventModule } from "./application/events/event.module";
 import { QueryModule } from "./application/queries/query.module";
 import { UserService } from "./application/services/user.service";
-import { UserProjection } from "./application/user.projection";
+import { UserProjection } from "./application/projections";
 import { UserController } from "./presentation/user.controller";
 
 @Module({
