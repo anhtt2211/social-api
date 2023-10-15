@@ -11,7 +11,7 @@ import { UserModule } from "../user/user.module";
 import { CommandModule } from "./application/commands/command.module";
 import { EventModule } from "./application/events/event.module";
 import { ProfileController } from "./presentation/profile.controller";
-import { ProfileProjection } from "./application/profile.projection";
+import { ProfileProjection } from "./application/projections";
 import { ProfileService } from "./application/services/profile.service";
 import { QueryModule } from "./application/queries/query.module";
 import { RedisModule } from "../redis/redis.module";
