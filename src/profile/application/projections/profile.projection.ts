@@ -1,12 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { EventBus } from "@nestjs/cqrs";
 
-import { ConsumerService } from "../../rabbitmq/consumer.service";
-import { PROFILE_QUEUE } from "../../rabbitmq/rabbitmq.constants";
-import { IMessage, IProjection } from "../core";
-import { FollowsEntity } from "../core/entities/follows.entity";
-import { MessageType } from "../core/enums/profile.enum";
-import { ProfileFollowedEvent, ProfileUnFollowedEvent } from "./events";
+import { ConsumerService } from "../../../rabbitmq/consumer.service";
+import { PROFILE_QUEUE } from "../../../rabbitmq/rabbitmq.constants";
+import { IMessage, IProjection } from "../../core";
+import { FollowsEntity } from "../../core/entities/follows.entity";
+import { MessageType } from "../../core/enums/profile.enum";
+import { ProfileFollowedEvent, ProfileUnFollowedEvent } from "../events";
 
 @Injectable()
 export class ProfileProjection implements IProjection {
