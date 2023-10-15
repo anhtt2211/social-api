@@ -1,8 +1,8 @@
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { ElasticsearchService } from "@nestjs/elasticsearch";
 
-import { IArticleSearchResult } from "../../core/interfaces/article.interface";
 import { SearchArticleQuery } from "../impl";
+import { IArticleSearchResult } from "../../../core";
 
 @QueryHandler(SearchArticleQuery)
 export class SearchArticleQueryHandler

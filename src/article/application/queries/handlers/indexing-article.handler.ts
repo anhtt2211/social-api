@@ -1,12 +1,10 @@
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-
-import { READ_CONNECTION } from "../../../config";
-import { PublisherService } from "../../../rabbitmq/publisher.service";
-import { ArticleEntity } from "../../core/entities/article.entity";
-import { ES_ARTICLE_QUEUE } from "../../../rabbitmq/rabbitmq.constants";
-import { MessageType } from "../../core";
+import { READ_CONNECTION } from "../../../../configs";
+import { PublisherService } from "../../../../rabbitmq/publisher.service";
+import { ES_ARTICLE_QUEUE } from "../../../../rabbitmq/rabbitmq.constants";
+import { ArticleEntity, MessageType } from "../../../core";
 
 export class IndexingArticleQuery {
   constructor() {}

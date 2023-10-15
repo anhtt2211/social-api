@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { EventBus } from "@nestjs/cqrs";
-import { ConsumerService } from "../rabbitmq/consumer.service";
-import { ES_ARTICLE_QUEUE } from "../rabbitmq/rabbitmq.constants";
-import { IMessage, IProjection } from "./core";
-import { MessageType } from "./core/enums/article.enum";
-import { IndexingArticleEvent } from "./events";
+import { ConsumerService } from "../../../rabbitmq/consumer.service";
+import { ES_ARTICLE_QUEUE } from "../../../rabbitmq/rabbitmq.constants";
+import { IMessage, IProjection } from "../../core";
+import { MessageType } from "../../core/enums/article.enum";
+import { IndexingArticleEvent } from "../events";
 
 @Injectable()
 export class ElasticSearchArticleProjection implements IProjection {

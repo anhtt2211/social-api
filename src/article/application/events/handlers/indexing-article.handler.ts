@@ -1,8 +1,7 @@
 import { IEventHandler } from "@nestjs/cqrs";
 import { EventsHandler } from "@nestjs/cqrs/dist/decorators/events-handler.decorator";
-
-import { ArticleEntity } from "../../core/entities/article.entity";
-import { SearchService } from "../../../elastic-search/elastic-search.service";
+import { ArticleEntity } from "../../../core";
+import { SearchService } from "../../../../elastic-search/elastic-search.service";
 
 export class IndexingArticleEvent {
   constructor(public readonly articles: ArticleEntity[]) {}
