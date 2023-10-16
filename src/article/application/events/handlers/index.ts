@@ -4,5 +4,7 @@ export * from "./article-deleted.handler";
 export * from "./article-favorited.handler";
 export * from "./article-unfavorited.handler";
 
+export * from "./indexing-article.handler";
+
 export * from "./comment-created.handler";
 export * from "./comment-deleted.handler";

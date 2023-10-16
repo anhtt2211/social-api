@@ -1,8 +1,10 @@
+import { IndexingArticleQueryHandler } from "./handlers/indexing-article.handler";
 import {
   FindAllArticleQueryHandler,
   FindCommentQueryHandler,
   FindFeedArticleQueryHandler,
   FindOneArticleQueryHandler,
+  SearchArticleQueryHandler,
 } from "./handlers";
 
 export * from "./handlers";
@@ -13,4 +15,6 @@ export const QueryHandlers = [
   FindFeedArticleQueryHandler,
   FindOneArticleQueryHandler,
   FindCommentQueryHandler,
+  IndexingArticleQueryHandler,
+  SearchArticleQueryHandler,
 ];

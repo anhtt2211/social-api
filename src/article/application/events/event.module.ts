@@ -6,6 +6,7 @@ import { UserEntity } from "../../../user/core/entities/user.entity";
 import { ArticleEntity, BlockEntity } from "../../core";
 import { CommentEntity } from "../../core/entities/comment.entity";
 import { EventHandlers } from ".";
+import { ElasticSearchModule } from "../../../elastic-search/elastic-search.module";
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { EventHandlers } from ".";
       READ_CONNECTION
     ),
     CqrsModule,
+    ElasticSearchModule,
   ],
   providers: [...EventHandlers],
   controllers: [],

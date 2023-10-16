@@ -27,18 +27,21 @@ import {
   UnFavoriteArticleCommand,
   UpdateArticleCommand,
 } from "../application/commands";
-import { ArticleRO, ArticlesRO, CommentsRO } from "../core";
-import {
-  ArticleFilters,
-  CreateArticleDto,
-  CreateCommentDto,
-} from "../core/dto";
 import {
   FindAllArticleQuery,
   FindCommentQuery,
   FindFeedArticleQuery,
   FindOneArticleQuery,
+  SearchArticleQuery,
 } from "../application/queries";
+import { IndexingArticleQuery } from "../application/queries/handlers/indexing-article.handler";
+import { ArticleRO, ArticlesRO, CommentsRO } from "../core";
+import {
+  ArticleFilters,
+  CreateArticleDto,
+  CreateCommentDto,
+  SearchArticleDto,
+} from "../core/dto";
 
 @ApiBearerAuth()
 @ApiTags("articles")
@@ -48,6 +51,28 @@ export class ArticleController {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus
   ) {}
+
+  @ApiOperation({ summary: "Unfavorite article" })
+  @ApiResponse({
+    status: 201,
+    description: "The article has been successfully unfavorited.",
+  })
+  @ApiResponse({ status: 403, description: "Forbidden." })
+  @Get("index")
+  async index() {
+    return this.queryBus.execute(new IndexingArticleQuery());
+  }
+
+  @ApiOperation({ summary: "Unfavorite article" })
+  @ApiResponse({
+    status: 201,
+    description: "The article has been successfully unfavorited.",
+  })
+  @ApiResponse({ status: 403, description: "Forbidden." })
+  @Get("search")
+  async search(@Query() query: SearchArticleDto) {
+    return this.queryBus.execute(new SearchArticleQuery(query));
+  }
 
   @ApiOperation({ summary: "Get all articles" })
   @ApiResponse({ status: 200, description: "Return all articles." })

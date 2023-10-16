@@ -16,6 +16,7 @@ import { EventModule } from "./application/events/event.module";
 import { QueryModule } from "./application/queries/query.module";
 import { ArticleService } from "./application/services/article.service";
 import { ArticleController } from "./presentation/article.controller";
+import { ElasticSearchArticleProjection } from "./application/projections/elastic-search-article.projection";
 
 @Module({
   imports: [
@@ -27,7 +28,11 @@ import { ArticleController } from "./presentation/article.controller";
     RabbitMqModule,
     RedisModule,
   ],
-  providers: [ArticleService, ArticleProjection],
+  providers: [
+    ArticleService,
+    ArticleProjection,
+    ElasticSearchArticleProjection,
+  ],
   controllers: [ArticleController],
 })
 export class ArticleModule implements NestModule {

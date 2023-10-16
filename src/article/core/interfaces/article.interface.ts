@@ -1,7 +1,7 @@
-import { BlockEntity } from "../entities/block.entity";
-import { IBlock } from "./block.interface";
 import { ProfileData } from "../../../profile/core/interfaces/profile.interface";
 import { IUser } from "../../../user/core/interfaces/user.interface";
+import { BlockEntity } from "../entities/block.entity";
+import { IBlock } from "./block.interface";
 
 // export interface Comment {
 //   id: number;
@@ -62,4 +62,21 @@ export interface IComment {
   updated?: Date;
   article?: IArticle;
   author?: IUser | ProfileData;
+}
+
+interface IArticleElasticSearch {
+  id: string;
+  title: string;
+  description: string;
+  author: string;
+  blockText: string;
+}
+
+export interface IArticleSearchResult {
+  hits: {
+    total: number;
+    hits: Array<{
+      _source: ArticleData;
+    }>;
+  };
 }

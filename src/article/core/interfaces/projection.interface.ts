@@ -7,6 +7,7 @@ export interface IMessage {
   type: MessageType;
   payload: {
     article?: ArticleEntity;
+    articles?: ArticleEntity[];
     user?: UserEntity;
     slug?: string;
     userId?: number;

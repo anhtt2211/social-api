@@ -6,16 +6,23 @@ import { json, urlencoded } from "express";
 import * as os from "os";
 
 import { ApplicationModule } from "./app.module";
-import { ArticleProjection } from "./article/application/projections";
-import { ProfileProjection } from "./profile/application/projections";
+import {
+  ArticleProjection,
+  ElasticSearchArticleProjection,
+} from "./article/application/projections";
 import { UserProjection } from "./user/application/projections";
+import { ProfileProjection } from "./profile/application/projections";
 
 async function executeProjection(app: INestApplication) {
   const articleProjection = app.get(ArticleProjection);
+  const elasticSearchArticleProjection = app.get(
+    ElasticSearchArticleProjection
+  );
   const userProjection = app.get(UserProjection);
   const profileProjection = app.get(ProfileProjection);
 
   await articleProjection.handle();
+  await elasticSearchArticleProjection.handle();
   await userProjection.handle();
   await profileProjection.handle();
 }

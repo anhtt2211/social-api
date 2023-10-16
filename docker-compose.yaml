@@ -76,6 +76,27 @@ services:
     networks:
       - social-network
 
+  elasticsearch:
+    container_name: social-es
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.0
+    environment:
+      - node.name=elasticsearch
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=elasticsearch
+      - cluster.initial_master_nodes=elasticsearch
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+    volumes:
+      - /data/elasticsearch/
+    networks:
+      - social-network
+
 networks:
   social-network:
     driver: bridge

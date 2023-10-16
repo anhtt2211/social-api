@@ -10,6 +10,8 @@ import { UserModule } from "../../../user/user.module";
 import { ArticleEntity } from "../../core";
 import { CommentEntity } from "../../core/entities/comment.entity";
 import { ArticleService } from "../services/article.service";
+import { ElasticSearchModule } from "../../../elastic-search/elastic-search.module";
+import { RabbitMqModule } from "../../../rabbitmq/rabbitmq.module";
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { ArticleService } from "../services/article.service";
     ),
     UserModule,
     CqrsModule,
+    ElasticSearchModule,
+    RabbitMqModule,
   ],
   providers: [ArticleService, ...QueryHandlers],
   controllers: [],
