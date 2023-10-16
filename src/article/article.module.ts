@@ -15,7 +15,8 @@ import { CommandModule } from "./application/commands/command.module";
 import { EventModule } from "./application/events/event.module";
 import { QueryModule } from "./application/queries/query.module";
 import { ArticleService } from "./application/services/article.service";
-import { ArticleController } from "./presentation/article.controller";
+import { ArticleController } from "./presentation/rest";
+import { ArticleRmq } from "./presentation/rmq";
 
 @Module({
   imports: [
@@ -28,7 +29,7 @@ import { ArticleController } from "./presentation/article.controller";
     RedisModule,
   ],
   providers: [ArticleService, ArticleProjection],
-  controllers: [ArticleController],
+  controllers: [ArticleController, ArticleRmq],
 })
 export class ArticleModule implements NestModule {
   public configure(consumer: MiddlewareConsumer) {
