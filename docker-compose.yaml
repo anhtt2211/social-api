@@ -14,10 +14,10 @@ services:
       - rabbitmq
       - redis
     env_file:
-      - .env
-    environment:
-      - NODE_ENV=staging
-      - DATABASE_HOST=host.docker.internal
+      - .env.docker
+    networks:
+      - social-network
+
   social-api-2:
     build:
       context: .
@@ -31,10 +31,9 @@ services:
       - rabbitmq
       - redis
     env_file:
-      - .env
-    environment:
-      - NODE_ENV=staging
-      - DATABASE_HOST=host.docker.internal
+      - .env.docker
+    networks:
+      - social-network
 
   db:
     container_name: social-postgres
@@ -46,17 +45,26 @@ services:
       - /data/postgres/
     ports:
       - 5432:5432
+    networks:
+      - social-network
+
   rabbitmq:
     container_name: social-rabbitmq
     image: rabbitmq:3-management
     ports:
       - "15672:15672"
       - "5672:5672"
+    networks:
+      - social-network
+
   redis:
     container_name: social-redis
     image: "redis:alpine"
     ports:
       - "6379:6379"
+    networks:
+      - social-network
+
   nginx:
     container_name: social-nginx
     build: ./nginx
@@ -65,3 +73,9 @@ services:
     depends_on:
       - social-api-1
       - social-api-2
+    networks:
+      - social-network
+
+networks:
+  social-network:
+    driver: bridge
