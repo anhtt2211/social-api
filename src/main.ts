@@ -1,14 +1,16 @@
 import { INestApplication, NestApplicationOptions } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
+import { RmqOptions, Transport } from "@nestjs/microservices";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import * as cluster from "cluster";
 import { json, urlencoded } from "express";
 import * as os from "os";
 
 import { ApplicationModule } from "./app.module";
-import { ArticleProjection } from "./article/application/article.projection";
-import { ProfileProjection } from "./profile/application/profile.projection";
-import { UserProjection } from "./user/application/user.projection";
+import { ArticleProjection } from "./article/application/projections";
+import { ARTICLE_QUEUE, PROFILE_QUEUE, USER_QUEUE } from "./configs";
+import { ProfileProjection } from "./profile/application/projections";
+import { UserProjection } from "./user/application/projections";
 
 async function executeProjection(app: INestApplication) {
   const articleProjection = app.get(ArticleProjection);
@@ -25,7 +27,7 @@ async function bootstrap() {
     const numWorkers = os.cpus().length;
     console.log(`Master cluster setting up ${numWorkers} workers...`);
 
-    for (let i = 0; i < numWorkers; i++) {
+    for (let i = 0; i < 1; i++) {
       cluster.fork();
     }
 
@@ -51,7 +53,38 @@ async function bootstrap() {
     app.use(urlencoded({ extended: true, limit: "50mb" }));
     app.setGlobalPrefix("api");
 
-    await executeProjection(app);
+    app.connectMicroservice<RmqOptions>({
+      transport: Transport.RMQ,
+      options: {
+        urls: [process.env.RABBITMQ_URL],
+        queue: ARTICLE_QUEUE,
+        queueOptions: {
+          durable: true,
+        },
+      },
+    });
+    app.connectMicroservice<RmqOptions>({
+      transport: Transport.RMQ,
+      options: {
+        urls: [process.env.RABBITMQ_URL],
+        queue: USER_QUEUE,
+        queueOptions: {
+          durable: true,
+        },
+      },
+    });
+    app.connectMicroservice<RmqOptions>({
+      transport: Transport.RMQ,
+      options: {
+        urls: [process.env.RABBITMQ_URL],
+        queue: PROFILE_QUEUE,
+        queueOptions: {
+          durable: true,
+        },
+      },
+    });
+
+    // await executeProjection(app);
 
     const options = new DocumentBuilder()
       .setTitle("Social API")
