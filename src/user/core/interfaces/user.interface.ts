@@ -1,5 +1,6 @@
 import { ArticleEntity } from "../../../article/core/entities/article.entity";
 import { CommentEntity } from "../../../article/core/entities/comment.entity";
+import { UserEntity } from "../entities";
 
 export interface UserData {
   username: string;
@@ -32,3 +33,9 @@ export interface IUser {
   articles?: ArticleEntity[];
   comments?: CommentEntity[];
 }
+
+export interface IPayloadUserRmq {
+  user: UserEntity;
+}
+export interface IPayloadUserCreated extends IPayloadUserRmq {}
+export interface IPayloadUserUpdated extends IPayloadUserRmq {}
