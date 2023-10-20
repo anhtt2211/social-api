@@ -1,4 +1,4 @@
-export enum MessageType {
+export enum MessageCmd {
   ARTICLE_CREATED = "ARTICLE_CREATED",
   ARTICLE_UPDATED = "ARTICLE_UPDATED",
   ARTICLE_DELETED = "ARTICLE_DELETED",

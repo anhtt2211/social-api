@@ -1,15 +1,15 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { ClientProxy } from "@nestjs/microservices";
 import { InjectRepository } from "@nestjs/typeorm";
 import { validate } from "class-validator";
-import { getRepository, Repository } from "typeorm";
-import { WRITE_CONNECTION } from "../../../../configs";
-import { PublisherService } from "../../../../rabbitmq/publisher.service";
-import { USER_QUEUE } from "../../../../rabbitmq/rabbitmq.constants";
-import { UserEntity } from "../../../core/entities/user.entity";
-import { MessageType } from "../../../core/enums/user.enum";
-import { UserRO } from "../../../core/interfaces/user.interface";
-import { UserService } from "../../services/user.service";
+import { Repository, getRepository } from "typeorm";
+
+import { USER_RMQ_CLIENT, WRITE_CONNECTION } from "../../../../configs";
+import { UserEntity } from "../../../core/entities";
+import { MessageCmd } from "../../../core/enums";
+import { IPayloadUserCreated, UserRO } from "../../../core/interfaces";
+import { UserService } from "../../services";
 import { CreateUserCommand } from "../impl";
 
 @CommandHandler(CreateUserCommand)
@@ -19,10 +19,13 @@ export class CreateUserCommandHandler
   constructor(
     @InjectRepository(UserEntity, WRITE_CONNECTION)
     private readonly userRepository: Repository<UserEntity>,
+    @Inject(USER_RMQ_CLIENT)
+    private readonly userRmqClient: ClientProxy,
 
-    private readonly userService: UserService,
-    private readonly publisher: PublisherService
-  ) {}
+    private readonly userService: UserService
+  ) {
+    this.userRmqClient.connect();
+  }
 
   async execute({ dto }: CreateUserCommand): Promise<UserRO> {
     try {
@@ -62,12 +65,10 @@ export class CreateUserCommandHandler
         const savedUser = await this.userRepository.save(newUser);
 
         if (savedUser) {
-          this.publisher.publish(USER_QUEUE, {
-            type: MessageType.USER_CREATED,
-            payload: {
-              user: savedUser,
-            },
-          });
+          this.userRmqClient.emit<any, IPayloadUserCreated>(
+            { cmd: MessageCmd.USER_CREATED },
+            { user: savedUser }
+          );
         }
 
         return this.userService.buildUserRO(savedUser);

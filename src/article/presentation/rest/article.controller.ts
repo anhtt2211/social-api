@@ -17,7 +17,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { User } from "../../shared/middleware/user.decorator";
+import { User } from "../../../shared/middleware/user.decorator";
 import {
   CreateArticleCommand,
   CreateCommentCommand,
@@ -26,19 +26,19 @@ import {
   FavoriteArticleCommand,
   UnFavoriteArticleCommand,
   UpdateArticleCommand,
-} from "../application/commands";
-import { ArticleRO, ArticlesRO, CommentsRO } from "../core";
+} from "../../application/commands";
+import { ArticleRO, ArticlesRO, CommentsRO } from "../../core";
 import {
   ArticleFilters,
   CreateArticleDto,
   CreateCommentDto,
-} from "../core/dto";
+} from "../../core/dto";
 import {
   FindAllArticleQuery,
   FindCommentQuery,
   FindFeedArticleQuery,
   FindOneArticleQuery,
-} from "../application/queries";
+} from "../../application/queries";
 
 @ApiBearerAuth()
 @ApiTags("articles")
