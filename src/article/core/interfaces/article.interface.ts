@@ -1,7 +1,9 @@
+import { ProfileData } from "../../../profile/core/interfaces/profile.interface";
+import { UserEntity } from "../../../user/core";
+import { IUser } from "../../../user/core/interfaces/user.interface";
+import { ArticleEntity } from "../entities";
 import { BlockEntity } from "../entities/block.entity";
 import { IBlock } from "./block.interface";
-import { ProfileData } from "../../../profile/core/interfaces/profile.interface";
-import { IUser } from "../../../user/core/interfaces/user.interface";
 
 // export interface Comment {
 //   id: number;
@@ -62,4 +64,26 @@ export interface IComment {
   updated?: Date;
   article?: IArticle;
   author?: IUser | ProfileData;
+}
+
+interface IPayloadArticleRmq {
+  article: ArticleEntity;
+}
+export interface IPayloadArticleCreated extends IPayloadArticleRmq {}
+export interface IPayloadArticleUpdated extends IPayloadArticleRmq {}
+export interface IPayloadArticleDeleted {
+  userId: number;
+  slug: string;
+}
+export interface IPayloadArticleFavorited extends IPayloadArticleRmq {
+  user: UserEntity;
+}
+export interface IPayloadArticleUnFavorited extends IPayloadArticleRmq {
+  user: UserEntity;
+}
+export interface IPayloadCommentCreated {
+  comment: IComment;
+}
+export interface IPayloadCommentDeleted {
+  comment: IComment;
 }

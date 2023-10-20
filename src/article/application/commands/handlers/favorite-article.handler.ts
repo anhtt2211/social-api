@@ -1,15 +1,15 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { ClientProxy } from "@nestjs/microservices";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { WRITE_CONNECTION } from "../../../../configs";
-import { PublisherService } from "../../../../rabbitmq/publisher.service";
-import { ARTICLE_QUEUE } from "../../../../rabbitmq/rabbitmq.constants";
-import { UserEntity } from "../../../../user/core/entities/user.entity";
-import { ArticleEntity } from "../../../core/entities/article.entity";
-import { MessageType } from "../../../core/enums/article.enum";
-import { ArticleRO } from "../../../core/interfaces/article.interface";
-import { ArticleService } from "../../services/article.service";
+
+import { ARTICLE_RMQ_CLIENT, WRITE_CONNECTION } from "../../../../configs";
+import { UserEntity } from "../../../../user/core/entities";
+import { ArticleEntity } from "../../../core/entities";
+import { MessageCmd } from "../../../core/enums";
+import { ArticleRO, IPayloadArticleFavorited } from "../../../core/interfaces";
+import { ArticleService } from "../../services";
 import { FavoriteArticleCommand } from "../impl";
 
 @CommandHandler(FavoriteArticleCommand)
@@ -21,10 +21,13 @@ export class FavoriteArticleCommandHandler
     private readonly articleRepository: Repository<ArticleEntity>,
     @InjectRepository(UserEntity, WRITE_CONNECTION)
     private readonly userRepository: Repository<UserEntity>,
+    @Inject(ARTICLE_RMQ_CLIENT)
+    private readonly articleRmqClient: ClientProxy,
 
-    private readonly articleService: ArticleService,
-    private readonly publisher: PublisherService
-  ) {}
+    private readonly articleService: ArticleService
+  ) {
+    this.articleRmqClient.connect();
+  }
 
   async execute({ userId, slug }: FavoriteArticleCommand): Promise<ArticleRO> {
     try {
@@ -52,13 +55,10 @@ export class FavoriteArticleCommandHandler
         article = await this.articleRepository.save(article);
 
         if (_user && article) {
-          this.publisher.publish(ARTICLE_QUEUE, {
-            type: MessageType.ARTICLE_FAVORITED,
-            payload: {
-              user,
-              article,
-            },
-          });
+          this.articleRmqClient.emit<any, IPayloadArticleFavorited>(
+            { cmd: MessageCmd.ARTICLE_FAVORITED },
+            { user, article }
+          );
         }
       }
 

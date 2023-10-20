@@ -26,3 +26,7 @@ export const PROFILE_DL_ROUTE_KEY = "PROFILE_DL_ROUTE_KEY";
 export const ARTICLE_DLQ = "ARTICLE_DLQ";
 export const USER_DLQ = "USER_DLQ";
 export const PROFILE_DLQ = "PROFILE_DLQ";
+
+export const ARTICLE_RMQ_CLIENT = "ARTICLE_RMQ_CLIENT";
+export const USER_RMQ_CLIENT = "USER_RMQ_CLIENT";
+export const PROFILE_RMQ_CLIENT = "PROFILE_RMQ_CLIENT";
