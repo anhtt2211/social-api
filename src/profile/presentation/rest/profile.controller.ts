@@ -2,13 +2,13 @@ import { Controller, Delete, Get, Param, Post } from "@nestjs/common";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 
-import { User } from "../../shared/middleware/user.decorator";
+import { User } from "../../../shared/middleware/user.decorator";
 import {
   FollowProfileCommand,
   UnFollowProfileCommand,
-} from "../application/commands";
-import { FindProfileQuery } from "../application/queries";
-import { ProfileRO } from "../core/interfaces/profile.interface";
+} from "../../application/commands";
+import { FindProfileQuery } from "../../application/queries";
+import { ProfileRO } from "../../core/interfaces/profile.interface";
 
 @ApiBearerAuth()
 @ApiTags("profiles")
