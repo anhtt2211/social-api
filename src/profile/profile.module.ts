@@ -12,9 +12,9 @@ import { UserModule } from "../user/user.module";
 import { CommandModule } from "./application/commands/command.module";
 import { EventModule } from "./application/events/event.module";
 import { QueryModule } from "./application/queries/query.module";
-import { ProfileService } from "./application/services/profile.service";
-import { ProfileController } from "./presentation/profile.controller";
-import { ProfileRmq } from "./presentation/profile.rmq";
+import { ProfileService } from "./application/services";
+import { ProfileController } from "./presentation/rest";
+import { ProfileRmq } from "./presentation/rmq";
 
 @Module({
   imports: [

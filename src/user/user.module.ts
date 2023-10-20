@@ -13,8 +13,8 @@ import { CommandModule } from "./application/commands/command.module";
 import { EventModule } from "./application/events/event.module";
 import { QueryModule } from "./application/queries/query.module";
 import { UserService } from "./application/services";
-import { UserController } from "./presentation/user.controller";
-import { UserRmq } from "./presentation/user.rmq";
+import { UserController } from "./presentation/rest";
+import { UserRmq } from "./presentation/rmq";
 
 @Module({
   imports: [
