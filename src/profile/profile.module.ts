@@ -6,15 +6,15 @@ import {
 } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { RabbitMqModule } from "../rabbitmq/rabbitmq.module";
+import { RedisModule } from "../redis/redis.module";
 import { AuthMiddleware } from "../shared/middleware/auth.middleware";
 import { UserModule } from "../user/user.module";
 import { CommandModule } from "./application/commands/command.module";
 import { EventModule } from "./application/events/event.module";
-import { ProfileController } from "./presentation/profile.controller";
-import { ProfileProjection } from "./application/projections";
-import { ProfileService } from "./application/services/profile.service";
 import { QueryModule } from "./application/queries/query.module";
-import { RedisModule } from "../redis/redis.module";
+import { ProfileService } from "./application/services/profile.service";
+import { ProfileController } from "./presentation/profile.controller";
+import { ProfileRmq } from "./presentation/profile.rmq";
 
 @Module({
   imports: [
@@ -26,8 +26,8 @@ import { RedisModule } from "../redis/redis.module";
     RabbitMqModule,
     RedisModule,
   ],
-  providers: [ProfileService, ProfileProjection],
-  controllers: [ProfileController],
+  providers: [ProfileService],
+  controllers: [ProfileController, ProfileRmq],
   exports: [],
 })
 export class ProfileModule implements NestModule {
