@@ -10,7 +10,6 @@ import { RabbitMqModule } from "../rabbitmq/rabbitmq.module";
 import { RedisModule } from "../redis/redis.module";
 import { AuthMiddleware } from "../shared/middleware/auth.middleware";
 import { UserModule } from "../user/user.module";
-import { ArticleProjection } from "./application/projections";
 import { CommandModule } from "./application/commands/command.module";
 import { EventModule } from "./application/events/event.module";
 import { QueryModule } from "./application/queries/query.module";
@@ -28,7 +27,7 @@ import { ArticleRmq } from "./presentation/rmq";
     RabbitMqModule,
     RedisModule,
   ],
-  providers: [ArticleService, ArticleProjection],
+  providers: [ArticleService],
   controllers: [ArticleController, ArticleRmq],
 })
 export class ArticleModule implements NestModule {
