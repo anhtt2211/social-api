@@ -1,13 +1,16 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { ClientProxy } from "@nestjs/microservices";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { WRITE_CONNECTION } from "../../../../configs";
-import { PublisherService } from "../../../../rabbitmq/publisher.service";
-import { ARTICLE_QUEUE } from "../../../../rabbitmq/rabbitmq.constants";
+
+import { ARTICLE_RMQ_CLIENT, WRITE_CONNECTION } from "../../../../configs";
 import { ArticleEntity } from "../../../core/entities/article.entity";
-import { MessageType } from "../../../core/enums/article.enum";
-import { ArticleRO } from "../../../core/interfaces/article.interface";
+import { MessageCmd } from "../../../core/enums/article.enum";
+import {
+  ArticleRO,
+  IPayloadArticleCreated,
+} from "../../../core/interfaces/article.interface";
 import { ArticleService } from "../../services/article.service";
 import { CreateArticleCommand } from "../impl";
 
@@ -18,10 +21,13 @@ export class CreateArticleCommandHandler
   constructor(
     @InjectRepository(ArticleEntity, WRITE_CONNECTION)
     private readonly articleRepository: Repository<ArticleEntity>,
+    @Inject(ARTICLE_RMQ_CLIENT)
+    private readonly articleRmqClient: ClientProxy,
 
-    private readonly articleService: ArticleService,
-    private readonly publisher: PublisherService
-  ) {}
+    private readonly articleService: ArticleService
+  ) {
+    this.articleRmqClient.connect();
+  }
 
   async execute({
     userId,
@@ -39,10 +45,10 @@ export class CreateArticleCommandHandler
       );
 
       if (article) {
-        this.publisher.publish(ARTICLE_QUEUE, {
-          type: MessageType.ARTICLE_CREATED,
-          payload: { article },
-        });
+        this.articleRmqClient.emit<any, IPayloadArticleCreated>(
+          { cmd: MessageCmd.ARTICLE_CREATED },
+          { article }
+        );
       }
 
       return {

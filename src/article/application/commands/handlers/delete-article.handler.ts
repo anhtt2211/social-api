@@ -1,15 +1,16 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { ClientProxy } from "@nestjs/microservices";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeleteResult, Repository } from "typeorm";
-import { WRITE_CONNECTION } from "../../../../configs";
-import { PublisherService } from "../../../../rabbitmq/publisher.service";
-import { ARTICLE_QUEUE } from "../../../../rabbitmq/rabbitmq.constants";
+
+import { ARTICLE_RMQ_CLIENT, WRITE_CONNECTION } from "../../../../configs";
 import {
-  CommentEntity,
   ArticleEntity,
   BlockEntity,
-  MessageType,
+  CommentEntity,
+  IPayloadArticleDeleted,
+  MessageCmd,
 } from "../../../core";
 import { DeleteArticleCommand } from "../impl";
 
@@ -24,9 +25,11 @@ export class DeleteArticleCommandHandler
     private readonly blockRepository: Repository<BlockEntity>,
     @InjectRepository(CommentEntity, WRITE_CONNECTION)
     private readonly commentRepository: Repository<CommentEntity>,
-
-    private readonly publisher: PublisherService
-  ) {}
+    @Inject(ARTICLE_RMQ_CLIENT)
+    private readonly articleRmqClient: ClientProxy
+  ) {
+    this.articleRmqClient.connect();
+  }
 
   async execute({ userId, slug }: DeleteArticleCommand): Promise<DeleteResult> {
     try {
@@ -58,10 +61,10 @@ export class DeleteArticleCommandHandler
       const _deleted = await this.articleRepository.delete({ slug: slug });
 
       if (_deleted) {
-        this.publisher.publish(ARTICLE_QUEUE, {
-          type: MessageType.ARTICLE_DELETED,
-          payload: { userId, slug },
-        });
+        this.articleRmqClient.emit<any, IPayloadArticleDeleted>(
+          { cmd: MessageCmd.ARTICLE_DELETED },
+          { userId, slug }
+        );
       }
 
       return _deleted;
