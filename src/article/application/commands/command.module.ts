@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
-import { CommandHandlers } from ".";
+import { CommandHandlers } from "./index";
 import { WRITE_CONNECTION } from "../../../configs";
 import { FollowsEntity } from "../../../profile/core/entities/follows.entity";
 import { RabbitMqModule } from "../../../rabbitmq/rabbitmq.module";

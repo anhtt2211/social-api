@@ -1,4 +1,4 @@
-import { INestApplication, NestApplicationOptions } from "@nestjs/common";
+import { NestApplicationOptions } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { RmqOptions, Transport } from "@nestjs/microservices";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
@@ -7,27 +7,14 @@ import { json, urlencoded } from "express";
 import * as os from "os";
 
 import { ApplicationModule } from "./app.module";
-import { ArticleProjection } from "./article/application/projections";
 import { ARTICLE_QUEUE, PROFILE_QUEUE, USER_QUEUE } from "./configs";
-import { ProfileProjection } from "./profile/application/projections";
-import { UserProjection } from "./user/application/projections";
-
-async function executeProjection(app: INestApplication) {
-  const articleProjection = app.get(ArticleProjection);
-  const userProjection = app.get(UserProjection);
-  const profileProjection = app.get(ProfileProjection);
-
-  await articleProjection.handle();
-  await userProjection.handle();
-  await profileProjection.handle();
-}
 
 async function bootstrap() {
   if (cluster.isMaster) {
     const numWorkers = os.cpus().length;
     console.log(`Master cluster setting up ${numWorkers} workers...`);
 
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < numWorkers; i++) {
       cluster.fork();
     }
 
@@ -56,7 +43,7 @@ async function bootstrap() {
     app.connectMicroservice<RmqOptions>({
       transport: Transport.RMQ,
       options: {
-        urls: [process.env.RABBITMQ_URL],
+        urls: [process.env.RABBIT_URL],
         queue: ARTICLE_QUEUE,
         queueOptions: {
           durable: true,
@@ -66,7 +53,7 @@ async function bootstrap() {
     app.connectMicroservice<RmqOptions>({
       transport: Transport.RMQ,
       options: {
-        urls: [process.env.RABBITMQ_URL],
+        urls: [process.env.RABBIT_URL],
         queue: USER_QUEUE,
         queueOptions: {
           durable: true,
@@ -76,15 +63,13 @@ async function bootstrap() {
     app.connectMicroservice<RmqOptions>({
       transport: Transport.RMQ,
       options: {
-        urls: [process.env.RABBITMQ_URL],
+        urls: [process.env.RABBIT_URL],
         queue: PROFILE_QUEUE,
         queueOptions: {
           durable: true,
         },
       },
     });
-
-    // await executeProjection(app);
 
     const options = new DocumentBuilder()
       .setTitle("Social API")
@@ -96,6 +81,7 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup("/docs", app, document);
 
+    app.startAllMicroservices();
     await app.listen(8000);
   }
 }
