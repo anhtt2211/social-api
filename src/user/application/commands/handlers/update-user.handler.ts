@@ -1,14 +1,14 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { ClientProxy } from "@nestjs/microservices";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { WRITE_CONNECTION } from "../../../../configs";
-import { PublisherService } from "../../../../rabbitmq/publisher.service";
-import { USER_QUEUE } from "../../../../rabbitmq/rabbitmq.constants";
-import { UserEntity } from "../../../core/entities/user.entity";
-import { MessageType } from "../../../core/enums/user.enum";
-import { UserRO } from "../../../core/interfaces/user.interface";
-import { UserService } from "../../services/user.service";
+
+import { USER_RMQ_CLIENT, WRITE_CONNECTION } from "../../../../configs";
+import { UserEntity } from "../../../core/entities";
+import { MessageCmd } from "../../../core/enums";
+import { IPayloadUserUpdated, UserRO } from "../../../core/interfaces";
+import { UserService } from "../../services";
 import { UpdateUserCommand } from "../impl";
 
 @CommandHandler(UpdateUserCommand)
@@ -18,10 +18,13 @@ export class UpdateUserCommandHandler
   constructor(
     @InjectRepository(UserEntity, WRITE_CONNECTION)
     private readonly userRepository: Repository<UserEntity>,
+    @Inject(USER_RMQ_CLIENT)
+    private readonly userRmqClient: ClientProxy,
 
-    private readonly userService: UserService,
-    private readonly publisher: PublisherService
-  ) {}
+    private readonly userService: UserService
+  ) {
+    this.userRmqClient.connect();
+  }
 
   async execute({ id, dto }: UpdateUserCommand): Promise<UserRO> {
     try {
@@ -33,12 +36,10 @@ export class UpdateUserCommandHandler
       const userUpdated = await this.userRepository.save(updated);
 
       if (userUpdated) {
-        this.publisher.publish(USER_QUEUE, {
-          type: MessageType.USER_UPDATED,
-          payload: {
-            user: userUpdated,
-          },
-        });
+        this.userRmqClient.emit<any, IPayloadUserUpdated>(
+          { cmd: MessageCmd.USER_UPDATED },
+          { user: userUpdated }
+        );
       }
 
       return this.userService.buildUserRO(userUpdated);

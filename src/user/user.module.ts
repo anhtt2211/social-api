@@ -12,9 +12,9 @@ import { AuthMiddleware } from "../shared/middleware/auth.middleware";
 import { CommandModule } from "./application/commands/command.module";
 import { EventModule } from "./application/events/event.module";
 import { QueryModule } from "./application/queries/query.module";
-import { UserService } from "./application/services/user.service";
-import { UserProjection } from "./application/projections";
+import { UserService } from "./application/services";
 import { UserController } from "./presentation/user.controller";
+import { UserRmq } from "./presentation/user.rmq";
 
 @Module({
   imports: [
@@ -25,8 +25,8 @@ import { UserController } from "./presentation/user.controller";
     RabbitMqModule,
     RedisModule,
   ],
-  providers: [UserService, UserProjection],
-  controllers: [UserController],
+  providers: [UserService],
+  controllers: [UserController, UserRmq],
   exports: [UserService],
 })
 export class UserModule implements NestModule {
