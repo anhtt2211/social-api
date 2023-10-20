@@ -79,7 +79,7 @@ export class ArticleController {
   @Get(":slug")
   async findOne(
     @User("id") userId: number,
-    @Param("slug") slug
+    @Param("slug") slug: string
   ): Promise<ArticleRO> {
     return this.queryBus.execute(new FindOneArticleQuery(userId, slug));
   }

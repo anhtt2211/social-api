@@ -1,3 +1,4 @@
+import { FollowsEntity } from "../../../profile/core";
 import { ProfileData } from "../../../profile/core/interfaces/profile.interface";
 import { UserEntity } from "../../../user/core";
 import { IUser } from "../../../user/core/interfaces/user.interface";
@@ -41,6 +42,17 @@ export interface ArticleRO {
 export interface ArticlesRO {
   articles: ArticleData[];
   articlesCount: number;
+}
+
+export interface ArticlesResponse {
+  articles: ArticleEntity[];
+  articlesCount: number;
+}
+
+export interface ArticleResponse {
+  article: ArticleEntity;
+  user?: UserEntity;
+  follows?: FollowsEntity;
 }
 
 export interface IArticle {

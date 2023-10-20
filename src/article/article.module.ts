@@ -14,6 +14,7 @@ import { CommandModule } from "./application/commands/command.module";
 import { EventModule } from "./application/events/event.module";
 import { QueryModule } from "./application/queries/query.module";
 import { ArticleService } from "./application/services";
+import { UseCaseModule } from "./application/use-cases/use-case.module";
 import { ArticleController } from "./presentation/rest";
 import { ArticleRmq } from "./presentation/rmq";
 
@@ -24,6 +25,7 @@ import { ArticleRmq } from "./presentation/rmq";
     CommandModule,
     QueryModule,
     EventModule,
+    UseCaseModule,
     RabbitMqModule,
     RedisModule,
   ],
