@@ -5,12 +5,12 @@ import { EventPattern, Payload, Transport } from "@nestjs/microservices";
 import {
   ProfileFollowedEvent,
   ProfileUnFollowedEvent,
-} from "../application/events";
+} from "../../application/events";
 import {
   IPayloadProfileFollowed,
   IPayloadProfileUnFollowed,
   MessageCmd,
-} from "../core";
+} from "../../core";
 
 @Controller()
 export class ProfileRmq {
