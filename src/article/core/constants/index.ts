@@ -1,0 +1,1 @@
+export const MIN_FAVORITE_TREDNING_ARTICLE = 70;

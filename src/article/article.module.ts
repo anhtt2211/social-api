@@ -16,6 +16,7 @@ import { QueryModule } from "./application/queries/query.module";
 import { ArticleService } from "./application/services";
 import { ArticleController } from "./presentation/rest";
 import { ArticleRmq } from "./presentation/rmq";
+import { CronjobService } from "./application/cron-jobs";
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ArticleRmq } from "./presentation/rmq";
     CommandModule,
     QueryModule,
     EventModule,
+    CronjobService,
     RabbitMqModule,
     RedisModule,
   ],

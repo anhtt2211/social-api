@@ -1,15 +1,13 @@
 import { Injectable, Inject } from "@nestjs/common";
 import Redis from "ioredis";
+import { TIME_TO_LIVE } from "./redis.constant";
 
 @Injectable()
 export class RedisService {
   constructor(@Inject("REDIS_CLIENT") private readonly redisClient: Redis) {}
 
-  async set(key: string, value: any, ttl?: number): Promise<any> {
-    if (ttl) {
-      return await this.redisClient.setex(key, ttl, JSON.stringify(value));
-    }
-    return await this.redisClient.set(key, JSON.stringify(value));
+  async set(key: string, value: any, ttl = TIME_TO_LIVE): Promise<any> {
+    return await this.redisClient.setex(key, ttl, JSON.stringify(value));
   }
 
   async get(key: string): Promise<any> {

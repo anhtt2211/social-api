@@ -31,6 +31,7 @@
     "@nestjs/cqrs": "^9.0.1",
     "@nestjs/microservices": "7.2",
     "@nestjs/platform-express": "^7.0.5",
+    "@nestjs/schedule": "^3.0.4",
     "@nestjs/swagger": "^4.4.0",
     "@nestjs/testing": "^7.0.5",
     "@nestjs/typeorm": "^7.0.0",
