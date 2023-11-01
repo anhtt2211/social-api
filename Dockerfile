@@ -8,9 +8,7 @@ RUN apk add g++ make py3-pip
 
 RUN yarn
 
-COPY . .
-
-RUN yarn build
+COPY dist ./dist
 
 EXPOSE 8000
 

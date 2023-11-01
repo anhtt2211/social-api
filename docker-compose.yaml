@@ -1,31 +1,14 @@
 version: "2.6"
 
 services:
-  social-api-1:
+  social-api:
     build:
       context: .
       dockerfile: Dockerfile
     image: social-api
-    container_name: social-api-1
+    container_name: social-api
     ports:
       - "81:8000"
-    depends_on:
-      - db
-      - rabbitmq
-      - redis
-    env_file:
-      - .env.docker
-    networks:
-      - social-network
-
-  social-api-2:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: social-api
-    container_name: social-api-2
-    ports:
-      - "82:8000"
     depends_on:
       - db
       - rabbitmq
@@ -62,17 +45,6 @@ services:
     image: "redis:alpine"
     ports:
       - "6379:6379"
-    networks:
-      - social-network
-
-  nginx:
-    container_name: social-nginx
-    build: ./nginx
-    ports:
-      - "80:80"
-    depends_on:
-      - social-api-1
-      - social-api-2
     networks:
       - social-network
 
