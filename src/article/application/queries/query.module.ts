@@ -7,8 +7,9 @@ import { READ_CONNECTION } from "../../../configs";
 import { FollowsEntity } from "../../../profile/core/entities/follows.entity";
 import { UserEntity } from "../../../user/core/entities/user.entity";
 import { UserModule } from "../../../user/user.module";
-import { ArticleEntity } from "../../core";
+import { ArticleEntity } from "../../core/entities";
 import { CommentEntity } from "../../core/entities/comment.entity";
+import { InfrastructureModule } from "../../../database/infrastructure/infrastructure.module";
 import { ArticleService } from "../services/article.service";
 
 @Module({
@@ -17,6 +18,7 @@ import { ArticleService } from "../services/article.service";
       [ArticleEntity, CommentEntity, UserEntity, FollowsEntity],
       READ_CONNECTION
     ),
+    { forwardRef: () => InfrastructureModule },
     UserModule,
     CqrsModule,
   ],

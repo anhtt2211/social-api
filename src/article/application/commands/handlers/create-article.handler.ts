@@ -1,17 +1,14 @@
 import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { ClientProxy } from "@nestjs/microservices";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
 
-import { ARTICLE_RMQ_CLIENT, WRITE_CONNECTION } from "../../../../configs";
-import { ArticleEntity } from "../../../core/entities/article.entity";
-import { MessageCmd } from "../../../core/enums/article.enum";
-import {
-  ArticleRO,
-  IPayloadArticleCreated,
-} from "../../../core/interfaces/article.interface";
-import { ArticleService } from "../../services/article.service";
+import { ARTICLE_RMQ_CLIENT } from "../../../../configs";
+import { ArticleEntity } from "../../../core/entities";
+import { MessageCmd } from "../../../core/enums";
+import { ArticleRO, IPayloadArticleCreated } from "../../../core/interfaces";
+import { ArticleWritePort } from "../../../core/ports";
+import { ARTICLE_WRITE_REPOSITORY } from "../../../core/token";
+import { ArticleService } from "../../services";
 import { CreateArticleCommand } from "../impl";
 
 @CommandHandler(CreateArticleCommand)
@@ -19,8 +16,8 @@ export class CreateArticleCommandHandler
   implements ICommandHandler<CreateArticleCommand>
 {
   constructor(
-    @InjectRepository(ArticleEntity, WRITE_CONNECTION)
-    private readonly articleRepository: Repository<ArticleEntity>,
+    @Inject(ARTICLE_WRITE_REPOSITORY)
+    private readonly articleRepository: ArticleWritePort,
     @Inject(ARTICLE_RMQ_CLIENT)
     private readonly articleRmqClient: ClientProxy,
 

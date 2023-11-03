@@ -1,11 +1,14 @@
+import { Inject } from "@nestjs/common";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
-import { getRepository, Repository } from "typeorm";
+import { Repository } from "typeorm";
+
 import { READ_CONNECTION } from "../../../../configs";
 import { FollowsEntity } from "../../../../profile/core/entities/follows.entity";
 import { UserEntity } from "../../../../user/core/entities/user.entity";
-import { ArticleEntity } from "../../../core/entities/article.entity";
 import { ArticlesRO } from "../../../core/interfaces/article.interface";
+import { ArticleReadPort } from "../../../core/ports";
+import { ARTICLE_READ_REPOSITORY } from "../../../core/token";
 import { ArticleService } from "../../services/article.service";
 import { FindFeedArticleQuery } from "../impl";
 
@@ -18,8 +21,8 @@ export class FindFeedArticleQueryHandler
     private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(FollowsEntity, READ_CONNECTION)
     private readonly followsRepository: Repository<FollowsEntity>,
-    @InjectRepository(ArticleEntity, READ_CONNECTION)
-    private readonly articleRepository: Repository<ArticleEntity>,
+    @Inject(ARTICLE_READ_REPOSITORY)
+    private readonly articleRepository: ArticleReadPort,
 
     private readonly articleService: ArticleService
   ) {}

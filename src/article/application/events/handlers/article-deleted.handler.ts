@@ -1,23 +1,30 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { IEventHandler } from "@nestjs/cqrs";
 import { EventsHandler } from "@nestjs/cqrs/dist/decorators/events-handler.decorator";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { READ_CONNECTION } from "../../../../configs";
+
+import {
+  ArticleReadPort,
+  BlockReadPort,
+  CommentReadPort,
+} from "../../../core/ports";
+import {
+  ARTICLE_READ_REPOSITORY,
+  BLOCK_READ_REPOSITORY,
+  COMMENT_READ_REPOSITORY,
+} from "../../../core/token";
 import { ArticleDeletedEvent } from "../impl";
-import { CommentEntity, ArticleEntity, BlockEntity } from "../../../core";
 
 @EventsHandler(ArticleDeletedEvent)
 export class ArticleDeletedEventHandler
   implements IEventHandler<ArticleDeletedEvent>
 {
   constructor(
-    @InjectRepository(ArticleEntity, READ_CONNECTION)
-    private readonly articleRepository: Repository<ArticleEntity>,
-    @InjectRepository(BlockEntity, READ_CONNECTION)
-    private readonly blockRepository: Repository<BlockEntity>,
-    @InjectRepository(CommentEntity, READ_CONNECTION)
-    private readonly commentRepository: Repository<CommentEntity>
+    @Inject(ARTICLE_READ_REPOSITORY)
+    private readonly articleRepository: ArticleReadPort,
+    @Inject(BLOCK_READ_REPOSITORY)
+    private readonly blockRepository: BlockReadPort,
+    @Inject(COMMENT_READ_REPOSITORY)
+    private readonly commentRepository: CommentReadPort
   ) {}
   async handle({ userId, slug }: ArticleDeletedEvent) {
     try {

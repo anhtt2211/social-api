@@ -2,22 +2,32 @@ import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
-import { CommandHandlers } from "./index";
 import { WRITE_CONNECTION } from "../../../configs";
-import { FollowsEntity } from "../../../profile/core/entities/follows.entity";
+import { InfrastructureModule } from "../../../database/infrastructure/infrastructure.module";
+import { FollowsEntity } from "../../../profile/core/entities";
 import { RabbitMqModule } from "../../../rabbitmq/rabbitmq.module";
 import { UserEntity } from "../../../user/core";
 import { UserModule } from "../../../user/user.module";
-import { ArticleEntity, BlockEntity } from "../../core";
-import { CommentEntity } from "../../core/entities/comment.entity";
-import { ArticleService } from "../services/article.service";
+import { ArticleEntity, BlockEntity, CommentEntity } from "../../core/entities";
+import { ArticleService } from "../services";
+import { CommandHandlers } from "./index";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature(
-      [ArticleEntity, UserEntity, CommentEntity, FollowsEntity, BlockEntity],
-      WRITE_CONNECTION
-    ),
+    {
+      forwardRef: () =>
+        TypeOrmModule.forFeature(
+          [
+            ArticleEntity,
+            UserEntity,
+            CommentEntity,
+            FollowsEntity,
+            BlockEntity,
+          ],
+          WRITE_CONNECTION
+        ),
+    },
+    { forwardRef: () => InfrastructureModule },
     UserModule,
     CqrsModule,
     RabbitMqModule,

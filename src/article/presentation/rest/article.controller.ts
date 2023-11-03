@@ -27,7 +27,7 @@ import {
   UnFavoriteArticleCommand,
   UpdateArticleCommand,
 } from "../../application/commands";
-import { ArticleRO, ArticlesRO, CommentsRO } from "../../core";
+import { ArticleRO, ArticlesRO, CommentsRO } from "../../core/interfaces";
 import {
   ArticleFilters,
   CreateArticleDto,

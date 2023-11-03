@@ -6,9 +6,10 @@ import { Repository } from "typeorm";
 
 import { ARTICLE_RMQ_CLIENT, WRITE_CONNECTION } from "../../../../configs";
 import { UserEntity } from "../../../../user/core/entities";
-import { ArticleEntity } from "../../../core/entities";
 import { MessageCmd } from "../../../core/enums";
 import { ArticleRO, IPayloadArticleFavorited } from "../../../core/interfaces";
+import { ArticleWritePort } from "../../../core/ports";
+import { ARTICLE_WRITE_REPOSITORY } from "../../../core/token";
 import { ArticleService } from "../../services";
 import { FavoriteArticleCommand } from "../impl";
 
@@ -17,8 +18,8 @@ export class FavoriteArticleCommandHandler
   implements ICommandHandler<FavoriteArticleCommand>
 {
   constructor(
-    @InjectRepository(ArticleEntity, WRITE_CONNECTION)
-    private readonly articleRepository: Repository<ArticleEntity>,
+    @Inject(ARTICLE_WRITE_REPOSITORY)
+    private readonly articleRepository: ArticleWritePort,
     @InjectRepository(UserEntity, WRITE_CONNECTION)
     private readonly userRepository: Repository<UserEntity>,
     @Inject(ARTICLE_RMQ_CLIENT)

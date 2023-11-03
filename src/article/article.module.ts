@@ -6,6 +6,7 @@ import {
 } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 
+import { InfrastructureModule } from "../database/infrastructure/infrastructure.module";
 import { RabbitMqModule } from "../rabbitmq/rabbitmq.module";
 import { RedisModule } from "../redis/redis.module";
 import { AuthMiddleware } from "../shared/middleware/auth.middleware";
