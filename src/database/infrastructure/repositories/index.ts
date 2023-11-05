@@ -9,3 +9,6 @@ export * from "./comment/comment-write.repository";
 
 export * from "./user/user-read.repository";
 export * from "./user/user-write.repository";
+
+export * from "./follow/follow-read.repository";
+export * from "./follow/follow-write.repository";
