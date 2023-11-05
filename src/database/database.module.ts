@@ -45,7 +45,5 @@ const defaultOptions = {
     }),
     InfrastructureModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class DatabaseModule {}

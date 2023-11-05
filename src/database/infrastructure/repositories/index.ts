@@ -6,3 +6,6 @@ export * from "./block/block-write.repository";
 
 export * from "./comment/comment-read.repository";
 export * from "./comment/comment-write.repository";
+
+export * from "./user/user-read.repository";
+export * from "./user/user-write.repository";
