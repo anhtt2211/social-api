@@ -1,9 +1,10 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import * as dotenv from "dotenv";
+import { join } from "path";
 
 import { READ_CONNECTION, WRITE_CONNECTION } from "../configs";
-import { join } from "path";
+import { InfrastructureModule } from "./infrastructure/infrastructure.module";
 
 dotenv.config();
 
@@ -42,8 +43,7 @@ const defaultOptions = {
         database: process.env.READ_DATABASE_NAME,
       }),
     }),
+    InfrastructureModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class DatabaseModule {}

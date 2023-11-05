@@ -1,12 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { UserEntity } from "../../../user/core/entities/user.entity";
-import {
-  ArticleData,
-  IComment,
-  ArticleEntity,
-  BlockEntity,
-  CommentEntity,
-} from "../../core";
+import { ArticleEntity, BlockEntity, CommentEntity } from "../../core/entities";
+import { ArticleData, IComment } from "../../core/interfaces";
 const slug = require("slug");
 
 @Injectable()

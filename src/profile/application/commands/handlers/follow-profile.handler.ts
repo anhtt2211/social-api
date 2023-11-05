@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { ClientProxy } from "@nestjs/microservices";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { PROFILE_RMQ_CLIENT, WRITE_CONNECTION } from "../../../../configs";
-import { UserEntity } from "../../../../user/core/entities";
+
+import { PROFILE_RMQ_CLIENT } from "../../../../configs";
+import { USER_WRITE_REPOSITORY, UserWritePort } from "../../../../user/core";
+import { FOLLOW_WRITE_REPOSITORY, FollowWritePort } from "../../../core";
 import { FollowsEntity } from "../../../core/entities";
 import { MessageCmd } from "../../../core/enums";
 import {
@@ -19,10 +19,10 @@ export class FollowProfileCommandHandler
   implements ICommandHandler<FollowProfileCommand>
 {
   constructor(
-    @InjectRepository(UserEntity, WRITE_CONNECTION)
-    private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(FollowsEntity, WRITE_CONNECTION)
-    private readonly followsRepository: Repository<FollowsEntity>,
+    @Inject(USER_WRITE_REPOSITORY)
+    private readonly userRepository: UserWritePort,
+    @Inject(FOLLOW_WRITE_REPOSITORY)
+    private readonly followsRepository: FollowWritePort,
     @Inject(PROFILE_RMQ_CLIENT)
     private readonly profileRmqClient: ClientProxy
   ) {

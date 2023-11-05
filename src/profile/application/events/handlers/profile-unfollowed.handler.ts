@@ -1,10 +1,7 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { IEventHandler } from "@nestjs/cqrs";
 import { EventsHandler } from "@nestjs/cqrs/dist/decorators/events-handler.decorator";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { READ_CONNECTION } from "../../../../configs";
-import { FollowsEntity } from "../../../core/entities/follows.entity";
+import { FOLLOW_READ_REPOSITORY, FollowReadPort } from "../../../core";
 import { ProfileUnFollowedEvent } from "../impl";
 
 @EventsHandler(ProfileUnFollowedEvent)
@@ -12,8 +9,8 @@ export class ProfileUnFollowedEventHandler
   implements IEventHandler<ProfileUnFollowedEvent>
 {
   constructor(
-    @InjectRepository(FollowsEntity, READ_CONNECTION)
-    private readonly followsRepository: Repository<FollowsEntity>
+    @Inject(FOLLOW_READ_REPOSITORY)
+    private readonly followsRepository: FollowReadPort
   ) {}
   async handle({ follow }: ProfileUnFollowedEvent) {
     try {

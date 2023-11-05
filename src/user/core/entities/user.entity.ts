@@ -11,7 +11,7 @@ import {
 import { IsEmail } from "class-validator";
 import * as argon2 from "argon2";
 import { IUser } from "../interfaces/user.interface";
-import { ArticleEntity, CommentEntity } from "../../../article/core";
+import { ArticleEntity, CommentEntity } from "../../../article/core/entities";
 
 @Entity("user")
 export class UserEntity {

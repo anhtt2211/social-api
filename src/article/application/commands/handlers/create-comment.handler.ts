@@ -1,14 +1,18 @@
 import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { ClientProxy } from "@nestjs/microservices";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
 
-import { ARTICLE_RMQ_CLIENT, WRITE_CONNECTION } from "../../../../configs";
-import { UserEntity } from "../../../../user/core/entities";
-import { ArticleEntity, CommentEntity } from "../../../core/entities";
+import { ARTICLE_RMQ_CLIENT } from "../../../../configs";
+import { USER_WRITE_REPOSITORY, UserWritePort } from "../../../../user/core";
+import { CommentEntity } from "../../../core/entities";
 import { MessageCmd } from "../../../core/enums";
 import { CommentRO, IPayloadCommentCreated } from "../../../core/interfaces";
+import { ArticleWritePort } from "../../../core/ports";
+import { CommentWritePort } from "../../../core/ports/comment.port";
+import {
+  ARTICLE_WRITE_REPOSITORY,
+  COMMENT_WRITE_REPOSITORY,
+} from "../../../core/token";
 import { ArticleService } from "../../services/article.service";
 import { CreateCommentCommand } from "../impl";
 
@@ -17,12 +21,12 @@ export class CreateCommentCommandHandler
   implements ICommandHandler<CreateCommentCommand>
 {
   constructor(
-    @InjectRepository(ArticleEntity, WRITE_CONNECTION)
-    private readonly articleRepository: Repository<ArticleEntity>,
-    @InjectRepository(UserEntity, WRITE_CONNECTION)
-    private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(CommentEntity, WRITE_CONNECTION)
-    private readonly commentRepository: Repository<CommentEntity>,
+    @Inject(ARTICLE_WRITE_REPOSITORY)
+    private readonly articleRepository: ArticleWritePort,
+    @Inject(USER_WRITE_REPOSITORY)
+    private readonly userRepository: UserWritePort,
+    @Inject(COMMENT_WRITE_REPOSITORY)
+    private readonly commentRepository: CommentWritePort,
     @Inject(ARTICLE_RMQ_CLIENT)
     private readonly articleRmqClient: ClientProxy,
 
@@ -37,10 +41,10 @@ export class CreateCommentCommandHandler
     commentData,
   }: CreateCommentCommand): Promise<CommentRO> {
     try {
-      let article = await this.articleRepository.findOne(
-        { slug },
-        { select: ["id"] }
-      );
+      // TODO: just select id
+      let article = await this.articleRepository.findOne({
+        slug,
+      });
       const author = await this.userRepository.findOne(userId);
 
       if (!article) {

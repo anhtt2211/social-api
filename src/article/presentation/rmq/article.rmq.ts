@@ -19,7 +19,7 @@ import {
   IPayloadArticleUpdated,
   IPayloadCommentCreated,
   IPayloadCommentDeleted,
-} from "../../core";
+} from "../../core/interfaces";
 import { MessageCmd } from "../../core/enums";
 
 @Controller()

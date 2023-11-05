@@ -1,12 +1,15 @@
 import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { ClientProxy } from "@nestjs/microservices";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { ARTICLE_RMQ_CLIENT, WRITE_CONNECTION } from "../../../../configs";
-import { ArticleEntity, CommentEntity } from "../../../core/entities";
+import { ARTICLE_RMQ_CLIENT } from "../../../../configs";
 import { MessageCmd } from "../../../core/enums";
 import { ArticleRO, IPayloadCommentDeleted } from "../../../core/interfaces";
+import { ArticleWritePort } from "../../../core/ports";
+import { CommentWritePort } from "../../../core/ports/comment.port";
+import {
+  ARTICLE_WRITE_REPOSITORY,
+  COMMENT_WRITE_REPOSITORY,
+} from "../../../core/token";
 import { ArticleService } from "../../services";
 import { DeleteCommentCommand } from "../impl";
 
@@ -15,10 +18,10 @@ export class DeleteCommentCommandHandler
   implements ICommandHandler<DeleteCommentCommand>
 {
   constructor(
-    @InjectRepository(ArticleEntity, WRITE_CONNECTION)
-    private readonly articleRepository: Repository<ArticleEntity>,
-    @InjectRepository(CommentEntity, WRITE_CONNECTION)
-    private readonly commentRepository: Repository<CommentEntity>,
+    @Inject(ARTICLE_WRITE_REPOSITORY)
+    private readonly articleRepository: ArticleWritePort,
+    @Inject(COMMENT_WRITE_REPOSITORY)
+    private readonly commentRepository: CommentWritePort,
     @Inject(ARTICLE_RMQ_CLIENT)
     private readonly articleRmqClient: ClientProxy,
 

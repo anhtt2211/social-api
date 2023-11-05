@@ -1,10 +1,9 @@
+import { Inject } from "@nestjs/common";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { READ_CONNECTION } from "../../../../configs";
+
 import { RedisService } from "../../../../redis/redis.service";
-import { UserEntity } from "../../../core/entities/user.entity";
-import { UserRO } from "../../../core/interfaces/user.interface";
+import { USER_READ_REPOSITORY, UserReadPort } from "../../../core";
+import { UserRO } from "../../../core/interfaces";
 import { FindUserByEmailQuery } from "../impl";
 
 @QueryHandler(FindUserByEmailQuery)
@@ -12,8 +11,8 @@ export class FindUserByEmailQueryHandler
   implements IQueryHandler<FindUserByEmailQuery>
 {
   constructor(
-    @InjectRepository(UserEntity, READ_CONNECTION)
-    private readonly userRepository: Repository<UserEntity>,
+    @Inject(USER_READ_REPOSITORY)
+    private readonly userRepository: UserReadPort,
 
     private readonly redisCacheService: RedisService
   ) {}
