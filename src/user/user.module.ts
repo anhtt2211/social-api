@@ -6,7 +6,6 @@ import {
 } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 
-import { RabbitMqModule } from "../rabbitmq/rabbitmq.module";
 import { RedisModule } from "../redis/redis.module";
 import { AuthMiddleware } from "../shared/middleware/auth.middleware";
 import { CommandModule } from "./application/commands/command.module";
@@ -17,14 +16,7 @@ import { UserController } from "./presentation/rest";
 import { UserRmq } from "./presentation/rmq";
 
 @Module({
-  imports: [
-    CqrsModule,
-    CommandModule,
-    QueryModule,
-    EventModule,
-    RabbitMqModule,
-    RedisModule,
-  ],
+  imports: [CqrsModule, CommandModule, QueryModule, EventModule, RedisModule],
   providers: [UserService],
   controllers: [UserController, UserRmq],
   exports: [UserService],

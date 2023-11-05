@@ -6,7 +6,6 @@ import {
 } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 
-import { RabbitMqModule } from "../rabbitmq/rabbitmq.module";
 import { RedisModule } from "../redis/redis.module";
 import { AuthMiddleware } from "../shared/middleware/auth.middleware";
 import { UserModule } from "../user/user.module";
@@ -24,7 +23,6 @@ import { ArticleRmq } from "./presentation/rmq";
     CommandModule,
     QueryModule,
     EventModule,
-    RabbitMqModule,
     RedisModule,
   ],
   providers: [ArticleService],

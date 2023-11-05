@@ -7,6 +7,7 @@ import { MediaModule } from "./media/media.module";
 import { ProfileModule } from "./profile/profile.module";
 import { TagModule } from "./tag/tag.module";
 import { UserModule } from "./user/user.module";
+import { RabbitMqModule } from "./rabbitmq/rabbitmq.module";
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UserModule } from "./user/user.module";
     ProfileModule,
     TagModule,
     MediaModule,
+    RabbitMqModule,
   ],
   controllers: [],
   providers: [],
