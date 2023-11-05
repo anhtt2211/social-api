@@ -2,11 +2,10 @@ import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 
 import { QueryHandlers } from ".";
-import { RedisModule } from "../../../redis/redis.module";
-import { UserService } from "../services/user.service";
+import { UserService } from "../services";
 
 @Module({
-  imports: [CqrsModule, RedisModule],
+  imports: [CqrsModule],
   providers: [UserService, ...QueryHandlers],
   controllers: [],
   exports: [UserService],

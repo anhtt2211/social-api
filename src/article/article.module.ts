@@ -6,7 +6,6 @@ import {
 } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 
-import { RedisModule } from "../redis/redis.module";
 import { AuthMiddleware } from "../shared/middleware/auth.middleware";
 import { UserModule } from "../user/user.module";
 import { CommandModule } from "./application/commands/command.module";
@@ -17,14 +16,7 @@ import { ArticleController } from "./presentation/rest";
 import { ArticleRmq } from "./presentation/rmq";
 
 @Module({
-  imports: [
-    CqrsModule,
-    UserModule,
-    CommandModule,
-    QueryModule,
-    EventModule,
-    RedisModule,
-  ],
+  imports: [CqrsModule, UserModule, CommandModule, QueryModule, EventModule],
   providers: [ArticleService],
   controllers: [ArticleController, ArticleRmq],
 })
