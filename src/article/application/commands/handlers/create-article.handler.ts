@@ -3,13 +3,16 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { ClientProxy } from "@nestjs/microservices";
 
 import { ARTICLE_RMQ_CLIENT } from "../../../../configs";
-import { ArticleEntity } from "../../../core/entities";
-import { MessageCmd } from "../../../core/enums";
-import { ArticleRO, IPayloadArticleCreated } from "../../../core/interfaces";
-import { ArticleWritePort } from "../../../core/ports";
-import { ARTICLE_WRITE_REPOSITORY } from "../../../core/token";
 import { ArticleService } from "../../services";
 import { CreateArticleCommand } from "../impl";
+import {
+  ARTICLE_WRITE_REPOSITORY,
+  ArticleEntity,
+  ArticleRO,
+  ArticleWritePort,
+  IPayloadArticleCreated,
+  MessageCmd,
+} from "../../../core";
 
 @CommandHandler(CreateArticleCommand)
 export class CreateArticleCommandHandler
