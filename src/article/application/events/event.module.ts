@@ -6,7 +6,6 @@ import { UserEntity } from "../../../user/core/entities/user.entity";
 import { ArticleEntity, BlockEntity } from "../../core/entities";
 import { CommentEntity } from "../../core/entities/comment.entity";
 import { EventHandlers } from ".";
-import { InfrastructureModule } from "../../../database/infrastructure/infrastructure.module";
 
 @Module({
   imports: [
@@ -14,7 +13,6 @@ import { InfrastructureModule } from "../../../database/infrastructure/infrastru
       [ArticleEntity, UserEntity, BlockEntity, CommentEntity],
       READ_CONNECTION
     ),
-    { forwardRef: () => InfrastructureModule },
     CqrsModule,
   ],
   providers: [...EventHandlers],

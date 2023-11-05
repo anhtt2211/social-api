@@ -9,7 +9,6 @@ import { UserEntity } from "../../../user/core/entities/user.entity";
 import { UserModule } from "../../../user/user.module";
 import { ArticleEntity } from "../../core/entities";
 import { CommentEntity } from "../../core/entities/comment.entity";
-import { InfrastructureModule } from "../../../database/infrastructure/infrastructure.module";
 import { ArticleService } from "../services/article.service";
 
 @Module({
@@ -18,7 +17,6 @@ import { ArticleService } from "../services/article.service";
       [ArticleEntity, CommentEntity, UserEntity, FollowsEntity],
       READ_CONNECTION
     ),
-    { forwardRef: () => InfrastructureModule },
     UserModule,
     CqrsModule,
   ],

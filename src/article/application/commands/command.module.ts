@@ -3,7 +3,6 @@ import { CqrsModule } from "@nestjs/cqrs";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { WRITE_CONNECTION } from "../../../configs";
-import { InfrastructureModule } from "../../../database/infrastructure/infrastructure.module";
 import { FollowsEntity } from "../../../profile/core/entities";
 import { RabbitMqModule } from "../../../rabbitmq/rabbitmq.module";
 import { UserEntity } from "../../../user/core";
@@ -27,7 +26,6 @@ import { CommandHandlers } from "./index";
           WRITE_CONNECTION
         ),
     },
-    { forwardRef: () => InfrastructureModule },
     UserModule,
     CqrsModule,
     RabbitMqModule,
