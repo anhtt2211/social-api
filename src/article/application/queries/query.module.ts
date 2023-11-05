@@ -1,25 +1,12 @@
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { QueryHandlers } from ".";
-import { READ_CONNECTION } from "../../../configs";
-import { FollowsEntity } from "../../../profile/core/entities/follows.entity";
-import { UserEntity } from "../../../user/core/entities/user.entity";
 import { UserModule } from "../../../user/user.module";
-import { ArticleEntity } from "../../core/entities";
-import { CommentEntity } from "../../core/entities/comment.entity";
-import { ArticleService } from "../services/article.service";
+import { ArticleService } from "../services";
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature(
-      [ArticleEntity, CommentEntity, UserEntity, FollowsEntity],
-      READ_CONNECTION
-    ),
-    UserModule,
-    CqrsModule,
-  ],
+  imports: [UserModule, CqrsModule],
   providers: [ArticleService, ...QueryHandlers],
   controllers: [],
 })

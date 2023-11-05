@@ -4,12 +4,12 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 import { READ_CONNECTION } from "../../../../configs";
-import { FollowsEntity } from "../../../../profile/core/entities/follows.entity";
-import { UserEntity } from "../../../../user/core/entities/user.entity";
-import { ArticlesRO } from "../../../core/interfaces/article.interface";
+import { FollowsEntity } from "../../../../profile/core";
+import { USER_READ_REPOSITORY, UserReadPort } from "../../../../user/core";
+import { ArticlesRO } from "../../../core/interfaces";
 import { ArticleReadPort } from "../../../core/ports";
 import { ARTICLE_READ_REPOSITORY } from "../../../core/token";
-import { ArticleService } from "../../services/article.service";
+import { ArticleService } from "../../services";
 import { FindFeedArticleQuery } from "../impl";
 
 @QueryHandler(FindFeedArticleQuery)
@@ -17,8 +17,8 @@ export class FindFeedArticleQueryHandler
   implements IQueryHandler<FindFeedArticleQuery>
 {
   constructor(
-    @InjectRepository(UserEntity, READ_CONNECTION)
-    private readonly userRepository: Repository<UserEntity>,
+    @Inject(USER_READ_REPOSITORY)
+    private readonly userRepository: UserReadPort,
     @InjectRepository(FollowsEntity, READ_CONNECTION)
     private readonly followsRepository: Repository<FollowsEntity>,
     @Inject(ARTICLE_READ_REPOSITORY)

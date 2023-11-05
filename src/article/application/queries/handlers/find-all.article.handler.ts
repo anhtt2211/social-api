@@ -1,15 +1,14 @@
 import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, getRepository } from "typeorm";
+import { getRepository } from "typeorm";
 
 import { READ_CONNECTION } from "../../../../configs";
-import { FollowsEntity } from "../../../../profile/core/entities/follows.entity";
-import { UserEntity } from "../../../../user/core/entities/user.entity";
-import { ArticlesRO } from "../../../core/interfaces/article.interface";
+import { FollowsEntity } from "../../../../profile/core";
+import { USER_READ_REPOSITORY, UserReadPort } from "../../../../user/core";
+import { ArticlesRO } from "../../../core/interfaces";
 import { ArticleReadPort } from "../../../core/ports";
 import { ARTICLE_READ_REPOSITORY } from "../../../core/token";
-import { ArticleService } from "../../services/article.service";
+import { ArticleService } from "../../services";
 import { FindAllArticleQuery } from "../impl";
 
 @QueryHandler(FindAllArticleQuery)
@@ -17,8 +16,8 @@ export class FindAllArticleQueryHandler
   implements IQueryHandler<FindAllArticleQuery>
 {
   constructor(
-    @InjectRepository(UserEntity, READ_CONNECTION)
-    private readonly userRepository: Repository<UserEntity>,
+    @Inject(USER_READ_REPOSITORY)
+    private readonly userRepository: UserReadPort,
     @Inject(ARTICLE_READ_REPOSITORY)
     private readonly articleRepository: ArticleReadPort,
 

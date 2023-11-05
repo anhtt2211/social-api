@@ -1,11 +1,9 @@
 import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { ClientProxy } from "@nestjs/microservices";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
 
-import { ARTICLE_RMQ_CLIENT, WRITE_CONNECTION } from "../../../../configs";
-import { UserEntity } from "../../../../user/core/entities";
+import { ARTICLE_RMQ_CLIENT } from "../../../../configs";
+import { USER_WRITE_REPOSITORY, UserWritePort } from "../../../../user/core";
 import { CommentEntity } from "../../../core/entities";
 import { MessageCmd } from "../../../core/enums";
 import { CommentRO, IPayloadCommentCreated } from "../../../core/interfaces";
@@ -25,8 +23,8 @@ export class CreateCommentCommandHandler
   constructor(
     @Inject(ARTICLE_WRITE_REPOSITORY)
     private readonly articleRepository: ArticleWritePort,
-    @InjectRepository(UserEntity, WRITE_CONNECTION)
-    private readonly userRepository: Repository<UserEntity>,
+    @Inject(USER_WRITE_REPOSITORY)
+    private readonly userRepository: UserWritePort,
     @Inject(COMMENT_WRITE_REPOSITORY)
     private readonly commentRepository: CommentWritePort,
     @Inject(ARTICLE_RMQ_CLIENT)

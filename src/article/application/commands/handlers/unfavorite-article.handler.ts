@@ -1,11 +1,9 @@
 import { Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { ClientProxy } from "@nestjs/microservices";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
 
-import { ARTICLE_RMQ_CLIENT, WRITE_CONNECTION } from "../../../../configs";
-import { UserEntity } from "../../../../user/core/entities";
+import { ARTICLE_RMQ_CLIENT } from "../../../../configs";
+import { USER_WRITE_REPOSITORY, UserWritePort } from "../../../../user/core";
 import { MessageCmd } from "../../../core/enums";
 import { ArticleRO, IPayloadArticleFavorited } from "../../../core/interfaces";
 import { ArticleWritePort } from "../../../core/ports";
@@ -20,8 +18,8 @@ export class UnFavoriteArticleCommandHandler
   constructor(
     @Inject(ARTICLE_WRITE_REPOSITORY)
     private readonly articleRepository: ArticleWritePort,
-    @InjectRepository(UserEntity, WRITE_CONNECTION)
-    private readonly userRepository: Repository<UserEntity>,
+    @Inject(USER_WRITE_REPOSITORY)
+    private readonly userRepository: UserWritePort,
     @Inject(ARTICLE_RMQ_CLIENT)
     private readonly articleRmqClient: ClientProxy,
 
