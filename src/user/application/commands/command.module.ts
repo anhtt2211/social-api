@@ -1,19 +1,12 @@
 import { Module } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { CommandHandlers } from ".";
-import { WRITE_CONNECTION } from "../../../configs";
 import { RabbitMqModule } from "../../../rabbitmq/rabbitmq.module";
-import { UserEntity } from "../../core";
-import { UserService } from "../services/user.service";
+import { UserService } from "../services";
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([UserEntity], WRITE_CONNECTION),
-    CqrsModule,
-    RabbitMqModule,
-  ],
+  imports: [CqrsModule, RabbitMqModule],
   providers: [UserService, ...CommandHandlers],
   controllers: [],
   exports: [],

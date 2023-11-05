@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { ClientProxy } from "@nestjs/microservices";
-import { InjectRepository } from "@nestjs/typeorm";
 import { validate } from "class-validator";
-import { Repository, getRepository } from "typeorm";
+import { getRepository } from "typeorm";
 
 import { USER_RMQ_CLIENT, WRITE_CONNECTION } from "../../../../configs";
+import { USER_WRITE_REPOSITORY, UserWritePort } from "../../../core";
 import { UserEntity } from "../../../core/entities";
 import { MessageCmd } from "../../../core/enums";
 import { IPayloadUserCreated, UserRO } from "../../../core/interfaces";
@@ -17,8 +17,8 @@ export class CreateUserCommandHandler
   implements ICommandHandler<CreateUserCommand>
 {
   constructor(
-    @InjectRepository(UserEntity, WRITE_CONNECTION)
-    private readonly userRepository: Repository<UserEntity>,
+    @Inject(USER_WRITE_REPOSITORY)
+    private readonly userRepository: UserWritePort,
     @Inject(USER_RMQ_CLIENT)
     private readonly userRmqClient: ClientProxy,
 

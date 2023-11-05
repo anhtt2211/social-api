@@ -1,22 +1,22 @@
-import { HttpException } from "@nestjs/common";
-import { QueryHandler, IQueryHandler } from "@nestjs/cqrs";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { HttpException, Inject } from "@nestjs/common";
+import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import * as argon2 from "argon2";
-import { READ_CONNECTION } from "../../../../configs";
-import { LoginUserDto } from "../../../core/dto";
-import { UserEntity } from "../../../core/entities/user.entity";
-import { UserRO } from "../../../core/interfaces/user.interface";
-import { UserService } from "../../services/user.service";
-import { LoginQuery } from "../impl";
-import { RedisService } from "../../../../redis/redis.service";
+
 import { TIME_TO_LIVE } from "../../../../redis/redis.constant";
+import { RedisService } from "../../../../redis/redis.service";
+import { USER_READ_REPOSITORY, UserReadPort } from "../../../core";
+import { LoginUserDto } from "../../../core/dto";
+import { UserEntity } from "../../../core";
+import { UserRO } from "../../../core/interfaces";
+import { UserService } from "../../services";
+import { LoginQuery } from "../impl";
 
 @QueryHandler(LoginQuery)
 export class LoginQueryHandler implements IQueryHandler<LoginQuery> {
   constructor(
-    @InjectRepository(UserEntity, READ_CONNECTION)
-    private readonly userRepository: Repository<UserEntity>,
+    @Inject(USER_READ_REPOSITORY)
+    private readonly userRepository: UserReadPort,
+
     private readonly userService: UserService,
     private readonly redisCacheService: RedisService
   ) {}
