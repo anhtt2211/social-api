@@ -1,8 +1,8 @@
 import { Get, Controller } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 
-import { TagService } from "./tag.service";
-import { TagRO } from "./core/interfaces/tag.interface";
+import { TagService } from "../application/tag.service";
+import { TagRO } from "../core/interfaces/tag.interface";
 
 @ApiBearerAuth()
 @ApiTags("tags")

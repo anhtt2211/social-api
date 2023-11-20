@@ -1,30 +1,52 @@
-# Getting started
+# NestJS Social Network API
 
-## Installation
+## Project Overview
 
-Clone the repository
+This project is a robust social networking platform built using NestJS. It features a microservices architecture, integrating technologies like RabbitMQ for message queuing and Redis for caching. The platform includes modules for user management, article handling, profiles, tags, and media management, showcasing a scalable and modular design.
 
-    git clone https://github.com/anhtt2211/social-api.git
+## Technology Stack
 
-Switch to the repo folder
+- NestJS
+- TypeScript
+- RabbitMQ
+- Redis
+- PostgreSQL
+- Docker
 
-    cd social-api
+## Architecture
 
-Install dependencies
+The application adopts a microservices architecture with distinct modules:
 
-    npm install
+- **User Module:** Manages user registration, authentication, and profile operations.
+- **Article Module:** Handles article creation, updates, deletion, and commenting features.
+- **Profile Module:** Manages user profiles.
+- **Tag Module:** Responsible for tag management associated with articles.
+- **Media Module:** Handles uploading and retrieving media content.
+- **Database Module:** Manages database connections and migrations.
 
-Create file .env from .env.example and fill it
+Each module follows the CLEAN architecture, promoting separation of concerns and maintainability.
 
-    cp .env.example .env
+## Getting Started
 
-Run migration
+### Prerequisites
 
-    npm run migration:run <db_name>
+- Node.js
+- Docker
+- RabbitMQ server
+- Redis server
+- PostgreSQL server
 
----
+### Installation
 
-## Running on docker
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/anhtt2211/social-api.git
+cd social-api
+yarn install
+```
+
+### Running on docker
 
 Build images
 
@@ -34,15 +56,16 @@ Run on docker
 
     docker-compose up
 
-## NPM scripts
+### Running the Application
 
-- `npm start` - Start application
-- `npm run start:watch` - Start application in watch mode
-- `npm run test` - run Jest test runner
-- `npm run start:prod` - Build application
+```
+yarn start
+```
 
----
+## API Documentation
 
-# Swagger API docs
+Swagger-based API documentation is available at `http://localhost:8000/docs`.
 
-This example repo uses the NestJS swagger module for API documentation. [NestJS Swagger](https://github.com/nestjs/swagger) - [www.swagger.io](https://swagger.io/)
+## Environment Variables
+
+Refer to the env.example file for necessary environment variables.

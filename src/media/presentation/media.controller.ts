@@ -11,8 +11,8 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { DropboxService } from "./services/dropbox.service";
-import { MediaOutput } from "./media.interface";
+import { DropboxService } from "../services/dropbox.service";
+import { MediaOutput } from "../core/media.interface";
 
 @ApiBearerAuth()
 @ApiTags("media")

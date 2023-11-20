@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { READ_CONNECTION } from "../configs";
-import { TagEntity } from "./core/entities/tag.entity";
-import { TagRO } from "./core/interfaces/tag.interface";
+import { READ_CONNECTION } from "../../configs";
+import { TagEntity } from "../core/entities/tag.entity";
+import { TagRO } from "../core/interfaces/tag.interface";
 
 @Injectable()
 export class TagService {

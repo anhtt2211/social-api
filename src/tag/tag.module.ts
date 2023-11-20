@@ -2,9 +2,9 @@ import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { READ_CONNECTION } from "../configs";
 import { UserModule } from "../user/user.module";
-import { TagController } from "./tag.controller";
-import { TagEntity } from "./core/entities/tag.entity";
-import { TagService } from "./tag.service";
+import { TagController } from "./presentation";
+import { TagEntity } from "./core/entities";
+import { TagService } from "./application";
 
 @Module({
   imports: [TypeOrmModule.forFeature([TagEntity], READ_CONNECTION), UserModule],
