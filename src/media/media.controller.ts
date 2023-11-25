@@ -11,16 +11,16 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { DropboxService } from "./services/dropbox.service";
 import { MediaOutput } from "./media.interface";
+import { S3Service } from "./services/s3.service";
 
 @ApiBearerAuth()
 @ApiTags("media")
 @Controller("media")
 export class MediaController {
-  constructor(private readonly dropboxService: DropboxService) {}
+  constructor(private readonly s3Service: S3Service) {}
 
-  @ApiOperation({ summary: "Upload image" })
+  @ApiOperation({ summary: "Upload image to S3" })
   @ApiResponse({
     status: 201,
     description: "The image has been successfully uploaded.",
@@ -28,9 +28,15 @@ export class MediaController {
   @ApiResponse({ status: 403, description: "Forbidden." })
   @UseInterceptors(FileInterceptor("file"))
   @Post("/img/upload")
-  async create(
+  async uploadS3(
     @UploadedFile() file: Express.Multer.File
   ): Promise<MediaOutput> {
-    return await this.dropboxService.uploadFile(file);
+    const uploadData = await this.s3Service.uploadFile(file);
+
+    return {
+      media: {
+        url: uploadData.Location,
+      },
+    };
   }
 }
