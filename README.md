@@ -22,6 +22,10 @@ Run migration
 
     npm run migration:run <db_name>
 
+Auto-Generate migration
+
+    npm run migration:generate -c <orm_connection> -n <migration_name>
+
 ---
 
 ## Running on docker
