@@ -7,7 +7,7 @@
     "clean": "rimraf dist/",
     "build": "yarn clean && tsc",
     "start": "node index.js",
-    "dev": "nodemon",
+    "dev": "nodemon -- --inspect",
     "start:prod": "node dist/main.js",
     "test": "jest --config=jest.json",
     "test:watch": "jest --watch --config=jest.json",

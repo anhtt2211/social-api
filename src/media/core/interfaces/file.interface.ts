@@ -1,3 +1,5 @@
+import { IUser } from "../../../user/core";
+
 export interface IFile {
   id?: number;
   name?: string;
@@ -6,4 +8,5 @@ export interface IFile {
   key?: string;
   url?: string;
   createdAt?: Date;
+  author?: IUser;
 }

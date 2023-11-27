@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import * as AWS from "aws-sdk";
 import { FileEntity, FileWritePort, MediaRepositoryToken } from "../core";
 
@@ -19,27 +19,35 @@ export class S3Service {
   }
 
   async uploadFile(
+    userId: number,
     file: Express.Multer.File
   ): Promise<AWS.S3.ManagedUpload.SendData> {
-    const params: AWS.S3.Types.PutObjectRequest = {
-      Bucket: this.bucketName,
-      Body: file.buffer,
-      Key: `articles/${new Date().getTime()}-${file.originalname}`,
-      ACL: "public-read",
-    };
+    try {
+      const params: AWS.S3.Types.PutObjectRequest = {
+        Bucket: this.bucketName,
+        Body: file.buffer,
+        Key: `articles/${new Date().getTime()}-${file.originalname}`,
+        ACL: "public-read",
+      };
 
-    const fileUpload = await this.s3.upload(params).promise();
+      const fileUpload = await this.s3.upload(params).promise();
 
-    const fileEntity: FileEntity = new FileEntity({
-      name: file.originalname,
-      size: file.size,
-      mimeType: file.mimetype,
-      url: fileUpload.Location,
-      key: fileUpload.Key,
-    });
-    await this.fileWriteRepository.save(fileEntity);
+      const fileEntity: FileEntity = new FileEntity({
+        name: file.originalname,
+        size: file.size,
+        mimeType: file.mimetype,
+        url: fileUpload.Location,
+        key: fileUpload.Key,
+        author: {
+          id: userId,
+        },
+      });
+      await this.fileWriteRepository.save(fileEntity);
 
-    return fileUpload;
+      return fileUpload;
+    } catch (error) {
+      throw new HttpException("Cannot upload file", HttpStatus.BAD_REQUEST);
+    }
   }
 
   // Method to get a signed URL for private access

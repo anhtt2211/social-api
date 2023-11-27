@@ -1,5 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { IFile } from "../interfaces";
+import { UserEntity } from "../../../user/core";
 
 @Entity("file")
 export class FileEntity {
@@ -25,6 +32,9 @@ export class FileEntity {
   @Column()
   url: string;
 
-  @Column()
+  @CreateDateColumn({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
+
+  @ManyToOne(() => UserEntity, (user) => user.photos)
+  author: UserEntity;
 }

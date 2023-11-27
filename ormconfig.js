@@ -37,6 +37,4 @@ const ormconfigs = [
   },
 ];
 
-console.log({ ormconfig: ormconfigs[0] });
-
 module.exports = ormconfigs;

@@ -13,6 +13,7 @@ import {
 } from "@nestjs/swagger";
 import { MediaOutput } from "./media.interface";
 import { S3Service } from "./services/s3.service";
+import { User } from "../shared/middleware/user.decorator";
 
 @ApiBearerAuth()
 @ApiTags("media")
@@ -29,9 +30,10 @@ export class MediaController {
   @UseInterceptors(FileInterceptor("file"))
   @Post("/img/upload")
   async uploadS3(
+    @User("id") userId: number,
     @UploadedFile() file: Express.Multer.File
   ): Promise<MediaOutput> {
-    const uploadData = await this.s3Service.uploadFile(file);
+    const uploadData = await this.s3Service.uploadFile(userId, file);
 
     return {
       media: {
