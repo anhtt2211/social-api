@@ -1,4 +1,5 @@
 import { IUser } from "../../../user/core";
+import { FileEntity } from "../entities";
 
 export interface IFile {
   id?: number;
@@ -10,3 +11,9 @@ export interface IFile {
   createdAt?: Date;
   author?: IUser;
 }
+
+interface IPayloadFileRmq {
+  file: FileEntity;
+}
+
+export interface IPayloadFileCreated extends IPayloadFileRmq {}

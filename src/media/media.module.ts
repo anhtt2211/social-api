@@ -5,15 +5,18 @@ import {
   RequestMethod,
 } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { AuthMiddleware } from "../shared/middleware/auth.middleware";
+
+import { AuthMiddleware } from "../shared/middleware";
 import { UserModule } from "../user/user.module";
-import { MediaController } from "./presentation";
-import { S3Service } from "./services/s3.service";
+import { EventModule } from "./application/events/event.module";
+import { S3Service } from "./application/services";
+import { MediaController } from "./presentation/rest";
+import { MediaRmq } from "./presentation/rmq";
 
 @Module({
-  imports: [UserModule, CqrsModule],
+  imports: [UserModule, CqrsModule, EventModule],
   providers: [S3Service],
-  controllers: [MediaController],
+  controllers: [MediaController, MediaRmq],
   exports: [S3Service],
 })
 export class MediaModule implements NestModule {

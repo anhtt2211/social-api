@@ -12,9 +12,9 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 
-import { User } from "../../shared/middleware/user.decorator";
-import { MediaOutput } from "../core/media.interface";
-import { S3Service } from "../services/s3.service";
+import { User } from "../../../shared/middleware/user.decorator";
+import { MediaOutput } from "../../core/media.interface";
+import { S3Service } from "../../application/services/s3.service";
 
 @ApiBearerAuth()
 @ApiTags("media")

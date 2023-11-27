@@ -1,6 +1,15 @@
 import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
+import { ClientProxy } from "@nestjs/microservices";
 import * as AWS from "aws-sdk";
-import { FileEntity, FileWritePort, MediaRepositoryToken } from "../core";
+
+import { FILE_RMQ_CLIENT } from "../../../configs";
+import {
+  FileEntity,
+  FileWritePort,
+  IPayloadFileCreated,
+  MediaRepositoryToken,
+} from "../../core";
+import { MessageCmd } from "../../core/enums";
 
 @Injectable()
 export class S3Service {
@@ -8,7 +17,10 @@ export class S3Service {
   private readonly bucketName: string = process.env.AWS_BUCKET_NAME;
   constructor(
     @Inject(MediaRepositoryToken.Write)
-    private readonly fileWriteRepository: FileWritePort
+    private readonly fileWriteRepository: FileWritePort,
+
+    @Inject(FILE_RMQ_CLIENT)
+    private readonly articleRmqClient: ClientProxy
   ) {
     AWS.config.update({
       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -43,6 +55,11 @@ export class S3Service {
         },
       });
       await this.fileWriteRepository.save(fileEntity);
+
+      this.articleRmqClient.emit<any, IPayloadFileCreated>(
+        { cmd: MessageCmd.FILE_CREATED },
+        { file: fileEntity }
+      );
 
       return fileUpload;
     } catch (error) {

@@ -15,6 +15,7 @@ export const PROFILE_ROUTE_KEY = "PROFILECLE_ROUTE_KEY";
 export const ARTICLE_QUEUE = "ARTICLE_QUEUE";
 export const USER_QUEUE = "USER_QUEUE";
 export const PROFILE_QUEUE = "PROFILE_QUEUE";
+export const FILE_QUEUE = "FILE_QUEUE";
 
 // dead letter
 export const RABBIT_DL_EXCHANGE = "SOCIAL_DL";
@@ -30,3 +31,4 @@ export const PROFILE_DLQ = "PROFILE_DLQ";
 export const ARTICLE_RMQ_CLIENT = "ARTICLE_RMQ_CLIENT";
 export const USER_RMQ_CLIENT = "USER_RMQ_CLIENT";
 export const PROFILE_RMQ_CLIENT = "PROFILE_RMQ_CLIENT";
+export const FILE_RMQ_CLIENT = "FILE_RMQ_CLIENT";

@@ -7,7 +7,12 @@ import { json, urlencoded } from "express";
 import * as os from "os";
 
 import { ApplicationModule } from "./app.module";
-import { ARTICLE_QUEUE, PROFILE_QUEUE, USER_QUEUE } from "./configs";
+import {
+  ARTICLE_QUEUE,
+  FILE_QUEUE,
+  PROFILE_QUEUE,
+  USER_QUEUE,
+} from "./configs";
 
 async function bootstrap() {
   if (cluster.isMaster) {
@@ -65,6 +70,17 @@ async function bootstrap() {
       options: {
         urls: [process.env.RABBIT_URL],
         queue: PROFILE_QUEUE,
+        queueOptions: {
+          durable: true,
+        },
+      },
+    });
+
+    app.connectMicroservice<RmqOptions>({
+      transport: Transport.RMQ,
+      options: {
+        urls: [process.env.RABBIT_URL],
+        queue: FILE_QUEUE,
         queueOptions: {
           durable: true,
         },
