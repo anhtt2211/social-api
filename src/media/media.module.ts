@@ -7,7 +7,7 @@ import {
 import { CqrsModule } from "@nestjs/cqrs";
 import { AuthMiddleware } from "../shared/middleware/auth.middleware";
 import { UserModule } from "../user/user.module";
-import { MediaController } from "./media.controller";
+import { MediaController } from "./presentation";
 import { S3Service } from "./services/s3.service";
 
 @Module({
