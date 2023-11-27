@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { IFile } from "../interfaces";
 
-@Entity("article")
+@Entity("file")
 export class FileEntity {
   constructor(props: IFile) {
     Object.assign(this, props);

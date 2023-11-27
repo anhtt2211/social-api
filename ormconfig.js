@@ -1,4 +1,4 @@
-module.exports = [
+const ormconfigs = [
   {
     type: process.env.DATABASE_ENGINE,
     name: process.env.WRITE_CONNECTION,
@@ -36,3 +36,7 @@ module.exports = [
     },
   },
 ];
+
+console.log({ ormconfig: ormconfigs[0] });
+
+module.exports = ormconfigs;

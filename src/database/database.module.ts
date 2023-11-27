@@ -14,8 +14,8 @@ const defaultOptions = {
   port: parseInt(process.env.DATABASE_PORT),
   username: process.env.DATABASE_USERNAME,
   password: process.env.DATABASE_PASSWORD,
-  entities: [join(__dirname, "../", "/**/core/entities/**.entity{.ts,.js}")],
-  migrations: [join(__dirname, "../", "/database/migrations/**{.ts,.js}")],
+  entities: [join(__dirname, "../", process.env.TYPEORM_ENTITIES)],
+  migrations: [join(__dirname, "../", process.env.TYPEORM_MIGRATIONS)],
   logging: process.env.TYPEORM_LOGGING === "true",
   synchronize: process.env.TYPEORM_SYNCHRONIZE === "true",
   migrationsRun: process.env.TYPEORM_MIGRATION_RUN === "true",
@@ -27,22 +27,34 @@ const defaultOptions = {
 
 @Module({
   imports: [
-    TypeOrmModule.forRootAsync({
+    TypeOrmModule.forRoot({
+      ...defaultOptions,
+      type: "postgres",
+      database: process.env.WRITE_DATABASE_NAME,
       name: WRITE_CONNECTION,
-      useFactory: () => ({
-        ...defaultOptions,
-        type: "postgres",
-        database: process.env.WRITE_DATABASE_NAME,
-      }),
     }),
-    TypeOrmModule.forRootAsync({
+    TypeOrmModule.forRoot({
+      ...defaultOptions,
+      type: "postgres",
+      database: process.env.READ_DATABASE_NAME,
       name: READ_CONNECTION,
-      useFactory: () => ({
-        ...defaultOptions,
-        type: "postgres",
-        database: process.env.READ_DATABASE_NAME,
-      }),
     }),
+    // TypeOrmModule.forRootAsync({
+    //   name: WRITE_CONNECTION,
+    //   useFactory: () => ({
+    //     ...defaultOptions,
+    //     type: "postgres",
+    //     database: process.env.WRITE_DATABASE_NAME,
+    //   }),
+    // }),
+    // TypeOrmModule.forRootAsync({
+    //   name: READ_CONNECTION,
+    //   useFactory: () => ({
+    //     ...defaultOptions,
+    //     type: "postgres",
+    //     database: process.env.READ_DATABASE_NAME,
+    //   }),
+    // }),
     InfrastructureModule,
   ],
 })
