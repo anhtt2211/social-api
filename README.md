@@ -36,10 +36,6 @@ Each module follows the CLEAN architecture, promoting separation of concerns and
 - Redis server
 - PostgreSQL server
 
-Auto-Generate migration
-
-    npm run migration:generate -c <orm_connection> -n <migration_name>
-
 ---
 
 ### Installation
@@ -67,6 +63,10 @@ Run on docker
 ```
 yarn start
 ```
+
+Auto-Generate migration
+
+    npm run migration:generate -c <orm_connection> -n <migration_name>
 
 ## API Documentation
 
