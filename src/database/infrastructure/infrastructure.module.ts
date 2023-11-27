@@ -15,6 +15,7 @@ import {
   COMMENT_WRITE_REPOSITORY,
 } from "../../article/core/token";
 import { READ_CONNECTION, WRITE_CONNECTION } from "../../configs";
+import { FileEntity, MediaRepositoryToken } from "../../media/core";
 import {
   FOLLOW_READ_REPOSITORY,
   FOLLOW_WRITE_REPOSITORY,
@@ -32,6 +33,8 @@ import {
   BlockWriteRepository,
   CommentReadRepository,
   CommentWriteRepository,
+  FileReadRepository,
+  FileWriteRepository,
   FollowReadRepository,
   FollowWriteRepository,
   UserReadRepository,
@@ -50,6 +53,7 @@ import {
             BlockEntity,
             UserEntity,
             FollowsEntity,
+            FileEntity,
           ],
           WRITE_CONNECTION
         ),
@@ -63,6 +67,7 @@ import {
             BlockEntity,
             UserEntity,
             FollowsEntity,
+            FileEntity,
           ],
           READ_CONNECTION
         ),
@@ -113,6 +118,15 @@ import {
       provide: FOLLOW_WRITE_REPOSITORY,
       useClass: FollowWriteRepository,
     },
+
+    {
+      provide: MediaRepositoryToken.Read,
+      useClass: FileReadRepository,
+    },
+    {
+      provide: MediaRepositoryToken.Write,
+      useClass: FileWriteRepository,
+    },
   ],
   exports: [
     ARTICLE_READ_REPOSITORY,
@@ -125,6 +139,8 @@ import {
     USER_WRITE_REPOSITORY,
     FOLLOW_READ_REPOSITORY,
     FOLLOW_WRITE_REPOSITORY,
+    MediaRepositoryToken.Read,
+    MediaRepositoryToken.Write,
   ],
 })
 export class InfrastructureModule {}

@@ -36,6 +36,12 @@ Each module follows the CLEAN architecture, promoting separation of concerns and
 - Redis server
 - PostgreSQL server
 
+Auto-Generate migration
+
+    npm run migration:generate -c <orm_connection> -n <migration_name>
+
+---
+
 ### Installation
 
 Clone the repository and install dependencies:

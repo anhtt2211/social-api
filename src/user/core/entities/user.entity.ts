@@ -1,17 +1,19 @@
+import * as argon2 from "argon2";
+import { IsEmail } from "class-validator";
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
   BeforeInsert,
+  Column,
+  Entity,
+  Index,
   JoinTable,
   ManyToMany,
   OneToMany,
-  Index,
+  PrimaryGeneratedColumn,
 } from "typeorm";
-import { IsEmail } from "class-validator";
-import * as argon2 from "argon2";
-import { IUser } from "../interfaces/user.interface";
+
 import { ArticleEntity, CommentEntity } from "../../../article/core/entities";
+import { FileEntity } from "../../../media/core";
+import { IUser } from "../interfaces/user.interface";
 
 @Entity("user")
 export class UserEntity {
@@ -54,4 +56,7 @@ export class UserEntity {
 
   @OneToMany((type) => CommentEntity, (comment) => comment.author)
   comments: CommentEntity[];
+
+  @OneToMany((type) => FileEntity, (file) => file.author)
+  photos: FileEntity[];
 }
