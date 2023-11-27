@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Dropbox } from "dropbox";
-import { MediaOutput } from "../../core/media.interface";
+
+import { MediaOutput } from "../../core/interfaces";
 
 @Injectable()
 export class DropboxService {
