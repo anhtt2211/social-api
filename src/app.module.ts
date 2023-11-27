@@ -5,22 +5,22 @@ import { ArticleModule } from "./article/article.module";
 import { DatabaseModule } from "./database/database.module";
 import { MediaModule } from "./media/media.module";
 import { ProfileModule } from "./profile/profile.module";
-import { TagModule } from "./tag/tag.module";
-import { UserModule } from "./user/user.module";
 import { RabbitMqModule } from "./rabbitmq/rabbitmq.module";
 import { RedisModule } from "./redis/redis.module";
+import { TagModule } from "./tag/tag.module";
+import { UserModule } from "./user/user.module";
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    DatabaseModule,
     ArticleModule,
-    UserModule,
-    ProfileModule,
-    TagModule,
+    DatabaseModule,
     MediaModule,
+    ProfileModule,
     RabbitMqModule,
     RedisModule,
+    TagModule,
+    UserModule,
   ],
   controllers: [],
   providers: [],
