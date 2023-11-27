@@ -13,10 +13,15 @@
     "test:watch": "jest --watch --config=jest.json",
     "test:coverage": "jest --config=jest.json --coverage --coverageDirectory=coverage",
     "migration:create": "ts-node node_modules/typeorm/cli.js migration:create -n",
+    "migration:create--master": "ts-node node_modules/typeorm/cli.js migration:create -n",
     "migration:generate": "ts-node node_modules/typeorm/cli.js migration:generate",
+    "migration:generate--master": "ts-node node_modules/typeorm/cli.js migration:generate -c db-master -n",
+    "migration:generate--slave": "ts-node node_modules/typeorm/cli.js migration:generate -c db-slave -n",
     "migration:run": "ts-node node_modules/typeorm/cli.js migration:run -c",
     "migration:revert": "ts-node node_modules/typeorm/cli.js migration:revert -c",
-    "migration:run--prod": "ts-node node_modules/typeorm/cli.js migration:run"
+    "migration:run--prod": "ts-node node_modules/typeorm/cli.js migration:run",
+    "migration:run--master": "ts-node node_modules/typeorm/cli.js migration:run -c db-master",
+    "migration:run--slave": "ts-node node_modules/typeorm/cli.js migration:run -c db-slave"
   },
   "repository": {
     "type": "git",
