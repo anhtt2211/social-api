@@ -17,16 +17,16 @@ export class FileEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   size: number;
 
-  @Column()
+  @Column({ nullable: true })
   mimeType: string;
 
-  @Column()
+  @Column({ nullable: true })
   key: string;
 
   @Column()

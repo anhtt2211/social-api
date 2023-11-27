@@ -1,9 +1,4 @@
-import {
-  Controller,
-  Post,
-  UploadedFile,
-  UseInterceptors,
-} from "@nestjs/common";
+import { Controller, Get, UseInterceptors } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import {
   ApiBearerAuth,
@@ -14,7 +9,6 @@ import {
 
 import { User } from "../../../shared/middleware";
 import { S3Service } from "../../application/services";
-import { MediaOutput } from "../../core/interfaces";
 
 @ApiBearerAuth()
 @ApiTags("media")
@@ -22,24 +16,40 @@ import { MediaOutput } from "../../core/interfaces";
 export class MediaController {
   constructor(private readonly s3Service: S3Service) {}
 
-  @ApiOperation({ summary: "Upload image to S3" })
+  // @ApiOperation({ summary: "Upload image to S3" })
+  // @ApiResponse({
+  //   status: 201,
+  //   description: "The image has been successfully uploaded.",
+  // })
+  // @ApiResponse({ status: 403, description: "Forbidden." })
+  // @UseInterceptors(FileInterceptor("file"))
+  // @Post("/img/upload")
+  // async uploadS3(
+  //   @User("id") userId: number,
+  //   @UploadedFile() file: Express.Multer.File
+  // ): Promise<MediaOutput> {
+  //   const uploadData = await this.s3Service.uploadFile(userId, file);
+
+  //   return {
+  //     media: {
+  //       url: uploadData,
+  //     },
+  //   };
+  // }
+
+  @ApiOperation({ summary: "Generate presigned Url" })
   @ApiResponse({
     status: 201,
-    description: "The image has been successfully uploaded.",
+    description: "",
   })
   @ApiResponse({ status: 403, description: "Forbidden." })
   @UseInterceptors(FileInterceptor("file"))
-  @Post("/img/upload")
-  async uploadS3(
-    @User("id") userId: number,
-    @UploadedFile() file: Express.Multer.File
-  ): Promise<MediaOutput> {
-    const uploadData = await this.s3Service.uploadFile(userId, file);
+  @Get("/img/presigned-url")
+  async presignedUrl(@User("id") userId: number): Promise<any> {
+    const uploadData = await this.s3Service.generatePresignedUrl(userId);
 
     return {
-      media: {
-        url: uploadData.Location,
-      },
+      data: uploadData,
     };
   }
 }
