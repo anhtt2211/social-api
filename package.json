@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "clean": "rimraf dist/",
-    "build": "yarn clean && tsc",
+    "build": "yarn clean && tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
     "start": "node index.js",
     "dev": "nodemon -- --inspect",
     "start:prod": "node dist/main.js",
@@ -75,6 +75,8 @@
     "nodemon": "^1.19.4",
     "supertest": "^3.4.2",
     "ts-jest": "^25.4.0",
-    "ts-node": "^8.9.1"
+    "ts-node": "^8.9.1",
+    "tsc-alias": "^1.8.8",
+    "tsconfig-paths": "^4.2.0"
   }
 }
