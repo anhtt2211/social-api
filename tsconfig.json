@@ -11,7 +11,19 @@
     "target": "es6",
     "sourceMap": true,
     "allowJs": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "paths": {
+      "@article/*": ["src/modules/article/*"],
+      "@configs": ["src/configs/index"],
+      "@media/*": ["src/modules/media/*"],
+      "@profile/*": ["src/modules/profile/*"],
+      "@tag/*": ["src/modules/tag/*"],
+      "@user/*": ["src/modules/user/*"],
+      "@rabbitmq/*": ["src/infrastructure/rabbitmq/*"],
+      "@redis/*": ["src/infrastructure/redis/*"],
+      "@shared/*": ["src/shared/*"]
+    }
   },
   "include": ["src/**/*", "dist/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]
