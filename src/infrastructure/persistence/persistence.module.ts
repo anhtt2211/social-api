@@ -4,7 +4,7 @@ import * as dotenv from "dotenv";
 import { join } from "path";
 
 import { READ_CONNECTION, WRITE_CONNECTION } from "@configs";
-import { RepositoryModule } from "./infrastructure/infrastructure.module";
+import { RepositoryModule } from "./repositories/repository.module";
 
 dotenv.config();
 

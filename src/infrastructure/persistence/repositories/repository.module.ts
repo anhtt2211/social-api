@@ -37,7 +37,7 @@ import {
   FollowWriteRepository,
   UserReadRepository,
   UserWriteRepository,
-} from "./repositories";
+} from ".";
 
 @Global()
 @Module({
