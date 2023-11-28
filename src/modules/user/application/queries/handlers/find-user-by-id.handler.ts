@@ -3,8 +3,8 @@ import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
 import { RedisService } from "@redis/redis.service";
 import { USER_READ_REPOSITORY, UserReadPort } from "../../../core//";
-import { UserEntity } from "../../../core///entities";
-import { UserRO } from "../../../core///interfaces";
+import { UserEntity } from "../../../core/entities";
+import { UserRO } from "../../../core/interfaces";
 import { UserService } from "../../services";
 import { FindUserById } from "../impl";
 

@@ -4,14 +4,14 @@ import { ClientProxy } from "@nestjs/microservices";
 
 import { ARTICLE_RMQ_CLIENT } from "@configs";
 import { USER_WRITE_REPOSITORY, UserWritePort } from "@user/core";
-import { CommentEntity } from "../../../core///entities";
-import { MessageCmd } from "../../../core///enums";
-import { CommentRO, IPayloadCommentCreated } from "../../../core///interfaces";
-import { ArticleWritePort, CommentWritePort } from "../../../core///ports";
+import { CommentEntity } from "../../../core/entities";
+import { MessageCmd } from "../../../core/enums";
+import { CommentRO, IPayloadCommentCreated } from "../../../core/interfaces";
+import { ArticleWritePort, CommentWritePort } from "../../../core/ports";
 import {
   ARTICLE_WRITE_REPOSITORY,
   COMMENT_WRITE_REPOSITORY,
-} from "../../../core///token";
+} from "../../../core/token";
 import { ArticleService } from "../../services/article.service";
 import { CreateCommentCommand } from "../impl";
 
