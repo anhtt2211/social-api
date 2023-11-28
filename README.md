@@ -22,7 +22,9 @@ The application adopts a microservices architecture with distinct modules:
 - **Profile Module:** Manages user profiles.
 - **Tag Module:** Responsible for tag management associated with articles.
 - **Media Module:** Handles uploading and retrieving media content.
-- **Database Module:** Manages database connections and migrations.
+- **Persistence Module:** Manages database connections and migrations.
+- **RabbitMQ Module:** Handles sync data between Master & Slave databases.
+- **Redis Module:** Handles cached user login.
 
 Each module follows the CLEAN architecture, promoting separation of concerns and maintainability.
 

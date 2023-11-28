@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { PersistenceModule } from "./persistence/database.module";
+import { PersistenceModule } from "./persistence/persistence.module";
 import { RabbitMqModule } from "./rabbitmq/rabbitmq.module";
 import { RedisModule } from "./redis/redis.module";
 
