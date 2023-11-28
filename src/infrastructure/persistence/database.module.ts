@@ -42,4 +42,4 @@ const defaultOptions = {
     RepositoryModule,
   ],
 })
-export class DatabaseModule {}
+export class PersistenceModule {}
