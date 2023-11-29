@@ -12,7 +12,7 @@ import {
   ArticleWritePort,
   IPayloadArticleCreated,
   MessageCmd,
-} from "../../../core//";
+} from "../../../core";
 
 @CommandHandler(CreateArticleCommand)
 export class CreateArticleCommandHandler
