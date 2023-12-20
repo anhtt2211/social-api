@@ -2,143 +2,76 @@ import { Global, Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 import {
-  ARTICLE_READ_REPOSITORY,
-  ARTICLE_WRITE_REPOSITORY,
+  ARTICLE_REPOSITORY,
   ArticleEntity,
-  BLOCK_READ_REPOSITORY,
-  BLOCK_WRITE_REPOSITORY,
+  BLOCK_REPOSITORY,
   BlockEntity,
-  COMMENT_READ_REPOSITORY,
-  COMMENT_WRITE_REPOSITORY,
+  COMMENT_REPOSITORY,
   CommentEntity,
 } from "@article/core";
-import { READ_CONNECTION, WRITE_CONNECTION } from "@configs";
-import { FileEntity, MediaRepositoryToken } from "@media/core";
-import {
-  FOLLOW_READ_REPOSITORY,
-  FOLLOW_WRITE_REPOSITORY,
-  FollowsEntity,
-} from "@profile/core";
-import {
-  USER_READ_REPOSITORY,
-  USER_WRITE_REPOSITORY,
-  UserEntity,
-} from "@user/core";
-import {
-  ArticleReadRepository,
-  ArticleWriteRepository,
-  BlockReadRepository,
-  BlockWriteRepository,
-  CommentReadRepository,
-  CommentWriteRepository,
-  FileReadRepository,
-  FileWriteRepository,
-  FollowReadRepository,
-  FollowWriteRepository,
-  UserReadRepository,
-  UserWriteRepository,
-} from ".";
+import { FileEntity, MEDIA_REPOSITORY } from "@media/core";
+import { FOLLOW_REPOSITORY, FollowsEntity } from "@profile/core";
+import { USER_REPOSITORY, UserEntity } from "@user/core";
+import { ArticleRepository } from "./article.repository";
+import { BlockRepository } from "./block.repository";
+import { CommentRepository } from "./comment.repository";
+import { FileRepository } from "./file.repository";
+import { FollowRepository } from "./follow.repository";
+import { UserRepository } from "./user.repository";
 
 @Global()
 @Module({
   imports: [
     {
       forwardRef: () =>
-        TypeOrmModule.forFeature(
-          [
-            ArticleEntity,
-            CommentEntity,
-            BlockEntity,
-            UserEntity,
-            FollowsEntity,
-            FileEntity,
-          ],
-          WRITE_CONNECTION
-        ),
-    },
-    {
-      forwardRef: () =>
-        TypeOrmModule.forFeature(
-          [
-            ArticleEntity,
-            CommentEntity,
-            BlockEntity,
-            UserEntity,
-            FollowsEntity,
-            FileEntity,
-          ],
-          READ_CONNECTION
-        ),
+        TypeOrmModule.forFeature([
+          ArticleEntity,
+          CommentEntity,
+          BlockEntity,
+          UserEntity,
+          FollowsEntity,
+          FileEntity,
+        ]),
     },
   ],
   providers: [
     {
-      provide: ARTICLE_WRITE_REPOSITORY,
-      useClass: ArticleWriteRepository,
-    },
-    {
-      provide: ARTICLE_READ_REPOSITORY,
-      useClass: ArticleReadRepository,
+      provide: ARTICLE_REPOSITORY,
+      useClass: ArticleRepository,
     },
 
     {
-      provide: BLOCK_READ_REPOSITORY,
-      useClass: BlockReadRepository,
-    },
-    {
-      provide: BLOCK_WRITE_REPOSITORY,
-      useClass: BlockWriteRepository,
+      provide: BLOCK_REPOSITORY,
+      useClass: BlockRepository,
     },
 
     {
-      provide: COMMENT_READ_REPOSITORY,
-      useClass: CommentReadRepository,
-    },
-    {
-      provide: COMMENT_WRITE_REPOSITORY,
-      useClass: CommentWriteRepository,
+      provide: COMMENT_REPOSITORY,
+      useClass: CommentRepository,
     },
 
     {
-      provide: USER_READ_REPOSITORY,
-      useClass: UserReadRepository,
-    },
-    {
-      provide: USER_WRITE_REPOSITORY,
-      useClass: UserWriteRepository,
+      provide: USER_REPOSITORY,
+      useClass: UserRepository,
     },
 
     {
-      provide: FOLLOW_READ_REPOSITORY,
-      useClass: FollowReadRepository,
-    },
-    {
-      provide: FOLLOW_WRITE_REPOSITORY,
-      useClass: FollowWriteRepository,
+      provide: FOLLOW_REPOSITORY,
+      useClass: FollowRepository,
     },
 
     {
-      provide: MediaRepositoryToken.Read,
-      useClass: FileReadRepository,
-    },
-    {
-      provide: MediaRepositoryToken.Write,
-      useClass: FileWriteRepository,
+      provide: MEDIA_REPOSITORY,
+      useClass: FileRepository,
     },
   ],
   exports: [
-    ARTICLE_READ_REPOSITORY,
-    ARTICLE_WRITE_REPOSITORY,
-    BLOCK_READ_REPOSITORY,
-    BLOCK_WRITE_REPOSITORY,
-    COMMENT_READ_REPOSITORY,
-    COMMENT_WRITE_REPOSITORY,
-    USER_READ_REPOSITORY,
-    USER_WRITE_REPOSITORY,
-    FOLLOW_READ_REPOSITORY,
-    FOLLOW_WRITE_REPOSITORY,
-    MediaRepositoryToken.Read,
-    MediaRepositoryToken.Write,
+    ARTICLE_REPOSITORY,
+    BLOCK_REPOSITORY,
+    COMMENT_REPOSITORY,
+    USER_REPOSITORY,
+    FOLLOW_REPOSITORY,
+    MEDIA_REPOSITORY,
   ],
 })
 export class RepositoryModule {}

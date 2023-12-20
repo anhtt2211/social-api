@@ -9,16 +9,14 @@ import { CqrsModule } from "@nestjs/cqrs";
 import { AuthMiddleware } from "@shared/middleware";
 import { UserModule } from "../user/user.module";
 import { CommandModule } from "./application/commands/command.module";
-import { EventModule } from "./application/events/event.module";
 import { QueryModule } from "./application/queries/query.module";
 import { ArticleService } from "./application/services";
 import { ArticleController } from "./presentation/rest";
-import { ArticleRmq } from "./presentation/rmq";
 
 @Module({
-  imports: [CqrsModule, UserModule, CommandModule, QueryModule, EventModule],
+  imports: [CqrsModule, UserModule, CommandModule, QueryModule],
   providers: [ArticleService],
-  controllers: [ArticleController, ArticleRmq],
+  controllers: [ArticleController],
 })
 export class ArticleModule implements NestModule {
   public configure(consumer: MiddlewareConsumer) {

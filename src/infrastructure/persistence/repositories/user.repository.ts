@@ -9,13 +9,12 @@ import {
   SelectQueryBuilder,
 } from "typeorm";
 
-import { WRITE_CONNECTION } from "@configs";
-import { UserEntity, UserWritePort } from "@user/core";
+import { UserEntity, UserPort } from "@user/core";
 
 @Injectable()
-export class UserWriteRepository implements UserWritePort {
+export class UserRepository implements UserPort {
   constructor(
-    @InjectRepository(UserEntity, WRITE_CONNECTION)
+    @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>
   ) {}
 

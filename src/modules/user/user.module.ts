@@ -6,18 +6,16 @@ import {
 } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
 
-import { AuthMiddleware } from "../../shared/middleware/auth.middleware";
+import { AuthMiddleware } from "@shared/middleware";
 import { CommandModule } from "./application/commands/command.module";
-import { EventModule } from "./application/events/event.module";
 import { QueryModule } from "./application/queries/query.module";
 import { UserService } from "./application/services";
 import { UserController } from "./presentation/rest";
-import { UserRmq } from "./presentation/rmq";
 
 @Module({
-  imports: [CqrsModule, CommandModule, QueryModule, EventModule],
+  imports: [CqrsModule, CommandModule, QueryModule],
   providers: [UserService],
-  controllers: [UserController, UserRmq],
+  controllers: [UserController],
   exports: [UserService],
 })
 export class UserModule implements NestModule {

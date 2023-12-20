@@ -1,13 +1,8 @@
 import { Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { ClientProxy } from "@nestjs/microservices";
 
-import { ARTICLE_RMQ_CLIENT } from "@configs";
-import { USER_WRITE_REPOSITORY, UserWritePort } from "@user/core";
-import { MessageCmd } from "../../../core/enums";
-import { ArticleRO, IPayloadArticleFavorited } from "../../../core/interfaces";
-import { ArticleWritePort } from "../../../core/ports";
-import { ARTICLE_WRITE_REPOSITORY } from "../../../core/token";
+import { USER_REPOSITORY, UserPort } from "@user/core";
+import { ARTICLE_REPOSITORY, ArticlePort, ArticleRO } from "../../../core";
 import { ArticleService } from "../../services";
 import { UnFavoriteArticleCommand } from "../impl";
 
@@ -16,17 +11,13 @@ export class UnFavoriteArticleCommandHandler
   implements ICommandHandler<UnFavoriteArticleCommand>
 {
   constructor(
-    @Inject(ARTICLE_WRITE_REPOSITORY)
-    private readonly articleRepository: ArticleWritePort,
-    @Inject(USER_WRITE_REPOSITORY)
-    private readonly userRepository: UserWritePort,
-    @Inject(ARTICLE_RMQ_CLIENT)
-    private readonly articleRmqClient: ClientProxy,
+    @Inject(ARTICLE_REPOSITORY)
+    private readonly articleRepository: ArticlePort,
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: UserPort,
 
     private readonly articleService: ArticleService
-  ) {
-    this.articleRmqClient.connect();
-  }
+  ) {}
 
   async execute({
     userId,
@@ -50,15 +41,8 @@ export class UnFavoriteArticleCommandHandler
       user.favorites.splice(deleteIndex, 1);
       article.favoriteCount--;
 
-      const _user = await this.userRepository.save(user);
+      await this.userRepository.save(user);
       article = await this.articleRepository.save(article);
-
-      if (_user && article) {
-        this.articleRmqClient.emit<any, IPayloadArticleFavorited>(
-          { cmd: MessageCmd.ARTICLE_UNFAVORITED },
-          { user, article }
-        );
-      }
     }
 
     return { article: this.articleService.buildArticleRO(article, user) };

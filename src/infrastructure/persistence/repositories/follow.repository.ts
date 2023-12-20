@@ -8,13 +8,12 @@ import {
   Repository,
 } from "typeorm";
 
-import { READ_CONNECTION } from "@configs";
-import { FollowReadPort, FollowsEntity } from "@profile/core";
+import { FollowPort, FollowsEntity } from "@profile/core";
 
 @Injectable()
-export class FollowReadRepository implements FollowReadPort {
+export class FollowRepository implements FollowPort {
   constructor(
-    @InjectRepository(FollowsEntity, READ_CONNECTION)
+    @InjectRepository(FollowsEntity)
     private readonly followRepository: Repository<FollowsEntity>
   ) {}
   async find(

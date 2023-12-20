@@ -8,7 +8,7 @@ import {
 
 import { FileEntity } from "../entities";
 
-interface FilePort {
+export interface FilePort {
   createQueryBuilder(
     alias?: string,
     queryRunner?: QueryRunner
@@ -29,6 +29,3 @@ interface FilePort {
   save(user: DeepPartial<FileEntity>): Promise<FileEntity>;
   save(users: DeepPartial<FileEntity>[]): Promise<FileEntity[]>;
 }
-
-export interface FileReadPort extends FilePort {}
-export interface FileWritePort extends FilePort {}

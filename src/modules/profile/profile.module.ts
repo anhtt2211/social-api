@@ -5,19 +5,18 @@ import {
   RequestMethod,
 } from "@nestjs/common";
 import { CqrsModule } from "@nestjs/cqrs";
-import { AuthMiddleware } from "../../shared/middleware/auth.middleware";
-import { UserModule } from "../user/user.module";
+
+import { AuthMiddleware } from "@shared/middleware";
+import { UserModule } from "@user/user.module";
 import { CommandModule } from "./application/commands/command.module";
-import { EventModule } from "./application/events/event.module";
 import { QueryModule } from "./application/queries/query.module";
 import { ProfileService } from "./application/services";
-import { ProfileController } from "./presentation/rest";
-import { ProfileRmq } from "./presentation/rmq";
+import { ProfileController } from "./presentation";
 
 @Module({
-  imports: [CqrsModule, UserModule, CommandModule, QueryModule, EventModule],
+  imports: [CqrsModule, UserModule, CommandModule, QueryModule],
   providers: [ProfileService],
-  controllers: [ProfileController, ProfileRmq],
+  controllers: [ProfileController],
   exports: [],
 })
 export class ProfileModule implements NestModule {

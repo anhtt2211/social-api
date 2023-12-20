@@ -1,12 +1,7 @@
 import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { ClientProxy } from "@nestjs/microservices";
 
-import { ARTICLE_RMQ_CLIENT } from "@configs";
-import { MessageCmd } from "../../../core/enums";
-import { ArticleRO, IPayloadArticleUpdated } from "../../../core/interfaces";
-import { ArticleWritePort } from "../../../core/ports";
-import { ARTICLE_WRITE_REPOSITORY } from "../../../core/token";
+import { ARTICLE_REPOSITORY, ArticlePort, ArticleRO } from "../../../core";
 import { ArticleService } from "../../services";
 import { UpdateArticleCommand } from "../impl";
 
@@ -15,15 +10,11 @@ export class UpdateArticleCommandHandler
   implements ICommandHandler<UpdateArticleCommand>
 {
   constructor(
-    @Inject(ARTICLE_WRITE_REPOSITORY)
-    private readonly articleRepository: ArticleWritePort,
-    @Inject(ARTICLE_RMQ_CLIENT)
-    private readonly articleRmqClient: ClientProxy,
+    @Inject(ARTICLE_REPOSITORY)
+    private readonly articleRepository: ArticlePort,
 
     private readonly articleService: ArticleService
-  ) {
-    this.articleRmqClient.connect();
-  }
+  ) {}
 
   async execute({
     slug,
@@ -34,12 +25,13 @@ export class UpdateArticleCommandHandler
       let updated = Object.assign(toUpdate, articleData);
       const article = await this.articleRepository.save(updated);
 
-      if (article) {
-        this.articleRmqClient.emit<any, IPayloadArticleUpdated>(
-          { cmd: MessageCmd.ARTICLE_CREATED },
-          { article }
-        );
-      }
+      // TODO: Publish an message to SQS
+      // if (article) {
+      //   this.articleRmqClient.emit<any, IPayloadArticleUpdated>(
+      //     { cmd: MessageCmd.ARTICLE_CREATED },
+      //     { article }
+      //   );
+      // }
 
       return {
         article: this.articleService.buildArticleRO(article),

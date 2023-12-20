@@ -2,13 +2,12 @@
 
 ## Project Overview
 
-This project is a robust social networking platform built using NestJS. It features a microservices architecture, integrating technologies like RabbitMQ for message queuing and Redis for caching. The platform includes modules for user management, article handling, profiles, tags, and media management, showcasing a scalable and modular design.
+This project is a robust social networking platform built using NestJS. It features a microservices architecture, integrating technologies Redis for caching. The platform includes modules for user management, article handling, profiles, tags, and media management, showcasing a scalable and modular design.
 
 ## Technology Stack
 
 - NestJS
 - TypeScript
-- RabbitMQ
 - Redis
 - PostgreSQL
 - Docker
@@ -23,7 +22,6 @@ The application adopts a microservices architecture with distinct modules:
 - **Tag Module:** Responsible for tag management associated with articles.
 - **Media Module:** Handles uploading and retrieving media content.
 - **Persistence Module:** Manages database connections and migrations.
-- **RabbitMQ Module:** Handles sync data between Master & Slave databases.
 - **Redis Module:** Handles cached user login.
 
 Each module follows the CLEAN architecture, promoting separation of concerns and maintainability.
@@ -34,7 +32,6 @@ Each module follows the CLEAN architecture, promoting separation of concerns and
 
 - Node.js
 - Docker
-- RabbitMQ server
 - Redis server
 - PostgreSQL server
 

@@ -1,18 +1,15 @@
 import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { ClientProxy } from "@nestjs/microservices";
 import { DeleteResult } from "typeorm";
 
-import { ARTICLE_RMQ_CLIENT } from "@configs";
-import { MessageCmd } from "../../../core/enums";
-import { IPayloadArticleDeleted } from "../../../core/interfaces";
-import { ArticleWritePort, BlockWritePort } from "../../../core/ports";
-import { CommentWritePort } from "../../../core/ports/comment.port";
 import {
-  ARTICLE_WRITE_REPOSITORY,
-  BLOCK_WRITE_REPOSITORY,
-  COMMENT_WRITE_REPOSITORY,
-} from "../../../core/token";
+  ARTICLE_REPOSITORY,
+  ArticlePort,
+  BLOCK_REPOSITORY,
+  BlockPort,
+  COMMENT_REPOSITORY,
+  CommentPort,
+} from "../../../core";
 import { DeleteArticleCommand } from "../impl";
 
 @CommandHandler(DeleteArticleCommand)
@@ -20,17 +17,13 @@ export class DeleteArticleCommandHandler
   implements ICommandHandler<DeleteArticleCommand>
 {
   constructor(
-    @Inject(ARTICLE_WRITE_REPOSITORY)
-    private readonly articleRepository: ArticleWritePort,
-    @Inject(BLOCK_WRITE_REPOSITORY)
-    private readonly blockRepository: BlockWritePort,
-    @Inject(COMMENT_WRITE_REPOSITORY)
-    private readonly commentRepository: CommentWritePort,
-    @Inject(ARTICLE_RMQ_CLIENT)
-    private readonly articleRmqClient: ClientProxy
-  ) {
-    this.articleRmqClient.connect();
-  }
+    @Inject(ARTICLE_REPOSITORY)
+    private readonly articleRepository: ArticlePort,
+    @Inject(BLOCK_REPOSITORY)
+    private readonly blockRepository: BlockPort,
+    @Inject(COMMENT_REPOSITORY)
+    private readonly commentRepository: CommentPort
+  ) {}
 
   async execute({ userId, slug }: DeleteArticleCommand): Promise<DeleteResult> {
     try {
@@ -61,12 +54,13 @@ export class DeleteArticleCommandHandler
 
       const _deleted = await this.articleRepository.delete({ slug: slug });
 
-      if (_deleted) {
-        this.articleRmqClient.emit<any, IPayloadArticleDeleted>(
-          { cmd: MessageCmd.ARTICLE_DELETED },
-          { userId, slug }
-        );
-      }
+      // TODO: Publish an message to SQS
+      // if (_deleted) {
+      //   this.articleRmqClient.emit<any, IPayloadArticleDeleted>(
+      //     { cmd: MessageCmd.ARTICLE_DELETED },
+      //     { userId, slug }
+      //   );
+      // }
 
       return _deleted;
     } catch (error) {

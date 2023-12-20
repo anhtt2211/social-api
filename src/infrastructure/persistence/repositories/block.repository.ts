@@ -2,14 +2,12 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeleteResult, FindConditions, Repository } from "typeorm";
 
-import { READ_CONNECTION } from "@configs";
-import { BlockEntity } from "@article/core/entities";
-import { BlockReadPort } from "@article/core/ports";
+import { BlockEntity, BlockPort } from "@article/core";
 
 @Injectable()
-export class BlockReadRepository implements BlockReadPort {
+export class BlockRepository implements BlockPort {
   constructor(
-    @InjectRepository(BlockEntity, READ_CONNECTION)
+    @InjectRepository(BlockEntity)
     private readonly blockRepository: Repository<BlockEntity>
   ) {}
 

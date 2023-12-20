@@ -8,7 +8,7 @@ import {
 
 import { FollowsEntity } from "../entities";
 
-interface FollowPort {
+export interface FollowPort {
   find(options?: FindManyOptions<FollowsEntity>): Promise<FollowsEntity[]>;
   find(conditions?: FindConditions<FollowsEntity>): Promise<FollowsEntity[]>;
 
@@ -35,6 +35,3 @@ interface FollowPort {
       | FindConditions<FollowsEntity>
   ): Promise<DeleteResult>;
 }
-
-export interface FollowReadPort extends FollowPort {}
-export interface FollowWritePort extends FollowPort {}

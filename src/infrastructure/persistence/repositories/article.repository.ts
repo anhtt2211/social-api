@@ -1,4 +1,3 @@
-// src/infrastructure/db/repositories/article.repository.ts
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import {
@@ -12,15 +11,14 @@ import {
   SelectQueryBuilder,
 } from "typeorm";
 
-import { READ_CONNECTION } from "@configs";
 import { CreateArticleDto } from "@article/core/dto";
 import { ArticleEntity } from "@article/core/entities";
-import { ArticleReadPort } from "@article/core/ports";
+import { ArticlePort } from "@article/core/ports";
 
 @Injectable()
-export class ArticleReadRepository implements ArticleReadPort {
+export class ArticleRepository implements ArticlePort {
   constructor(
-    @InjectRepository(ArticleEntity, READ_CONNECTION)
+    @InjectRepository(ArticleEntity)
     private readonly articleRepository: Repository<ArticleEntity>
   ) {}
 

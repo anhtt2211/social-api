@@ -2,17 +2,15 @@ import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
 import { RedisService } from "@redis/redis.service";
-import { USER_READ_REPOSITORY, UserReadPort } from "../../../core";
-import { UserEntity } from "../../../core/entities";
-import { UserRO } from "../../../core/interfaces";
+import { USER_REPOSITORY, UserEntity, UserPort, UserRO } from "@user/core";
 import { UserService } from "../../services";
 import { FindUserById } from "../impl";
 
 @QueryHandler(FindUserById)
 export class FindUserByIdHandler implements IQueryHandler<FindUserById> {
   constructor(
-    @Inject(USER_READ_REPOSITORY)
-    private readonly userRepository: UserReadPort,
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: UserPort,
 
     private readonly userService: UserService,
     private readonly redisCacheService: RedisService

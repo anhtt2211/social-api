@@ -9,13 +9,12 @@ import {
   SelectQueryBuilder,
 } from "typeorm";
 
-import { READ_CONNECTION } from "@configs";
-import { FileEntity, FileReadPort } from "@media/core";
+import { FileEntity, FilePort } from "@media/core";
 
 @Injectable()
-export class FileReadRepository implements FileReadPort {
+export class FileRepository implements FilePort {
   constructor(
-    @InjectRepository(FileEntity, READ_CONNECTION)
+    @InjectRepository(FileEntity)
     private readonly fileRepository: Repository<FileEntity>
   ) {}
 

@@ -7,14 +7,12 @@ import {
   Repository,
 } from "typeorm";
 
-import { WRITE_CONNECTION } from "@configs";
-import { CommentEntity } from "@article/core/entities";
-import { CommentWritePort } from "@article/core/ports";
+import { CommentEntity, CommentPort } from "@article/core";
 
 @Injectable()
-export class CommentWriteRepository implements CommentWritePort {
+export class CommentRepository implements CommentPort {
   constructor(
-    @InjectRepository(CommentEntity, WRITE_CONNECTION)
+    @InjectRepository(CommentEntity)
     private readonly commentRepository: Repository<CommentEntity>
   ) {}
 
