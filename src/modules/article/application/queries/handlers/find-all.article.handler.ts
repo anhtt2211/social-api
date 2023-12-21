@@ -2,7 +2,6 @@ import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { getRepository } from "typeorm";
 
-import { READ_CONNECTION } from "@configs";
 import { FollowsEntity } from "@profile/core";
 import { USER_REPOSITORY, UserPort } from "@user/core";
 import { ARTICLE_REPOSITORY, ArticlePort, ArticlesRO } from "../../../core";
@@ -77,7 +76,7 @@ export class FindAllArticleQueryHandler
         user = await this.userRepository.findOne(userId, {
           relations: ["favorites"],
         });
-        const followsBuilder = getRepository(FollowsEntity, READ_CONNECTION)
+        const followsBuilder = getRepository(FollowsEntity)
           .createQueryBuilder("follows")
           .where("follows.followerId = :followerId", { followerId: userId });
         if (authorIds.length > 0) {
