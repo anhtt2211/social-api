@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import * as AWS from "aws-sdk";
 
 import {
   ARTICLE_REPOSITORY,
@@ -14,12 +15,23 @@ import { CreateArticleCommand } from "../impl";
 export class CreateArticleCommandHandler
   implements ICommandHandler<CreateArticleCommand>
 {
+  private readonly sqs: AWS.SQS;
+  private readonly awsRegion: string = process.env.AWS_REGION;
+  private readonly queueUrl: string = process.env.AWS_SQS_QUEUE_URL;
+
   constructor(
     @Inject(ARTICLE_REPOSITORY)
     private readonly articleRepository: ArticlePort,
 
     private readonly articleService: ArticleService
-  ) {}
+  ) {
+    AWS.config.update({
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      region: this.awsRegion,
+    });
+    this.sqs = new AWS.SQS();
+  }
 
   async execute({
     userId,
@@ -36,13 +48,13 @@ export class CreateArticleCommandHandler
         })
       );
 
-      // TODO: Publish an message to SQS
-      // if (article) {
-      //   this.articleRmqClient.emit<any, IPayloadArticleCreated>(
-      //     { cmd: MessageCmd.ARTICLE_CREATED },
-      //     { article }
-      //   );
-      // }
+      if (article) {
+        const params: AWS.SQS.Types.SendMessageRequest = {
+          QueueUrl: this.queueUrl,
+          MessageBody: JSON.stringify({ article }),
+        };
+        await this.sqs.sendMessage(params).promise();
+      }
 
       return {
         article: this.articleService.buildArticleRO(article),
