@@ -11,9 +11,8 @@ services:
       - "81:8000"
     depends_on:
       - db
-      - rabbitmq
       - redis
-    env_file:
+env_file:
       - .env.docker
     networks:
       - social-network
