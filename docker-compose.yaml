@@ -12,7 +12,7 @@ services:
     depends_on:
       - db
       - redis
-env_file:
+    env_file:
       - .env.docker
     networks:
       - social-network
