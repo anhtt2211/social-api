@@ -67,6 +67,10 @@
     "ts-jest": "^25.4.0",
     "ts-node": "^8.9.1",
     "tsc-alias": "^1.8.8",
-    "tsconfig-paths": "^4.2.0"
+    "tsconfig-paths": "^4.2.0",
+    "nx": "17.2.7"
+  },
+  "nx": {
+    "targets": {}
   }
 }
