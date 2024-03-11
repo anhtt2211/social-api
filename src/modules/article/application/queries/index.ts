@@ -3,6 +3,7 @@ import {
   FindCommentQueryHandler,
   FindFeedArticleQueryHandler,
   FindOneArticleQueryHandler,
+  GetHotArticleQueryHandler,
 } from "./handlers";
 
 export * from "./handlers";
@@ -13,4 +14,5 @@ export const QueryHandlers = [
   FindFeedArticleQueryHandler,
   FindOneArticleQueryHandler,
   FindCommentQueryHandler,
+  GetHotArticleQueryHandler,
 ];

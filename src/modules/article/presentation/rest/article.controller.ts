@@ -33,13 +33,19 @@ import {
   FindCommentQuery,
   FindFeedArticleQuery,
   FindOneArticleQuery,
+  GetHotArticleQuery,
 } from "../../application/queries";
 import {
   ArticleFilters,
   CreateArticleDto,
   CreateCommentDto,
 } from "../../core/dto";
-import { ArticleRO, ArticlesRO, CommentsRO } from "../../core/interfaces";
+import {
+  ArticleData,
+  ArticleRO,
+  ArticlesRO,
+  CommentsRO,
+} from "../../core/interfaces";
 
 @ApiBearerAuth()
 @ApiTags("articles")
@@ -69,6 +75,13 @@ export class ArticleController {
     @Query() query: ArticleFilters
   ): Promise<ArticlesRO> {
     return this.queryBus.execute(new FindFeedArticleQuery(userId, query));
+  }
+
+  @ApiOperation({ summary: "Get hot articles" })
+  @ApiResponse({ status: 200, description: "Return hot articles." })
+  @Get("hot")
+  async getHotArticles(): Promise<ArticleData[]> {
+    return this.queryBus.execute(new GetHotArticleQuery());
   }
 
   @ApiOperation({ summary: "Get article by slug" })
