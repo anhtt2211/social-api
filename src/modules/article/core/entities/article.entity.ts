@@ -8,9 +8,10 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { BlockEntity } from "./block.entity";
+
 import { UserEntity } from "@user/core/entities/user.entity";
 import { IArticle } from "../interfaces/article.interface";
+import { BlockEntity } from "./block.entity";
 import { CommentEntity } from "./comment.entity";
 
 @Entity("article")
@@ -38,6 +39,9 @@ export class ArticleEntity {
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   updated: Date;
 
+  @Column({ default: 0, type: "float" })
+  readingTime: number;
+
   @BeforeUpdate()
   updateTimestamp() {
     this.updated = new Date();
@@ -57,6 +61,9 @@ export class ArticleEntity {
 
   @Column({ default: 0 })
   favoriteCount: number;
+
+  @Column({ default: 0 })
+  commentCount: number;
 
   @OneToMany(() => BlockEntity, (block) => block.article, { cascade: true })
   blocks: BlockEntity[];
