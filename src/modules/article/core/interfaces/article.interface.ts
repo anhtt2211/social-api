@@ -55,6 +55,8 @@ export interface IArticle {
   comments?: IComment[];
   favoriteCount?: number;
   blocks?: BlockEntity[];
+  readingTime?: number;
+  commentCount?: number;
 }
 
 export interface IComment {

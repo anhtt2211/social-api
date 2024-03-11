@@ -20,4 +20,16 @@ export class CreateArticleDto {
 
   @ApiProperty()
   readonly blocks: BlockDto[];
+
+  @ApiProperty({ required: false })
+  readonly readingTime?: number;
+
+  @ApiProperty({ required: false })
+  readonly commentCount?: number;
+
+  @ApiProperty({ required: false })
+  readonly favoriteCount?: number;
+
+  @ApiProperty({ required: false })
+  readonly created?: Date;
 }

@@ -7,3 +7,5 @@ export * from "./delete-comment.handler";
 
 export * from "./favorite-article.handler";
 export * from "./unfavorite-article.handler";
+
+export * from "./seed-article.handler";
