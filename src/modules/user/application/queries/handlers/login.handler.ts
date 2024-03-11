@@ -6,19 +6,19 @@ import { TIME_TO_LIVE } from "@redis/redis.constant";
 import { RedisService } from "@redis/redis.service";
 import {
   LoginUserDto,
-  USER_READ_REPOSITORY,
-  UserReadPort,
-  UserRO,
+  USER_REPOSITORY,
   UserEntity,
-} from "../../../core";
+  UserPort,
+  UserRO,
+} from "@user/core";
 import { UserService } from "../../services";
 import { LoginQuery } from "../impl";
 
 @QueryHandler(LoginQuery)
 export class LoginQueryHandler implements IQueryHandler<LoginQuery> {
   constructor(
-    @Inject(USER_READ_REPOSITORY)
-    private readonly userRepository: UserReadPort,
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: UserPort,
 
     private readonly userService: UserService,
     private readonly redisCacheService: RedisService

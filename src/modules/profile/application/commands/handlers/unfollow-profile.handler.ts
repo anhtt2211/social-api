@@ -1,17 +1,14 @@
 import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { ClientProxy } from "@nestjs/microservices";
 
-import { PROFILE_RMQ_CLIENT } from "@configs";
-import { USER_WRITE_REPOSITORY, UserWritePort } from "@user/core";
-import { FOLLOW_WRITE_REPOSITORY, FollowWritePort } from "../../../core";
-import { FollowsEntity } from "../../../core/entities";
-import { MessageCmd } from "../../../core/enums";
 import {
-  IPayloadProfileUnFollowed,
+  FOLLOW_REPOSITORY,
+  FollowPort,
+  FollowsEntity,
   ProfileData,
   ProfileRO,
-} from "../../../core/interfaces";
+} from "@profile/core";
+import { USER_REPOSITORY, UserPort } from "@user/core";
 import { UnFollowProfileCommand } from "../impl";
 
 @CommandHandler(UnFollowProfileCommand)
@@ -19,12 +16,10 @@ export class UnFollowProfileCommandHandler
   implements ICommandHandler<UnFollowProfileCommand>
 {
   constructor(
-    @Inject(USER_WRITE_REPOSITORY)
-    private readonly userRepository: UserWritePort,
-    @Inject(FOLLOW_WRITE_REPOSITORY)
-    private readonly followsRepository: FollowWritePort,
-    @Inject(PROFILE_RMQ_CLIENT)
-    private readonly profileRmqClient: ClientProxy
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: UserPort,
+    @Inject(FOLLOW_REPOSITORY)
+    private readonly followsRepository: FollowPort
   ) {}
 
   async execute({
@@ -51,14 +46,7 @@ export class UnFollowProfileCommandHandler
       followingId: followingUser.id,
     });
 
-    const _deleted = await this.followsRepository.delete(follow);
-
-    if (_deleted) {
-      this.profileRmqClient.emit<any, IPayloadProfileUnFollowed>(
-        { cmd: MessageCmd.PROFILE_UNFOLLOWED },
-        { follow }
-      );
-    }
+    await this.followsRepository.delete(follow);
 
     let profile: ProfileData = {
       username: followingUser.username,

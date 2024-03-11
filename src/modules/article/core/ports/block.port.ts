@@ -2,7 +2,7 @@ import { DeleteResult, FindConditions } from "typeorm";
 
 import { BlockEntity } from "../entities";
 
-interface BlockPort {
+export interface BlockPort {
   delete(
     criteria:
       | string
@@ -12,6 +12,3 @@ interface BlockPort {
       | FindConditions<BlockEntity>
   ): Promise<DeleteResult>;
 }
-
-export interface BlockReadPort extends BlockPort {}
-export interface BlockWritePort extends BlockPort {}

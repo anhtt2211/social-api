@@ -4,6 +4,7 @@ import {
   DeleteArticleCommandHandler,
   DeleteCommentCommandHandler,
   FavoriteArticleCommandHandler,
+  SeedArticleCommandHandler,
   UnFavoriteArticleCommandHandler,
   UpdateArticleCommandHandler,
 } from "./handlers";
@@ -19,4 +20,5 @@ export const CommandHandlers = [
   FavoriteArticleCommandHandler,
   UnFavoriteArticleCommandHandler,
   UpdateArticleCommandHandler,
+  SeedArticleCommandHandler,
 ];

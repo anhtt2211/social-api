@@ -8,7 +8,7 @@ import {
 
 import { UserEntity } from "../entities";
 
-interface UserPort {
+export interface UserPort {
   createQueryBuilder(
     alias?: string,
     queryRunner?: QueryRunner
@@ -30,5 +30,3 @@ interface UserPort {
   save(users: DeepPartial<UserEntity>[]): Promise<UserEntity[]>;
 }
 
-export interface UserReadPort extends UserPort {}
-export interface UserWritePort extends UserPort {}

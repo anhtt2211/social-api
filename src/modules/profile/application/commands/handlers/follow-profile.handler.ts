@@ -1,17 +1,14 @@
 import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { ClientProxy } from "@nestjs/microservices";
 
-import { PROFILE_RMQ_CLIENT } from "@configs";
-import { USER_WRITE_REPOSITORY, UserWritePort } from "@user/core";
-import { FOLLOW_WRITE_REPOSITORY, FollowWritePort } from "../../../core";
-import { FollowsEntity } from "../../../core/entities";
-import { MessageCmd } from "../../../core/enums";
 import {
-  IPayloadProfileFollowed,
+  FOLLOW_REPOSITORY,
+  FollowPort,
+  FollowsEntity,
   ProfileData,
   ProfileRO,
-} from "../../../core/interfaces";
+} from "@profile/core";
+import { USER_REPOSITORY, UserPort } from "@user/core";
 import { FollowProfileCommand } from "../impl";
 
 @CommandHandler(FollowProfileCommand)
@@ -19,15 +16,11 @@ export class FollowProfileCommandHandler
   implements ICommandHandler<FollowProfileCommand>
 {
   constructor(
-    @Inject(USER_WRITE_REPOSITORY)
-    private readonly userRepository: UserWritePort,
-    @Inject(FOLLOW_WRITE_REPOSITORY)
-    private readonly followsRepository: FollowWritePort,
-    @Inject(PROFILE_RMQ_CLIENT)
-    private readonly profileRmqClient: ClientProxy
-  ) {
-    this.profileRmqClient.connect();
-  }
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: UserPort,
+    @Inject(FOLLOW_REPOSITORY)
+    private readonly followsRepository: FollowPort
+  ) {}
 
   async execute({
     followerEmail,
@@ -64,13 +57,6 @@ export class FollowProfileCommandHandler
           followingId: followingUser.id,
         })
       );
-
-      if (follow) {
-        this.profileRmqClient.emit<any, IPayloadProfileFollowed>(
-          { cmd: MessageCmd.PROFILE_FOLLOWED },
-          { follow }
-        );
-      }
     }
 
     let profile: ProfileData = {

@@ -1,32 +1,36 @@
 import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { ClientProxy } from "@nestjs/microservices";
+import * as AWS from "aws-sdk";
 
-import { ARTICLE_RMQ_CLIENT } from "@configs";
+import {
+  ARTICLE_REPOSITORY,
+  ArticleEntity,
+  ArticlePort,
+  ArticleRO,
+} from "../../../core";
 import { ArticleService } from "../../services";
 import { CreateArticleCommand } from "../impl";
-import {
-  ARTICLE_WRITE_REPOSITORY,
-  ArticleEntity,
-  ArticleRO,
-  ArticleWritePort,
-  IPayloadArticleCreated,
-  MessageCmd,
-} from "../../../core";
 
 @CommandHandler(CreateArticleCommand)
 export class CreateArticleCommandHandler
   implements ICommandHandler<CreateArticleCommand>
 {
+  private readonly sqs: AWS.SQS;
+  private readonly awsRegion: string = process.env.AWS_REGION;
+  private readonly queueUrl: string = process.env.AWS_SQS_QUEUE_URL;
+
   constructor(
-    @Inject(ARTICLE_WRITE_REPOSITORY)
-    private readonly articleRepository: ArticleWritePort,
-    @Inject(ARTICLE_RMQ_CLIENT)
-    private readonly articleRmqClient: ClientProxy,
+    @Inject(ARTICLE_REPOSITORY)
+    private readonly articleRepository: ArticlePort,
 
     private readonly articleService: ArticleService
   ) {
-    this.articleRmqClient.connect();
+    AWS.config.update({
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      region: this.awsRegion,
+    });
+    this.sqs = new AWS.SQS();
   }
 
   async execute({
@@ -45,10 +49,11 @@ export class CreateArticleCommandHandler
       );
 
       if (article) {
-        this.articleRmqClient.emit<any, IPayloadArticleCreated>(
-          { cmd: MessageCmd.ARTICLE_CREATED },
-          { article }
-        );
+        const params: AWS.SQS.Types.SendMessageRequest = {
+          QueueUrl: this.queueUrl,
+          MessageBody: JSON.stringify({ article }),
+        };
+        await this.sqs.sendMessage(params).promise();
       }
 
       return {

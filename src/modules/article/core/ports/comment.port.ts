@@ -7,7 +7,7 @@ import {
 
 import { CommentEntity } from "../entities";
 
-interface CommentPort {
+export interface CommentPort {
   findOne(
     id?: string | number,
     options?: FindOneOptions<CommentEntity>
@@ -31,6 +31,3 @@ interface CommentPort {
       | FindConditions<CommentEntity>
   ): Promise<DeleteResult>;
 }
-
-export interface CommentReadPort extends CommentPort {}
-export interface CommentWritePort extends CommentPort {}

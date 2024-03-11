@@ -1,11 +1,9 @@
 import { Inject } from "@nestjs/common";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
-import { FOLLOW_READ_REPOSITORY, FollowReadPort } from "@profile/core";
-import { USER_READ_REPOSITORY, UserReadPort } from "@user/core";
-import { ArticlesRO } from "../../../core/interfaces";
-import { ArticleReadPort } from "../../../core/ports";
-import { ARTICLE_READ_REPOSITORY } from "../../../core/token";
+import { FOLLOW_REPOSITORY, FollowPort } from "@profile/core";
+import { USER_REPOSITORY, UserPort } from "@user/core";
+import { ARTICLE_REPOSITORY, ArticlePort, ArticlesRO } from "@article/core";
 import { ArticleService } from "../../services";
 import { FindFeedArticleQuery } from "../impl";
 
@@ -14,12 +12,12 @@ export class FindFeedArticleQueryHandler
   implements IQueryHandler<FindFeedArticleQuery>
 {
   constructor(
-    @Inject(USER_READ_REPOSITORY)
-    private readonly userRepository: UserReadPort,
-    @Inject(FOLLOW_READ_REPOSITORY)
-    private readonly followsRepository: FollowReadPort,
-    @Inject(ARTICLE_READ_REPOSITORY)
-    private readonly articleRepository: ArticleReadPort,
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: UserPort,
+    @Inject(FOLLOW_REPOSITORY)
+    private readonly followsRepository: FollowPort,
+    @Inject(ARTICLE_REPOSITORY)
+    private readonly articleRepository: ArticlePort,
 
     private readonly articleService: ArticleService
   ) {}

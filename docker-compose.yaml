@@ -11,7 +11,6 @@ services:
       - "81:8000"
     depends_on:
       - db
-      - rabbitmq
       - redis
     env_file:
       - .env.docker
@@ -28,15 +27,6 @@ services:
       - /data/postgres/
     ports:
       - 5432:5432
-    networks:
-      - social-network
-
-  rabbitmq:
-    container_name: social-rabbitmq
-    image: rabbitmq:3-management
-    ports:
-      - "15672:15672"
-      - "5672:5672"
     networks:
       - social-network
 

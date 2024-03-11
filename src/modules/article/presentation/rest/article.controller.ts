@@ -24,21 +24,22 @@ import {
   DeleteArticleCommand,
   DeleteCommentCommand,
   FavoriteArticleCommand,
+  SeedArticleCommand,
   UnFavoriteArticleCommand,
   UpdateArticleCommand,
 } from "../../application/commands";
-import { ArticleRO, ArticlesRO, CommentsRO } from "../../core/interfaces";
-import {
-  ArticleFilters,
-  CreateArticleDto,
-  CreateCommentDto,
-} from "../../core/dto";
 import {
   FindAllArticleQuery,
   FindCommentQuery,
   FindFeedArticleQuery,
   FindOneArticleQuery,
 } from "../../application/queries";
+import {
+  ArticleFilters,
+  CreateArticleDto,
+  CreateCommentDto,
+} from "../../core/dto";
+import { ArticleRO, ArticlesRO, CommentsRO } from "../../core/interfaces";
 
 @ApiBearerAuth()
 @ApiTags("articles")
@@ -202,11 +203,11 @@ export class ArticleController {
     return this.commandBus.execute(new UnFavoriteArticleCommand(userId, slug));
   }
 
-  // @Post("/seed")
-  // async seedData(
-  //   @User("id") userId: number,
-  //   @Body("articles") articleList: CreateArticleDto[]
-  // ) {
-  //   return this.articleService.seed(userId, articleList);
-  // }
+  @Post("/seed")
+  async seedData(
+    @User("id") userId: number,
+    @Body("articles") articleList: CreateArticleDto[]
+  ) {
+    return this.commandBus.execute(new SeedArticleCommand(userId, articleList));
+  }
 }

@@ -1,12 +1,12 @@
 import { Inject } from "@nestjs/common";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
-import { USER_READ_REPOSITORY, UserReadPort } from "@user/core";
 import {
-  FOLLOW_READ_REPOSITORY,
-  FollowReadPort,
+  FOLLOW_REPOSITORY,
+  FollowPort,
   ProfileData,
   ProfileRO,
-} from "../../../core";
+} from "@profile/core";
+import { USER_REPOSITORY, UserPort } from "@user/core";
 import { FindProfileQuery } from "../impl";
 
 @QueryHandler(FindProfileQuery)
@@ -14,10 +14,10 @@ export class FindProfileQueryHandler
   implements IQueryHandler<FindProfileQuery>
 {
   constructor(
-    @Inject(USER_READ_REPOSITORY)
-    private readonly userRepository: UserReadPort,
-    @Inject(FOLLOW_READ_REPOSITORY)
-    private readonly followsRepository: FollowReadPort
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: UserPort,
+    @Inject(FOLLOW_REPOSITORY)
+    private readonly followsRepository: FollowPort
   ) {}
 
   async execute({

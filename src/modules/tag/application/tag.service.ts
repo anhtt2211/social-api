@@ -1,14 +1,14 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
+import { Inject, Injectable } from "@nestjs/common";
+import { TAG_REPOSITORY } from "@tag/core";
 import { Repository } from "typeorm";
-import { READ_CONNECTION } from "@configs";
+
 import { TagEntity } from "../core/entities/tag.entity";
 import { TagRO } from "../core/interfaces/tag.interface";
 
 @Injectable()
 export class TagService {
   constructor(
-    @InjectRepository(TagEntity, READ_CONNECTION)
+    @Inject(TAG_REPOSITORY)
     private readonly tagRepository: Repository<TagEntity>
   ) {}
 

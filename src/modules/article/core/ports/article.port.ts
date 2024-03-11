@@ -12,7 +12,7 @@ import {
 import { CreateArticleDto } from "../dto";
 import { ArticleEntity } from "../entities";
 
-interface ArticlePort {
+export interface ArticlePort {
   createQueryBuilder(
     alias?: string,
     queryRunner?: QueryRunner
@@ -52,6 +52,3 @@ interface ArticlePort {
       | FindConditions<ArticleEntity>
   ): Promise<DeleteResult>;
 }
-
-export interface ArticleReadPort extends ArticlePort {}
-export interface ArticleWritePort extends ArticlePort {}

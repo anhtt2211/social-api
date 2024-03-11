@@ -1,15 +1,13 @@
 import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
-import { ClientProxy } from "@nestjs/microservices";
-import { ARTICLE_RMQ_CLIENT } from "@configs";
-import { MessageCmd } from "../../../core/enums";
-import { ArticleRO, IPayloadCommentDeleted } from "../../../core/interfaces";
-import { ArticleWritePort } from "../../../core/ports";
-import { CommentWritePort } from "../../../core/ports/comment.port";
+
 import {
-  ARTICLE_WRITE_REPOSITORY,
-  COMMENT_WRITE_REPOSITORY,
-} from "../../../core/token";
+  ARTICLE_REPOSITORY,
+  ArticlePort,
+  ArticleRO,
+  COMMENT_REPOSITORY,
+  CommentPort,
+} from "../../../core";
 import { ArticleService } from "../../services";
 import { DeleteCommentCommand } from "../impl";
 
@@ -18,17 +16,13 @@ export class DeleteCommentCommandHandler
   implements ICommandHandler<DeleteCommentCommand>
 {
   constructor(
-    @Inject(ARTICLE_WRITE_REPOSITORY)
-    private readonly articleRepository: ArticleWritePort,
-    @Inject(COMMENT_WRITE_REPOSITORY)
-    private readonly commentRepository: CommentWritePort,
-    @Inject(ARTICLE_RMQ_CLIENT)
-    private readonly articleRmqClient: ClientProxy,
+    @Inject(ARTICLE_REPOSITORY)
+    private readonly articleRepository: ArticlePort,
+    @Inject(COMMENT_REPOSITORY)
+    private readonly commentRepository: CommentPort,
 
     private readonly articleService: ArticleService
-  ) {
-    this.articleRmqClient.connect();
-  }
+  ) {}
 
   async execute({
     userId,
@@ -54,17 +48,8 @@ export class DeleteCommentCommandHandler
 
     if (deleteIndex >= 0) {
       const deleteComments = article.comments.splice(deleteIndex, 1);
-      const _deleted = await this.commentRepository.delete(
-        deleteComments[0].id
-      );
+      await this.commentRepository.delete(deleteComments[0].id);
       article = await this.articleRepository.save(article);
-
-      if (_deleted && article) {
-        this.articleRmqClient.emit<any, IPayloadCommentDeleted>(
-          { cmd: MessageCmd.COMMENT_DELETED },
-          { comment: deleteComments[0] }
-        );
-      }
 
       return { article: this.articleService.buildArticleRO(article) };
     } else {
