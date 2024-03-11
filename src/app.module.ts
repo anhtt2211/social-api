@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { ScheduleModule } from "@nestjs/schedule";
 
 import { InfrastructureModule } from "./infrastructure/infrastructure.module";
 import {
@@ -13,6 +14,7 @@ import {
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    ScheduleModule.forRoot(),
     ArticleModule,
     MediaModule,
     ProfileModule,
