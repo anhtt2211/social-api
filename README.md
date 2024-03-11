@@ -14,6 +14,10 @@ This project is a robust social networking platform built using NestJS. It featu
 
 ## Architecture
 
+### High level design
+
+![alt text](./assets/architect.png)
+
 The application adopts a microservices architecture with distinct modules:
 
 - **User Module:** Manages user registration, authentication, and profile operations.
