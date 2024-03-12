@@ -29,6 +29,5 @@ const ormconfigs = {
     migrationsDir: "src/infrastructure/persistence/migrations",
   },
 };
-console.log("🚀 ~ ormconfigs:", ormconfigs);
 
 module.exports = ormconfigs;

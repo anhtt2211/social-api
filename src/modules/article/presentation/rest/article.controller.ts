@@ -33,6 +33,7 @@ import {
   FindCommentQuery,
   FindFeedArticleQuery,
   FindOneArticleQuery,
+  GetHotArticleMonthlyQuery,
   GetHotArticleQuery,
 } from "../../application/queries";
 import {
@@ -82,6 +83,13 @@ export class ArticleController {
   @Get("hot")
   async getHotArticles(): Promise<ArticleData[]> {
     return this.queryBus.execute(new GetHotArticleQuery());
+  }
+
+  @ApiOperation({ summary: "Get hot articles monthly" })
+  @ApiResponse({ status: 200, description: "Return hot articles monthly." })
+  @Get("hot-monthly")
+  async getHotArticlesMonthly(): Promise<ArticleData[]> {
+    return this.queryBus.execute(new GetHotArticleMonthlyQuery());
   }
 
   @ApiOperation({ summary: "Get article by slug" })
