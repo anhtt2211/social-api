@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Inject } from "@nestjs/common";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 
+import { TIME_TO_LIVE } from "@redis/redis.constant";
 import { RedisService } from "@redis/redis.service";
 import { USER_REPOSITORY, UserEntity, UserPort, UserRO } from "@user/core";
 import { UserService } from "../../services";
@@ -28,6 +29,8 @@ export class FindUserByIdHandler implements IQueryHandler<FindUserById> {
         const errors = { User: "User not found" };
         throw new HttpException({ errors }, HttpStatus.NOT_FOUND);
       }
+
+      this.redisCacheService.set(id.toString(), user, TIME_TO_LIVE);
     }
 
     return this.userService.buildUserRO(user);
