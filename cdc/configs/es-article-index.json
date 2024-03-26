@@ -1,0 +1,72 @@
+{
+  "settings": {
+    "number_of_shards": 2,
+    "analysis": {
+      "analyzer": {
+        "article_title": {
+          "tokenizer": "standard",
+          "filter": ["lowercase", "asciifolding"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "id": { "type": "integer" },
+      "slug": { "type": "keyword" },
+      "title": {
+        "type": "text",
+        "analyzer": "article_title"
+      },
+      "description": { "type": "text" },
+      "created": { "type": "date" },
+      "updated": { "type": "date" },
+      "readingTime": { "type": "float" },
+      "tagList": {
+        "type": "keyword"
+      },
+      "author": {
+        "type": "nested",
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "comments": {
+        "type": "nested",
+        "properties": {
+          "id": { "type": "integer" }
+        }
+      },
+      "favoriteCount": { "type": "integer" },
+      "commentCount": { "type": "integer" },
+      "blocks": {
+        "type": "nested",
+        "properties": {
+          "id": { "type": "integer" },
+          "data": {
+            "type": "nested",
+            "properties": {
+              "alignment": { "type": "keyword" },
+              "text": { "type": "text" },
+              "caption": { "type": "text" },
+              "file": {
+                "type": "nested",
+                "properties": {
+                  "info": {
+                    "type": "nested",
+                    "properties": {
+                      "width": { "type": "integer" },
+                      "height": { "type": "integer" }
+                    }
+                  },
+                  "url": { "type": "keyword" }
+                }
+              }
+            }
+          },
+          "type": { "type": "keyword" }
+        }
+      }
+    }
+  }
+}
