@@ -2,8 +2,6 @@
 
 ## Target Architecture
 
-![Alt text](screenshots/target-architecture.png?raw=true "target-architecture")
-
 ## Tech Stack
 
 - Docker
@@ -24,77 +22,55 @@ source .env
 docker-compose up
 ```
 
-![Alt text](screenshots/1.running-docker-containers.png?raw=true "running-docker-containers")
-
 ```sh
 # Check if debezium is UP
 curl -H "Accept:application/json" localhost:8083/
 ```
-
-![Alt text](screenshots/2.check-debezium-up.png?raw=true "check-debezium-up")
 
 ```sh
 # Check if elasticsearch is UP
 curl http://localhost:9200
 ```
 
-![Alt text](screenshots/3.check-es-up.png?raw=true "check-es-up")
-
 ```sh
 # Deploy all configurations when elasticsearch and debezium is UP
 sh deploy-configurations.sh
 ```
-
-![Alt text](screenshots/4.run-deploy-configurations.png?raw=true "run-deploy-configurations")
 
 ```sh
 # Check installed debezium connector plugins
 curl -H "Accept:application/json" http://localhost:8083/connector-plugins
 ```
 
-![Alt text](screenshots/5.check-installed-connector-plugins.png?raw=true "check-installed-connector-plugins")
-
 ```sh
 # Check installed debezium configurations
 curl -H "Accept:application/json" http://localhost:8083/connectors
 ```
 
-![Alt text](screenshots/6.check-installed-debezium-configurations.png?raw=true "check-installed-debezium-configurations")
-
 ```sh
 # Check installed source connector status
-curl -H "Accept:application/json" http://localhost:8083/connectors/postgres-employee-source/status
+curl -H "Accept:application/json" http://localhost:8083/connectors/postgres-article-source/status
 ```
-
-![Alt text](screenshots/7.check-installed-source-connector.png?raw=true "check-installed-source-connector")
 
 ```sh
 # Check installed sink connector status
-curl -H "Accept:application/json" http://localhost:8083/connectors/es-employee-sink/status
+curl -H "Accept:application/json" http://localhost:8083/connectors/es-article-sink/status
 ```
-
-![Alt text](screenshots/8.check-installed-sink-connector.png?raw=true "check-installed-sink-connector")
 
 ```sh
 # Check elasticsearch configurations
-curl -H "Accept:application/json" http://localhost:9200/cdc.employee_db.public.employee
+curl -H "Accept:application/json" http://localhost:9200/cdc.article_db.public.article
 ```
-
-![Alt text](screenshots/9.check-installed-es-index.png?raw=true "check-installed-es-index")
 
 ```sh
 # Check if debezium topic is created
 docker-compose exec kafka /kafka/bin/kafka-topics.sh --bootstrap-server kafka:9092 --list
 ```
 
-![Alt text](screenshots/10.check-topic-created-by-debezium.png?raw=true "check-topic-created-by-debezium")
-
 ```sh
 # Check if elasticsearch already has content
-curl -H "Accept:application/json" http://localhost:9200/cdc.employee_db.public.employee/_search?pretty
+curl -H "Accept:application/json" http://localhost:9200/cdc.article_db.public.article/_search?pretty
 ```
-
-![Alt text](screenshots/11.check-es-has-content.png?raw=true "check-es-has-content")
 
 ```sh
 # Open new tab to manipulate table
@@ -115,9 +91,6 @@ curl -X GET "localhost:9200/_search?pretty" -H 'Content-Type: application/json' 
 }'
 ```
 
-![Alt text](screenshots/12.dml-insert.png?raw=true "dml-insert")
-![Alt text](screenshots/13.result-insert.png?raw=true "result-insert")
-
 ```sh
 # Check update query
 curl -X GET "localhost:9200/_search?pretty" -H 'Content-Type: application/json' -d'
@@ -131,9 +104,6 @@ curl -X GET "localhost:9200/_search?pretty" -H 'Content-Type: application/json' 
   }
 }'
 ```
-
-![Alt text](screenshots/14.dml-update.png?raw=true "dml-update")
-![Alt text](screenshots/15.result-update.png?raw=true "result-update")
 
 ```sh
 # Check delete query
@@ -149,16 +119,13 @@ curl -X GET "localhost:9200/_search?pretty" -H 'Content-Type: application/json' 
 }'
 ```
 
-![Alt text](screenshots/16.dml-delete.png?raw=true "dml-delete")
-![Alt text](screenshots/17.result-delete.png?raw=true "result-delete")
-
 ```sh
 # Watch messages from debezium topic as Binary
 docker-compose exec kafka /kafka/bin/kafka-console-consumer.sh \
     --bootstrap-server kafka:9092 \
     --from-beginning \
     --property print.key=true \
-    --topic cdc.employee_db.public.employee
+    --topic cdc.article_db.public.article
 
 # Watch messages from debezium topic as Converted Avro to Json
 docker run -it --rm --name avro-consumer --network=debezium-postgresql-elasticsearch_default \
@@ -172,7 +139,7 @@ docker run -it --rm --name avro-consumer --network=debezium-postgresql-elasticse
       --property print.key=true \
       --formatter io.confluent.kafka.formatter.AvroMessageFormatter \
       --property schema.registry.url=http://schema-registry:8081 \
-      --topic cdc.employee_db.public.employee
+      --topic cdc.article_db.public.article
 
 # Terminate all docker instances
 docker-compose down
