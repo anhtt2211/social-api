@@ -28,6 +28,9 @@ export class UserEntity {
   @Column()
   username: string;
 
+  @Column({ nullable: true, name: "full_name" })
+  fullName: string;
+
   @Index("user_email")
   @Column()
   @IsEmail()

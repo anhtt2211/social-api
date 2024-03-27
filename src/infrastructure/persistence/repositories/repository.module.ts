@@ -2,7 +2,9 @@ import { Global, Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 import {
+  ARTICLE_BLOCK_OUTBOX_REPOSITORY,
   ARTICLE_REPOSITORY,
+  ArticleBlockOutboxEntity,
   ArticleEntity,
   BLOCK_REPOSITORY,
   BlockEntity,
@@ -20,12 +22,14 @@ import { FileRepository } from "./file.repository";
 import { FollowRepository } from "./follow.repository";
 import { UserRepository } from "./user.repository";
 import { TagRepository } from "./tag.repository";
+import { ArticleBlockOutboxRepository } from "./article-block.outbox.repository";
 
 @Global()
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       ArticleEntity,
+      ArticleBlockOutboxEntity,
       CommentEntity,
       BlockEntity,
       UserEntity,
@@ -35,6 +39,11 @@ import { TagRepository } from "./tag.repository";
     ]),
   ],
   providers: [
+    {
+      provide: ARTICLE_BLOCK_OUTBOX_REPOSITORY,
+      useClass: ArticleBlockOutboxRepository,
+    },
+
     {
       provide: ARTICLE_REPOSITORY,
       useClass: ArticleRepository,
@@ -71,6 +80,7 @@ import { TagRepository } from "./tag.repository";
     },
   ],
   exports: [
+    ARTICLE_BLOCK_OUTBOX_REPOSITORY,
     ARTICLE_REPOSITORY,
     BLOCK_REPOSITORY,
     COMMENT_REPOSITORY,

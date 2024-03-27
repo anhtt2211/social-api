@@ -13,7 +13,7 @@
     "test:watch": "jest --watch --config=jest.json",
     "test:coverage": "jest --config=jest.json --coverage --coverageDirectory=coverage",
     "migration:create": "ts-node node_modules/typeorm/cli.js migration:create -n",
-    "migration:generate": "ts-node -r tsconfig-paths/register node_modules/typeorm/cli.js migration:generate",
+    "migration:generate": "ts-node -r tsconfig-paths/register node_modules/typeorm/cli.js migration:generate -n",
     "migration:run": "ts-node -r tsconfig-paths/register node_modules/typeorm/cli.js migration:run -c",
     "migration:revert": "ts-node -r tsconfig-paths/register node_modules/typeorm/cli.js migration:revert -c",
     "migration:run--prod": "ts-node -r tsconfig-paths/register node_modules/typeorm/cli.js migration:run"
