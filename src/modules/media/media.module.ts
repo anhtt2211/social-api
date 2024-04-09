@@ -8,14 +8,11 @@ import { CqrsModule } from "@nestjs/cqrs";
 
 import { AuthMiddleware } from "../../shared/middleware";
 import { UserModule } from "../user/user.module";
-import { S3Service } from "./application/services";
-import { MediaController } from "./presentation/rest";
+import { ApplicationModule } from "./application/application.module";
+import { PresentationModule } from "./presentation/presentation.module";
 
 @Module({
-  imports: [UserModule, CqrsModule],
-  providers: [S3Service],
-  controllers: [MediaController],
-  exports: [S3Service],
+  imports: [UserModule, CqrsModule, ApplicationModule, PresentationModule],
 })
 export class MediaModule implements NestModule {
   public configure(consumer: MiddlewareConsumer) {
