@@ -1,0 +1,47 @@
+{
+  "monorepo": true,
+  "root": "apps/social-api",
+  "sourceRoot": "apps/social-api/src",
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/social-api/tsconfig.app.json"
+  },
+  "projects": {
+    "social-api": {
+      "type": "application",
+      "root": "apps/social-api",
+      "entryFile": "main",
+      "sourceRoot": "apps/social-api/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/social-api/tsconfig.app.json"
+      }
+    },
+    "article": {
+      "type": "application",
+      "root": "apps/article",
+      "entryFile": "main",
+      "sourceRoot": "apps/article/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/article/tsconfig.app.json"
+      }
+    },
+    "profile": {
+      "type": "application",
+      "root": "apps/profile",
+      "entryFile": "main",
+      "sourceRoot": "apps/profile/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/profile/tsconfig.app.json"
+      }
+    },
+    "user": {
+      "type": "application",
+      "root": "apps/user",
+      "entryFile": "main",
+      "sourceRoot": "apps/user/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/user/tsconfig.app.json"
+      }
+    }
+  }
+}

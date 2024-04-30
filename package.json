@@ -8,7 +8,7 @@
     "build": "yarn clean && tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
     "start": "node -r tsconfig-paths/register -r ts-node/register index.js ",
     "dev": "NODE_ENV=development nodemon -- --inspect",
-    "start:prod": "NODE_ENV=production node -r tsconfig-paths/register -r ts-node/register dist/main.js",
+    "start:prod": "node dist/apps/social-api/main",
     "test": "jest --config=jest.json",
     "test:watch": "jest --watch --config=jest.json",
     "test:coverage": "jest --config=jest.json --coverage --coverageDirectory=coverage",

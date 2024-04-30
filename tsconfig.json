@@ -5,7 +5,9 @@
     "noImplicitAny": false,
     "removeComments": true,
     "noLib": false,
-    "lib": ["es2017"],
+    "lib": [
+      "es2017"
+    ],
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es6",
@@ -14,17 +16,41 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@article/*": ["src/modules/article/*"],
-      "@configs": ["src/configs/index"],
-      "@media/*": ["src/modules/media/*"],
-      "@profile/*": ["src/modules/profile/*"],
-      "@tag/*": ["src/modules/tag/*"],
-      "@user/*": ["src/modules/user/*"],
-      "@rabbitmq/*": ["src/infrastructure/rabbitmq/*"],
-      "@redis/*": ["src/infrastructure/redis/*"],
-      "@shared/*": ["src/shared/*"]
+      "@article/*": [
+        "src/modules/article/*"
+      ],
+      "@configs": [
+        "src/configs/index"
+      ],
+      "@media/*": [
+        "src/modules/media/*"
+      ],
+      "@profile/*": [
+        "src/modules/profile/*"
+      ],
+      "@tag/*": [
+        "src/modules/tag/*"
+      ],
+      "@user/*": [
+        "src/modules/user/*"
+      ],
+      "@rabbitmq/*": [
+        "src/infrastructure/rabbitmq/*"
+      ],
+      "@redis/*": [
+        "src/infrastructure/redis/*"
+      ],
+      "@shared/*": [
+        "src/shared/*"
+      ]
     }
   },
-  "include": ["src/**/*", "dist/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "include": [
+    "src/**/*",
+    "dist/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
 }
