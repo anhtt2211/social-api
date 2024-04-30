@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import {
   DeepPartial,
   DeleteResult,
-  FindConditions,
+  FindOneOptions,
   FindManyOptions,
   FindOneOptions,
   QueryRunner,
@@ -45,7 +45,7 @@ export class ArticleRepository implements ArticlePort {
     options?: FindOneOptions<ArticleEntity>
   ): Promise<ArticleEntity | undefined>;
   findOne(
-    conditions?: FindConditions<ArticleEntity>,
+    conditions?: FindOneOptions<ArticleEntity>,
     options?: FindOneOptions<ArticleEntity>
   ): Promise<ArticleEntity | undefined>;
   async findOne(
@@ -53,7 +53,7 @@ export class ArticleRepository implements ArticlePort {
       | [id?: string | number, options?: FindOneOptions<ArticleEntity>]
       | [options?: FindOneOptions<ArticleEntity>]
       | [
-          conditions?: FindConditions<ArticleEntity>,
+          conditions?: FindOneOptions<ArticleEntity>,
           options?: FindOneOptions<ArticleEntity>
         ]
   ): Promise<ArticleEntity | undefined> {

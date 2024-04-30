@@ -1,56 +1,34 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "declaration": false,
+    "declaration": true,
     "noImplicitAny": false,
     "removeComments": true,
-    "noLib": false,
-    "lib": [
-      "es2017"
-    ],
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es6",
+    "target": "ES2021",
     "sourceMap": true,
     "allowJs": true,
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@article/*": [
-        "src/modules/article/*"
-      ],
-      "@configs": [
-        "src/configs/index"
-      ],
-      "@media/*": [
-        "src/modules/media/*"
-      ],
-      "@profile/*": [
-        "src/modules/profile/*"
-      ],
-      "@tag/*": [
-        "src/modules/tag/*"
-      ],
-      "@user/*": [
-        "src/modules/user/*"
-      ],
-      "@rabbitmq/*": [
-        "src/infrastructure/rabbitmq/*"
-      ],
-      "@redis/*": [
-        "src/infrastructure/redis/*"
-      ],
-      "@shared/*": [
-        "src/shared/*"
-      ]
+      "@article/*": ["src/modules/article/*"],
+      "@configs": ["src/configs/index"],
+      "@media/*": ["src/modules/media/*"],
+      "@profile/*": ["src/modules/profile/*"],
+      "@tag/*": ["src/modules/tag/*"],
+      "@user/*": ["src/modules/user/*"],
+      "@rabbitmq/*": ["src/infrastructure/rabbitmq/*"],
+      "@redis/*": ["src/infrastructure/redis/*"],
+      "@shared/*": ["src/shared/*"],
+      "@app/persistence": ["libs/persistence/src"],
+      "@app/persistence/*": ["libs/persistence/src/*"],
+      "@app/redis": ["libs/redis/src"],
+      "@app/redis/*": ["libs/redis/src/*"],
+      "@app/auth": ["libs/auth/src"],
+      "@app/auth/*": ["libs/auth/src/*"]
     }
   },
-  "include": [
-    "src/**/*",
-    "dist/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts"
-  ]
+  "include": ["src/**/*", "dist/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }
