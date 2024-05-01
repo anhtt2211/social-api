@@ -2,33 +2,39 @@
   "compilerOptions": {
     "module": "commonjs",
     "declaration": true,
-    "noImplicitAny": false,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
     "target": "ES2021",
     "sourceMap": true,
-    "allowJs": true,
     "outDir": "./dist",
     "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@article/*": ["src/modules/article/*"],
-      "@configs": ["src/configs/index"],
-      "@media/*": ["src/modules/media/*"],
-      "@profile/*": ["src/modules/profile/*"],
-      "@tag/*": ["src/modules/tag/*"],
-      "@user/*": ["src/modules/user/*"],
-      "@rabbitmq/*": ["src/infrastructure/rabbitmq/*"],
-      "@redis/*": ["src/infrastructure/redis/*"],
-      "@shared/*": ["src/shared/*"],
-      "@app/persistence": ["libs/persistence/src"],
-      "@app/persistence/*": ["libs/persistence/src/*"],
-      "@app/redis": ["libs/redis/src"],
-      "@app/redis/*": ["libs/redis/src/*"],
-      "@app/auth": ["libs/auth/src"],
-      "@app/auth/*": ["libs/auth/src/*"]
+      "@app/persistence": [
+        "libs/persistence/src"
+      ],
+      "@app/persistence/*": [
+        "libs/persistence/src/*"
+      ],
+      "@app/redis": [
+        "libs/redis/src"
+      ],
+      "@app/redis/*": [
+        "libs/redis/src/*"
+      ],
+      "@app/auth": [
+        "libs/auth/src"
+      ],
+      "@app/auth/*": [
+        "libs/auth/src/*"
+      ]
     }
-  },
-  "include": ["src/**/*", "dist/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  }
 }

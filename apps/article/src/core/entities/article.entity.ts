@@ -47,9 +47,6 @@ export class ArticleEntity {
   @Column("simple-array")
   tagList: string[];
 
-  // @ManyToOne((type) => UserEntity, (user) => user.articles)
-  // author: UserEntity;
-
   @Column({ name: "authorId" })
   authorId: number;
 
