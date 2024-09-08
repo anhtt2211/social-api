@@ -8,12 +8,12 @@ services:
     image: social-api
     container_name: social-api
     ports:
-      - "8001:8000"
+      - "8000:8000"
     depends_on:
       - db
       - redis
     env_file:
-      - .env.docker
+      - .docker.env
     networks:
       - social-network
 

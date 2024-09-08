@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { ScheduleModule } from "@nestjs/schedule";
 
+import { AppController } from "./app.controller";
 import { InfrastructureModule } from "./infrastructure/infrastructure.module";
 import {
   ArticleModule,
@@ -22,7 +23,7 @@ import {
     UserModule,
     InfrastructureModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [],
 })
 export class ApplicationModule {}

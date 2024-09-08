@@ -24,5 +24,6 @@ dist/*
 .env.development
 .env.docker
 .env.production
+.docker.env
 
 app.yaml

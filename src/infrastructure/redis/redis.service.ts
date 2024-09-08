@@ -20,4 +20,8 @@ export class RedisService {
   async del(key: string): Promise<any> {
     return await this.redisClient.del(key);
   }
+
+  async ping(): Promise<any> {
+    return await this.redisClient.ping();
+  }
 }
