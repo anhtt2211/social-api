@@ -28,7 +28,7 @@
     "@nestjs/common": "^7.0.5",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^7.0.5",
-    "@nestjs/cqrs": "^9.0.1",
+    "@nestjs/cqrs": "^11.0.2",
     "@nestjs/platform-express": "^7.0.5",
     "@nestjs/schedule": "^4.0.1",
     "@nestjs/swagger": "^4.4.0",
