@@ -21,9 +21,16 @@ coverage
 dist/*
 
 .env
+.env.test
 .env.development
 .env.docker
 .env.production
 .docker.env
 
 app.yaml
+
+# Ignore the bash directory
+bash
+
+# Ignore the CDC directory
+kafka-connect-plugins

@@ -1,7 +1,9 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { APP_INTERCEPTOR } from "@nestjs/core";
 import { ScheduleModule } from "@nestjs/schedule";
 
+import { TransformInterceptor } from "@shared/interceptors";
 import { AppController } from "./app.controller";
 import { InfrastructureModule } from "./infrastructure/infrastructure.module";
 import {
@@ -24,6 +26,11 @@ import {
     InfrastructureModule,
   ],
   controllers: [AppController],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TransformInterceptor,
+    },
+  ],
 })
 export class ApplicationModule {}
