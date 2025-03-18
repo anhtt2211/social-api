@@ -38,6 +38,7 @@ Each module follows the CLEAN architecture, promoting separation of concerns and
 - Docker
 - Redis server
 - PostgreSQL server
+- Kafka server
 
 ---
 
@@ -60,6 +61,38 @@ Build images
 Run on docker
 
     docker-compose up
+
+### Configuring Debezium for Change Data Capture (CDC)
+
+Debezium is used in this project to enable near real-time data streaming from PostgreSQL to Elasticsearch.
+
+#### Prerequisites
+
+Ensure that you have Kafka and Zookeeper running before proceeding.
+
+#### Running Debezium Connectors
+
+To configure Debezium, follow these steps:
+
+Run the shell scripts to set up Elasticsearch indexes and Debezium connectors.
+
+```bash
+bash cdc/es-indexes/indexes_mappings.sh
+bash cdc/create_connectors.sh
+```
+
+### Explanation of Shell Scripts
+
+- **`cdc/es-indexes/indexes_mappings.sh`**: Creates index mappings in Elasticsearch to store CDC data.
+- **`cdc/create_connectors.sh`**: Configures Debezium connectors to capture changes from PostgreSQL and stream them to Kafka.
+
+### Verifying the Setup
+
+To verify that the connectors are working correctly, you can check the status of registered connectors:
+
+```bash
+curl -s -X GET http://localhost:8083/connectors | jq .
+```
 
 ### Running the Application
 
