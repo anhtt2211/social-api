@@ -1,0 +1,11 @@
+{
+  "mappings": {
+    "properties": {
+      "id": { "type": "integer" },
+      "slug": { "type": "keyword" },
+      "title": { "type": "text" },
+      "description": { "type": "text" },
+      "tagList": { "type": "keyword" }
+    }
+  }
+}

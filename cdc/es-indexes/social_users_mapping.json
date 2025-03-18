@@ -1,0 +1,10 @@
+{
+  "mappings": {
+    "properties": {
+      "id": { "type": "integer" },
+      "username": { "type": "keyword" },
+      "email": { "type": "keyword" },
+      "bio": { "type": "text" }
+    }
+  }
+}
