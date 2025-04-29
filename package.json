@@ -67,7 +67,7 @@
     "nodemon": "^1.19.4",
     "supertest": "^3.4.2",
     "ts-jest": "^25.4.0",
-    "ts-node": "^8.9.1",
+    "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.8",
     "tsconfig-paths": "^4.2.0"
   }
