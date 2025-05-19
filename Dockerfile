@@ -1,4 +1,4 @@
-FROM node:14.19.1-alpine
+FROM node:24.0.2-alpine
 
 WORKDIR /social
 
